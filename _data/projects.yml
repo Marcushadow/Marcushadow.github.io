@@ -1,5 +1,53 @@
+- name: DistributedMacInference
+  description: Distributed inference across multiple Mac machines, leveraging Apple Silicon for parallel ML model execution.
+  url: https://github.com/Marcushadow/DistributedMacInference
+  tags: [python, ml, distributed-systems]
+  featured: true
+
+- name: Vibe Hackathon Platform
+  description: A full-stack hackathon management platform built with TypeScript and Docker. Collaborative project for organizing and running hackathon events.
+  url: https://github.com/marcuslowhuiyu/VibeHackathonPlatform
+  tags: [typescript, docker, fullstack]
+  featured: true
+
+- name: BCA Detect Project
+  description: Detection and classification system using Jupyter notebooks and Python, built for BCA data analysis and prediction.
+  url: https://github.com/Marcushadow/BCADetectProject
+  tags: [python, ml, jupyter]
+  featured: true
+
+- name: CTScan3D
+  description: 3D binary classification on CT scan data — training and evaluating deep learning models for medical imaging.
+  url: https://github.com/Marcushadow/CT-Scan-3D-Binary-Classification
+  tags: [python, deep-learning, medical-imaging]
+  featured: true
+
+- name: APCTrevorBot
+  description: A bot built with Python and TypeScript, featuring a web frontend for interaction and management.
+  url: https://github.com/Marcushadow/APCTrevorBot
+  tags: [python, typescript, bot]
+  featured: false
+
+- name: noobmaster69game
+  description: A browser-based game built with JavaScript, HTML, and CSS.
+  url: https://github.com/Marcushadow/noobmaster69game
+  tags: [javascript, game, html]
+  featured: false
+
+- name: AWS Amplify Application
+  description: Demo application showcasing AWS Amplify, built for a live demo at LLI.
+  url: https://github.com/Marcushadow/AWSAmplifyApplication
+  tags: [aws, amplify, demo]
+  featured: false
+
+- name: Chinese Debate Timer
+  description: A clean timer page for Chinese debate rounds, built with vanilla HTML, CSS, and JavaScript.
+  url: https://github.com/Marcushadow/chinese-debate-timer
+  tags: [html, javascript, css]
+  featured: false
+
 - name: marcushadow.github.io
   description: My personal blog — the site you're looking at right now. Built from scratch with Jekyll, custom CSS, and a dark futuristic theme.
   url: https://github.com/Marcushadow/Marcushadow.github.io
   tags: [jekyll, html, css]
-  featured: true
+  featured: false
