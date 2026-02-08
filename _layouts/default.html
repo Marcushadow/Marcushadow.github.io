@@ -22,6 +22,43 @@
         navLinks.classList.toggle('open');
       });
     }
+
+    // Theme switcher
+    (function() {
+      const themes = ['dark', 'light', 'beige'];
+      const toggle = document.getElementById('theme-toggle');
+      if (!toggle) return;
+
+      function getCurrentTheme() {
+        return document.documentElement.getAttribute('data-theme') || 'dark';
+      }
+
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+        localStorage.setItem('theme', theme);
+
+        // Update Giscus iframe theme
+        var giscusFrame = document.querySelector('iframe.giscus-frame');
+        if (giscusFrame) {
+          var giscusTheme = theme === 'dark' ? 'dark' : theme === 'beige' ? 'light' : 'light';
+          giscusFrame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: giscusTheme } } },
+            'https://giscus.app'
+          );
+        }
+      }
+
+      toggle.addEventListener('click', function() {
+        var current = getCurrentTheme();
+        var idx = themes.indexOf(current);
+        var next = themes[(idx + 1) % themes.length];
+        setTheme(next);
+      });
+    })();
   </script>
 </body>
 </html>
