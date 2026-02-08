@@ -1,0 +1,23 @@
+- name: jekyll
+  description: Posts about Jekyll static site generator
+  color: "#cc0000"
+
+- name: tutorial
+  description: Step-by-step guides and how-tos
+  color: "#00d4ff"
+
+- name: web
+  description: Web development topics
+  color: "#98c379"
+
+- name: meta
+  description: Posts about this blog itself
+  color: "#e5c07b"
+
+- name: python
+  description: Python programming
+  color: "#3776ab"
+
+- name: ai
+  description: Artificial intelligence and machine learning
+  color: "#7c3aed"

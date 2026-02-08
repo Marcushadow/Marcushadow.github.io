@@ -1,0 +1,5 @@
+- name: marcushadow.github.io
+  description: My personal blog — the site you're looking at right now. Built from scratch with Jekyll, custom CSS, and a dark futuristic theme.
+  url: https://github.com/Marcushadow/Marcushadow.github.io
+  tags: [jekyll, html, css]
+  featured: true

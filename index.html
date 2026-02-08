@@ -1,0 +1,28 @@
+---
+layout: default
+title: Home
+---
+
+<section class="hero">
+  <h1 class="hero-title">Hey, I'm <span class="accent">Marcus</span>.</h1>
+  <p class="hero-tagline">I build things, break things, and write about it. Welcome to my corner of the internet — a space for tech, code, and the occasional stray thought.</p>
+  <div class="hero-line"></div>
+
+  <div class="quick-links">
+    <a href="{{ '/projects' | relative_url }}" class="quick-link">Projects &rarr;</a>
+    <a href="{{ '/about' | relative_url }}" class="quick-link">About me &rarr;</a>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <h2 class="section-title">Recent Posts</h2>
+    <a href="{{ '/blog' | relative_url }}" class="section-link">View all &rarr;</a>
+  </div>
+
+  <div class="post-grid">
+    {% for post in site.posts limit:4 %}
+      {% include post-card.html post=post %}
+    {% endfor %}
+  </div>
+</section>

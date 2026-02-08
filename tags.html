@@ -1,0 +1,28 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+<div class="blog-header">
+  <h1>Tags</h1>
+  <p>Browse posts by topic.</p>
+</div>
+
+{% assign sorted_tags = site.tags | sort %}
+{% for tag in sorted_tags %}
+<section class="tag-section" id="{{ tag[0] | slugify }}">
+  <div class="tag-section-header">
+    <h2 class="tag-section-name">#{{ tag[0] }}</h2>
+    <span class="tag-section-count">{{ tag[1].size }} post{% if tag[1].size != 1 %}s{% endif %}</span>
+  </div>
+  <div class="tag-posts-list">
+    {% for post in tag[1] %}
+    <div class="tag-post-item">
+      <span class="tag-post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+      <a href="{{ post.url | relative_url }}" class="tag-post-title">{{ post.title }}</a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
