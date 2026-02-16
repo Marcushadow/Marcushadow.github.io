@@ -1,0 +1,154 @@
+---
+layout: null
+permalink: /explore/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore — {{ site.title }}</title>
+  <meta name="description" content="Navigate {{ site.title }} in an immersive 3D world.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Explore styles -->
+  <link rel="stylesheet" href="{{ '/assets/css/explore.css' | relative_url }}">
+</head>
+<body>
+
+  <!-- ============================================
+       Jekyll Data Injection
+       ============================================ -->
+  <script>
+    window.EXPLORE_DATA = {
+      posts: [
+        {% for post in site.posts %}
+        {
+          title: {{ post.title | jsonify }},
+          url: {{ post.url | relative_url | jsonify }},
+          date: {{ post.date | date: "%Y-%m-%d" | jsonify }},
+          tags: {{ post.tags | jsonify }},
+          category: {{ post.category | jsonify }},
+          description: {{ post.description | jsonify }}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
+      projects: [
+        {% for project in site.projects %}
+        {
+          title: {{ project.title | jsonify }},
+          url: {{ project.url | relative_url | jsonify }},
+          description: {{ project.description | jsonify }},
+          tags: {{ project.tags | jsonify }},
+          featured: {{ project.featured | jsonify }}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
+      about: {
+        url: {{ "/about/" | relative_url | jsonify }}
+      }
+    };
+
+    // Read theme from localStorage (matches main blog behaviour)
+    window.EXPLORE_THEME = localStorage.getItem('theme') || 'dark';
+  </script>
+
+  <!-- ============================================
+       Three.js Import Map
+       ============================================ -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- ============================================
+       Loading Screen
+       ============================================ -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading world...</p>
+      <div class="loading-progress-track">
+        <div id="loading-progress-bar" class="loading-progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       Start Prompt
+       ============================================ -->
+  <div id="start-prompt" class="start-prompt hidden">
+    <div class="start-prompt-box">
+      <h1 class="start-prompt-title">Explore</h1>
+      <p class="start-prompt-subtitle">Navigate the blog in 3D</p>
+
+      <div class="controls-hint">
+        <div class="controls-hint-row">
+          <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+          <span>Move</span>
+        </div>
+        <div class="controls-hint-row">
+          <kbd>Mouse</kbd>
+          <span>Look around</span>
+        </div>
+        <div class="controls-hint-row">
+          <kbd>Click</kbd>
+          <span>Interact</span>
+        </div>
+        <div class="controls-hint-row">
+          <kbd>Esc</kbd>
+          <span>Pause</span>
+        </div>
+      </div>
+
+      <button id="start-button" class="start-button">Click to Enter</button>
+      <a href="{{ '/' | relative_url }}" class="back-link">Back to blog</a>
+    </div>
+  </div>
+
+  <!-- ============================================
+       HUD Overlay
+       ============================================ -->
+  <div id="hud" class="hud hidden">
+    <div class="hud-crosshair"></div>
+    <div id="hud-label" class="hud-label hidden"></div>
+    <button id="hud-exit" class="hud-exit">Exit</button>
+  </div>
+
+  <!-- ============================================
+       Pause Menu
+       ============================================ -->
+  <div id="pause-menu" class="pause-menu hidden">
+    <div class="pause-menu-box">
+      <h2 class="pause-menu-title">Paused</h2>
+      <button id="pause-resume" class="pause-menu-btn">Resume</button>
+      <a href="{{ '/' | relative_url }}" class="pause-menu-btn pause-menu-btn-secondary">Back to Blog</a>
+    </div>
+  </div>
+
+  <!-- ============================================
+       Mobile Notice
+       ============================================ -->
+  <div id="mobile-notice" class="mobile-notice hidden">
+    <div class="mobile-notice-box">
+      <h2>Desktop Only</h2>
+      <p>The 3D explore experience requires a keyboard and mouse. Please visit on a desktop browser.</p>
+      <a href="{{ '/' | relative_url }}" class="mobile-notice-link">Back to blog</a>
+    </div>
+  </div>
+
+  <!-- ============================================
+       Application Entry
+       ============================================ -->
+  <script type="module" src="{{ '/assets/js/explore/main.js' | relative_url }}"></script>
+
+</body>
+</html>
