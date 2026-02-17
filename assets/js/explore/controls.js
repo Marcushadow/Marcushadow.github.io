@@ -1,0 +1,226 @@
+/**
+ * controls.js — First-person pointer-lock controls
+ *
+ * Provides WASD + Arrow key movement and mouse-look with pointer lock.
+ * Camera Y is fixed at 1.7 (eye height) — no jumping or gravity.
+ *
+ * Usage:
+ *   const controls = createControls(camera, renderer.domElement);
+ *   controls.onLockChange = (locked) => { ... };
+ *   controls.lock();
+ *   // in animation loop:
+ *   controls.update(delta);
+ */
+
+import * as THREE from 'three';
+
+const MOVE_SPEED = 6.0;
+const DECELERATION = 8.0;
+const MOUSE_SENSITIVITY = 0.002;
+const PITCH_LIMIT = THREE.MathUtils.degToRad(89);
+const EYE_HEIGHT = 1.7;
+
+/**
+ * Creates a first-person controls object.
+ *
+ * @param {THREE.PerspectiveCamera} camera     - The camera to control
+ * @param {HTMLElement}             domElement  - The element to request pointer lock on
+ * @returns {object} controls API
+ */
+export function createControls(camera, domElement) {
+  // --- Internal state ---
+  let _locked = false;
+  const _euler = new THREE.Euler(0, 0, 0, 'YXZ');
+  const _velocity = new THREE.Vector3();
+  const _direction = new THREE.Vector3();
+
+  // Keyboard state
+  const _keys = {
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+  };
+
+  // Public callback — called with boolean when lock state changes
+  let _onLockChange = null;
+
+  // --- Pointer Lock listeners ---
+
+  function onPointerLockChange() {
+    const wasLocked = _locked;
+    _locked = document.pointerLockElement === domElement;
+
+    if (wasLocked !== _locked && _onLockChange) {
+      _onLockChange(_locked);
+    }
+  }
+
+  function onPointerLockError() {
+    console.warn('[controls] Pointer lock error');
+  }
+
+  document.addEventListener('pointerlockchange', onPointerLockChange);
+  document.addEventListener('pointerlockerror', onPointerLockError);
+
+  // --- Mouse look ---
+
+  function onMouseMove(event) {
+    if (!_locked) return;
+
+    const movementX = event.movementX || 0;
+    const movementY = event.movementY || 0;
+
+    _euler.setFromQuaternion(camera.quaternion, 'YXZ');
+    _euler.y -= movementX * MOUSE_SENSITIVITY;
+    _euler.x -= movementY * MOUSE_SENSITIVITY;
+    _euler.x = THREE.MathUtils.clamp(_euler.x, -PITCH_LIMIT, PITCH_LIMIT);
+
+    camera.quaternion.setFromEuler(_euler);
+  }
+
+  document.addEventListener('mousemove', onMouseMove);
+
+  // --- Keyboard ---
+
+  function onKeyDown(event) {
+    switch (event.code) {
+      case 'KeyW':
+      case 'ArrowUp':
+        _keys.forward = true;
+        break;
+      case 'KeyS':
+      case 'ArrowDown':
+        _keys.backward = true;
+        break;
+      case 'KeyA':
+      case 'ArrowLeft':
+        _keys.left = true;
+        break;
+      case 'KeyD':
+      case 'ArrowRight':
+        _keys.right = true;
+        break;
+    }
+  }
+
+  function onKeyUp(event) {
+    switch (event.code) {
+      case 'KeyW':
+      case 'ArrowUp':
+        _keys.forward = false;
+        break;
+      case 'KeyS':
+      case 'ArrowDown':
+        _keys.backward = false;
+        break;
+      case 'KeyA':
+      case 'ArrowLeft':
+        _keys.left = false;
+        break;
+      case 'KeyD':
+      case 'ArrowRight':
+        _keys.right = false;
+        break;
+    }
+  }
+
+  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keyup', onKeyUp);
+
+  // --- Reusable vectors (allocated once) ---
+  const _forward = new THREE.Vector3();
+  const _right = new THREE.Vector3();
+  const _up = new THREE.Vector3(0, 1, 0);
+
+  // --- Public API ---
+
+  const controls = {
+    /**
+     * Whether pointer lock is currently active.
+     */
+    get isLocked() {
+      return _locked;
+    },
+
+    /**
+     * Callback property — called with a boolean whenever the lock
+     * state changes.
+     */
+    get onLockChange() {
+      return _onLockChange;
+    },
+    set onLockChange(fn) {
+      _onLockChange = fn;
+    },
+
+    /**
+     * Requests pointer lock on the target element.
+     */
+    lock() {
+      domElement.requestPointerLock();
+    },
+
+    /**
+     * Exits pointer lock.
+     */
+    unlock() {
+      document.exitPointerLock();
+    },
+
+    /**
+     * Per-frame update — call from the animation loop.
+     *
+     * @param {number} delta - Time since last frame in seconds
+     */
+    update(delta) {
+      if (!_locked) return;
+
+      // Build desired movement direction from camera facing
+      camera.getWorldDirection(_forward);
+      _forward.y = 0;
+      _forward.normalize();
+
+      _right.crossVectors(_forward, _up).normalize();
+
+      // Accumulate desired direction
+      _direction.set(0, 0, 0);
+
+      if (_keys.forward)  _direction.add(_forward);
+      if (_keys.backward) _direction.sub(_forward);
+      if (_keys.left)     _direction.sub(_right);
+      if (_keys.right)    _direction.add(_right);
+
+      if (_direction.lengthSq() > 0) {
+        _direction.normalize();
+        _velocity.x += _direction.x * MOVE_SPEED * delta;
+        _velocity.z += _direction.z * MOVE_SPEED * delta;
+      }
+
+      // Apply deceleration (friction)
+      const decay = Math.exp(-DECELERATION * delta);
+      _velocity.x *= decay;
+      _velocity.z *= decay;
+
+      // Integrate position
+      camera.position.x += _velocity.x * delta;
+      camera.position.z += _velocity.z * delta;
+
+      // Lock vertical position to eye height
+      camera.position.y = EYE_HEIGHT;
+    },
+
+    /**
+     * Removes all event listeners. Call when tearing down.
+     */
+    dispose() {
+      document.removeEventListener('pointerlockchange', onPointerLockChange);
+      document.removeEventListener('pointerlockerror', onPointerLockError);
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keyup', onKeyUp);
+    },
+  };
+
+  return controls;
+}
