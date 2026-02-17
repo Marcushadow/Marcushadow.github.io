@@ -192,7 +192,7 @@ function createDisplayItem(project, position) {
     roughness: 0.5,
   });
   const card = new THREE.Mesh(cardGeo, cardMat);
-  card.position.y = 0.7;
+  card.position.y = 0.35;
   group.add(card);
 
   group.position.copy(position);
@@ -231,7 +231,7 @@ function createNeonBillboard(post, position) {
   const planeMat = new THREE.MeshStandardMaterial({
     map: billboardTexture,
     emissive: 0x001122,
-    emissiveIntensity: 0.5,
+    emissiveIntensity: 0.8,
     roughness: 0.4,
     metalness: 0.2,
     side: THREE.DoubleSide,
@@ -379,7 +379,7 @@ function createFloatingScroll(post, position) {
   const offset = Math.abs(hashCode(post.title)) % 100; // phase offset
 
   const animationCallback = (_delta, elapsed) => {
-    group.position.y = baseY + Math.sin(elapsed * 0.8 + offset) * 0.3;
+    group.position.y = baseY + Math.sin(elapsed * 0.7 + offset) * 0.25;
     group.rotation.y += 0.002;
   };
 
@@ -441,7 +441,7 @@ function createCrystalStructure(project, position) {
   const offset = Math.abs(hashCode(project.title)) % 100;
 
   const animationCallback = (_delta, elapsed) => {
-    group.position.y = baseY + Math.sin(elapsed * 0.6 + offset) * 0.25;
+    group.position.y = baseY + Math.sin(elapsed * 0.7 + offset) * 0.25;
     group.rotation.y += 0.003;
   };
 
@@ -491,7 +491,7 @@ function createAboutDisplay(aboutData, position, theme) {
     { width: 512, height: 512, bgColor, padding: 30 }
   );
 
-  const cardGeo = new THREE.PlaneGeometry(2.0, 2.0);
+  const cardGeo = new THREE.PlaneGeometry(1.6, 1.6);
   const cardMat = new THREE.MeshStandardMaterial({
     map: cardTexture,
     transparent: true,
@@ -504,7 +504,7 @@ function createAboutDisplay(aboutData, position, theme) {
 
   // Decorative frame for dark theme
   if (theme === 'dark') {
-    const frameGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(2.05, 2.05, 0.02));
+    const frameGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.65, 1.65, 0.02));
     const frameMat = new THREE.LineBasicMaterial({ color: 0x00d4ff });
     const frame = new THREE.LineSegments(frameGeo, frameMat);
     group.add(frame);

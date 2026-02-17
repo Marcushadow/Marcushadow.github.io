@@ -146,6 +146,18 @@ permalink: /explore/
   </div>
 
   <!-- ============================================
+       In-World Content Panel
+       ============================================ -->
+  <div id="content-panel" class="content-panel hidden">
+    <div class="content-panel-header">
+      <a id="content-panel-fullpage" class="content-panel-link" target="_blank" rel="noopener noreferrer">Open full page</a>
+      <button id="content-panel-close" class="content-panel-close">&times;</button>
+    </div>
+    <iframe id="content-panel-iframe" class="content-panel-iframe"></iframe>
+  </div>
+  <div id="content-panel-backdrop" class="content-panel-backdrop hidden"></div>
+
+  <!-- ============================================
        Application Entry
        ============================================ -->
   <script type="module" src="{{ '/assets/js/explore/main.js' | relative_url }}"></script>

@@ -183,7 +183,70 @@ export function setupUI(state, theme) {
     }
   });
 
-  // --- Click handler: navigate to content URL ---
+  // --- Content panel references ---
+  const contentPanel    = document.getElementById('content-panel');
+  const contentBackdrop = document.getElementById('content-panel-backdrop');
+  const contentIframe   = document.getElementById('content-panel-iframe');
+  const contentFullpage = document.getElementById('content-panel-fullpage');
+  const contentClose    = document.getElementById('content-panel-close');
+
+  let panelOpen = false;
+
+  /**
+   * Opens the content panel with the given URL.
+   */
+  function openContentPanel(url) {
+    if (!contentPanel || !contentIframe) return;
+
+    contentIframe.src = url;
+    if (contentFullpage) {
+      contentFullpage.href = url;
+    }
+
+    controls.unlock();
+
+    // Show backdrop + panel
+    contentBackdrop?.classList.remove('hidden');
+    contentPanel.classList.remove('hidden');
+
+    // Trigger slide-in on next frame so the transition plays
+    requestAnimationFrame(() => {
+      contentPanel.classList.add('visible');
+    });
+
+    panelOpen = true;
+  }
+
+  /**
+   * Closes the content panel and re-locks the pointer.
+   */
+  function closeContentPanel() {
+    if (!contentPanel) return;
+
+    contentPanel.classList.remove('visible');
+
+    // Hide backdrop and clear iframe after slide-out transition
+    setTimeout(() => {
+      contentBackdrop?.classList.add('hidden');
+      contentPanel.classList.add('hidden');
+      if (contentIframe) contentIframe.src = '';
+    }, 350);
+
+    panelOpen = false;
+
+    // Re-lock pointer after a short delay to avoid immediate ESC conflict
+    setTimeout(() => {
+      controls.lock();
+    }, 100);
+  }
+
+  // Expose panel state for main.js ESC handling
+  controls._contentPanel = {
+    get isOpen() { return panelOpen; },
+    close: closeContentPanel,
+  };
+
+  // --- Click handler: open content panel ---
   document.addEventListener('click', () => {
     if (!controls.isLocked) return;
     if (!currentTarget) return;
@@ -191,9 +254,18 @@ export function setupUI(state, theme) {
     const url = currentTarget.userData.url;
     if (!url) return;
 
-    // Unlock pointer before navigating so the browser allows it
-    controls.unlock();
-    window.location.href = url;
+    openContentPanel(url);
+  });
+
+  // --- Close button ---
+  contentClose?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeContentPanel();
+  });
+
+  // --- Backdrop click closes panel ---
+  contentBackdrop?.addEventListener('click', () => {
+    closeContentPanel();
   });
 
   // --- Exit button ---

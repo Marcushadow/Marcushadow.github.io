@@ -55,7 +55,7 @@ function createBuilding(scene, x, z, width, height, depth) {
 
   for (let row = 0; row < windowRows; row++) {
     for (let col = 0; col < windowCols; col++) {
-      const lit = Math.random() > 0.45;
+      const lit = Math.random() > 0.30;
       if (!lit) continue;
 
       const wy = 1.0 + row * 1.2;
@@ -129,7 +129,7 @@ export function buildCyberpunk(scene) {
   const neonStrip = createEmissiveBox(
     0.15, 0.02, 40,
     C.neonCyan, C.neonCyan, 1.0,
-    new THREE.Vector3(0, 0.01, 0)
+    new THREE.Vector3(0, 0.02, 0)
   );
   scene.add(neonStrip);
 
@@ -137,14 +137,14 @@ export function buildCyberpunk(scene) {
   const leftStrip = createEmissiveBox(
     0.1, 0.02, 40,
     C.neonMagenta, C.neonMagenta, 0.6,
-    new THREE.Vector3(-5.5, 0.01, 0)
+    new THREE.Vector3(-5.5, 0.02, 0)
   );
   scene.add(leftStrip);
 
   const rightStrip = createEmissiveBox(
     0.1, 0.02, 40,
     C.neonMagenta, C.neonMagenta, 0.6,
-    new THREE.Vector3(5.5, 0.01, 0)
+    new THREE.Vector3(5.5, 0.02, 0)
   );
   scene.add(rightStrip);
 
@@ -239,7 +239,7 @@ export function buildCyberpunk(scene) {
   scene.add(screen);
 
   // --- Rain particles ---
-  const rainCount = 800;
+  const rainCount = 1500;
   const rainPositions = new Float32Array(rainCount * 3);
 
   for (let i = 0; i < rainCount; i++) {
@@ -256,10 +256,10 @@ export function buildCyberpunk(scene) {
 
   const rainMaterial = new THREE.PointsMaterial({
     color: 0x8888cc,
-    size: 0.05,
+    size: 0.08,
     sizeAttenuation: true,
     transparent: true,
-    opacity: 0.5,
+    opacity: 0.7,
   });
 
   const rain = new THREE.Points(rainGeometry, rainMaterial);

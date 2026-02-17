@@ -15,7 +15,9 @@
 import * as THREE from 'three';
 
 const MOVE_SPEED = 6.0;
-const DECELERATION = 8.0;
+const DECELERATION = 4.0;
+const LERP_FACTOR = 0.08;
+const VELOCITY_DEADZONE = 0.001;
 const MOUSE_SENSITIVITY = 0.002;
 const PITCH_LIMIT = THREE.MathUtils.degToRad(89);
 const EYE_HEIGHT = 1.7;
@@ -193,14 +195,29 @@ export function createControls(camera, domElement) {
 
       if (_direction.lengthSq() > 0) {
         _direction.normalize();
-        _velocity.x += _direction.x * MOVE_SPEED * delta;
-        _velocity.z += _direction.z * MOVE_SPEED * delta;
+        // Lerp velocity toward target speed for smooth acceleration
+        const targetX = _direction.x * MOVE_SPEED;
+        const targetZ = _direction.z * MOVE_SPEED;
+        _velocity.x += (targetX - _velocity.x) * LERP_FACTOR;
+        _velocity.z += (targetZ - _velocity.z) * LERP_FACTOR;
+      }
+
+      // Clamp velocity to max speed
+      const speed = Math.sqrt(_velocity.x * _velocity.x + _velocity.z * _velocity.z);
+      if (speed > MOVE_SPEED) {
+        const scale = MOVE_SPEED / speed;
+        _velocity.x *= scale;
+        _velocity.z *= scale;
       }
 
       // Apply deceleration (friction)
       const decay = Math.exp(-DECELERATION * delta);
       _velocity.x *= decay;
       _velocity.z *= decay;
+
+      // Zero out micro-drift
+      if (Math.abs(_velocity.x) < VELOCITY_DEADZONE) _velocity.x = 0;
+      if (Math.abs(_velocity.z) < VELOCITY_DEADZONE) _velocity.z = 0;
 
       // Integrate position
       camera.position.x += _velocity.x * delta;

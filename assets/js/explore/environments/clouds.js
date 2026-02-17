@@ -262,7 +262,7 @@ export function buildClouds(scene) {
   for (let i = 0; i < 20; i++) {
     const cloudGroup = new THREE.Group();
     const cx = (Math.random() - 0.5) * 70;
-    const cy = -3 + Math.random() * 15;
+    const cy = 3 + Math.random() * 12;
     const cz = (Math.random() - 0.5) * 70;
 
     // 2-4 stretched spheres per cloud
@@ -298,7 +298,7 @@ export function buildClouds(scene) {
   const crystalMat = new THREE.MeshStandardMaterial({
     color: C.crystal,
     emissive: C.crystal,
-    emissiveIntensity: 0.3,
+    emissiveIntensity: 0.6,
     transparent: true,
     opacity: 0.7,
     roughness: 0.1,

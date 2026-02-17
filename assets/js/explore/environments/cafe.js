@@ -49,7 +49,7 @@ export function buildCafe(scene) {
   scene.background = new THREE.Color(0xFAF6F1);
 
   // --- Lighting ---
-  const ambient = new THREE.AmbientLight(0xFFF5E6, 0.4);
+  const ambient = new THREE.AmbientLight(0xFFF5E6, 0.6);
   scene.add(ambient);
 
   const overhead = new THREE.PointLight(0xFFE4C4, 1.2, 30);
@@ -66,7 +66,7 @@ export function buildCafe(scene) {
   ];
 
   lampPositions.forEach((pos) => {
-    const lamp = new THREE.PointLight(0xFFD699, 0.6, 12);
+    const lamp = new THREE.PointLight(0xFFD699, 0.85, 12);
     lamp.position.copy(pos);
     scene.add(lamp);
 
@@ -168,7 +168,7 @@ export function buildCafe(scene) {
 
       // Content slot sits on top of each plank
       blogSlots.push(
-        new THREE.Vector3(sx, shelfHeights[j] + 0.4, sz + 0.1)
+        new THREE.Vector3(sx, shelfHeights[j] + 0.4, sz - 0.15)
       );
     }
   }
@@ -211,7 +211,7 @@ export function buildCafe(scene) {
       scene.add(leg);
     });
 
-    projectSlots.push(new THREE.Vector3(tx, 1.4, tz));
+    projectSlots.push(new THREE.Vector3(tx, 1.15, tz));
   }
 
   // --- Armchair + side table for about zone ---

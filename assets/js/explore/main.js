@@ -210,8 +210,9 @@ async function init() {
       pauseMenu?.classList.add('hidden');
     } else {
       hud?.classList.add('hidden');
-      // Show pause menu only if we were in-game (not on start prompt)
-      if (startPrompt?.classList.contains('hidden')) {
+      // Show pause menu only if we were in-game and content panel is not open
+      if (startPrompt?.classList.contains('hidden') &&
+          !(controls._contentPanel && controls._contentPanel.isOpen)) {
         pauseMenu?.classList.remove('hidden');
       }
     }
@@ -220,6 +221,17 @@ async function init() {
   // --- Pause menu resume ---
   pauseResume?.addEventListener('click', () => {
     controls.lock();
+  });
+
+  // --- ESC key: close content panel before showing pause menu ---
+  document.addEventListener('keydown', (e) => {
+    if (e.code !== 'Escape') return;
+
+    // If content panel is open, close it instead of showing pause menu
+    if (controls._contentPanel && controls._contentPanel.isOpen) {
+      e.preventDefault();
+      controls._contentPanel.close();
+    }
   });
 
   // --- Resize handler ---
@@ -235,7 +247,7 @@ async function init() {
   function animate() {
     requestAnimationFrame(animate);
 
-    const delta = clock.getDelta();
+    const delta = Math.min(clock.getDelta(), 0.05);
 
     // Update controls (only moves when locked)
     controls.update(delta);
