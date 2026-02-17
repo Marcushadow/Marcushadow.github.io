@@ -3,7 +3,8 @@
  *
  * Builds a sky-high scene with four cloud platforms (spawn, blog,
  * projects, about) connected by luminous bridges, surrounded by
- * decorative cloud puffs and gold sparkle particles.
+ * decorative cloud puffs, procedural crystals, benches, arches,
+ * Kenney plant models, and gold sparkle particles.
  */
 
 import * as THREE from 'three';
@@ -17,6 +18,7 @@ import {
   createParticles,
   createExitPortal,
 } from './shared.js';
+import { loadModels, cloneModel } from '../model-loader.js';
 
 /* ============================================
    Palette
@@ -30,6 +32,9 @@ const C = {
   accent:   0x0066cc,
   crystal:  0x88bbff,
   gold:     0xffd700,
+  stone:    0xd0d0d8,
+  wood:     0xc4a882,
+  bench:    0xb8a88a,
 };
 
 /* ============================================
@@ -43,7 +48,7 @@ const C = {
  * @param {THREE.Scene} scene
  * @param {THREE.Vector3} center - World-space center of the platform
  * @param {number} radius - Platform radius
- * @returns {THREE.Group}
+ * @returns {{ group: THREE.Group, topMesh: THREE.Mesh }}
  */
 function createCloudPlatform(scene, center, radius) {
   const group = new THREE.Group();
@@ -101,7 +106,7 @@ function createCloudPlatform(scene, center, radius) {
   }
 
   scene.add(group);
-  return group;
+  return { group, topMesh: top };
 }
 
 /* ============================================
@@ -116,9 +121,12 @@ function createCloudPlatform(scene, center, radius) {
  * @param {THREE.Vector3} from - Start position
  * @param {THREE.Vector3} to   - End position
  * @param {number} [arcHeight=2] - Maximum arc height above midpoint
+ * @returns {THREE.Mesh[]} Array of plank meshes for collision
  */
 function createLightBridge(scene, from, to, arcHeight = 2) {
   const plankCount = 20;
+  const planks = [];
+
   const bridgeMat = new THREE.MeshStandardMaterial({
     color: C.bridge,
     transparent: true,
@@ -160,6 +168,7 @@ function createLightBridge(scene, from, to, arcHeight = 2) {
     plank.rotation.y = bridgeAngle;
     plank.receiveShadow = true;
     scene.add(plank);
+    planks.push(plank);
 
     // Railing posts (every other plank)
     if (i % 2 === 0) {
@@ -178,6 +187,186 @@ function createLightBridge(scene, from, to, arcHeight = 2) {
       scene.add(rightPost);
     }
   }
+
+  return planks;
+}
+
+/* ============================================
+   Procedural Decoration Helpers
+   ============================================ */
+
+/**
+ * Creates a crystal cluster of 2-4 octahedrons grouped together.
+ */
+function createCrystalCluster(position, baseSize) {
+  const group = new THREE.Group();
+  const crystalMat = new THREE.MeshStandardMaterial({
+    color: C.crystal,
+    emissive: C.crystal,
+    emissiveIntensity: 0.5,
+    transparent: true,
+    opacity: 0.75,
+    roughness: 0.1,
+    metalness: 0.8,
+  });
+
+  const count = 2 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < count; i++) {
+    const size = baseSize * (0.5 + Math.random() * 0.8);
+    const geo = new THREE.OctahedronGeometry(size, 0);
+    const mesh = new THREE.Mesh(geo, crystalMat);
+    mesh.position.set(
+      (Math.random() - 0.5) * baseSize * 1.5,
+      size * 0.5,
+      (Math.random() - 0.5) * baseSize * 1.5
+    );
+    mesh.rotation.set(
+      Math.random() * 0.3,
+      Math.random() * Math.PI * 2,
+      Math.random() * 0.3
+    );
+    mesh.castShadow = true;
+    group.add(mesh);
+  }
+
+  group.position.copy(position);
+  return group;
+}
+
+/**
+ * Creates a procedural bench (box geometry seat + two leg supports).
+ */
+function createProceduralBench(position, rotationY) {
+  const group = new THREE.Group();
+  const benchMat = new THREE.MeshStandardMaterial({
+    color: C.bench,
+    roughness: 0.7,
+    metalness: 0.1,
+  });
+
+  // Seat
+  const seatGeo = new THREE.BoxGeometry(1.5, 0.12, 0.5);
+  const seat = new THREE.Mesh(seatGeo, benchMat);
+  seat.position.set(0, 0.35, 0);
+  seat.castShadow = true;
+  seat.receiveShadow = true;
+  group.add(seat);
+
+  // Two leg supports
+  const legMat = new THREE.MeshStandardMaterial({
+    color: C.stone,
+    roughness: 0.5,
+    metalness: 0.2,
+  });
+  const legGeo = new THREE.BoxGeometry(0.12, 0.35, 0.45);
+
+  const legL = new THREE.Mesh(legGeo, legMat);
+  legL.position.set(-0.55, 0.175, 0);
+  legL.castShadow = true;
+  group.add(legL);
+
+  const legR = new THREE.Mesh(legGeo.clone(), legMat);
+  legR.position.set(0.55, 0.175, 0);
+  legR.castShadow = true;
+  group.add(legR);
+
+  group.position.copy(position);
+  group.rotation.y = rotationY || 0;
+  return group;
+}
+
+/**
+ * Creates a decorative arch/pillar pair: two cylinders with a connecting box on top.
+ */
+function createArchPillar(position, rotationY) {
+  const group = new THREE.Group();
+  const pillarMat = new THREE.MeshStandardMaterial({
+    color: C.stone,
+    roughness: 0.4,
+    metalness: 0.3,
+    emissive: C.crystal,
+    emissiveIntensity: 0.05,
+  });
+
+  // Left pillar
+  const pillarGeo = new THREE.CylinderGeometry(0.12, 0.15, 2.0, 8);
+  const pillarL = new THREE.Mesh(pillarGeo, pillarMat);
+  pillarL.position.set(-0.6, 1.0, 0);
+  pillarL.castShadow = true;
+  group.add(pillarL);
+
+  // Right pillar
+  const pillarR = new THREE.Mesh(pillarGeo.clone(), pillarMat);
+  pillarR.position.set(0.6, 1.0, 0);
+  pillarR.castShadow = true;
+  group.add(pillarR);
+
+  // Connecting arch top (box spanning between pillars)
+  const archMat = new THREE.MeshStandardMaterial({
+    color: C.crystal,
+    emissive: C.crystal,
+    emissiveIntensity: 0.3,
+    transparent: true,
+    opacity: 0.8,
+    roughness: 0.2,
+    metalness: 0.5,
+  });
+  const archGeo = new THREE.BoxGeometry(1.4, 0.15, 0.2);
+  const archTop = new THREE.Mesh(archGeo, archMat);
+  archTop.position.set(0, 2.05, 0);
+  archTop.castShadow = true;
+  group.add(archTop);
+
+  // Small decorative sphere on top center
+  const orbGeo = new THREE.SphereGeometry(0.1, 8, 8);
+  const orbMat = new THREE.MeshStandardMaterial({
+    color: C.crystal,
+    emissive: C.crystal,
+    emissiveIntensity: 0.8,
+    transparent: true,
+    opacity: 0.9,
+  });
+  const orb = new THREE.Mesh(orbGeo, orbMat);
+  orb.position.set(0, 2.2, 0);
+  group.add(orb);
+
+  group.position.copy(position);
+  group.rotation.y = rotationY || 0;
+  return group;
+}
+
+/**
+ * Creates invisible edge boundary colliders arranged in a ring around a platform.
+ * These prevent the player from walking off the edge.
+ *
+ * @param {THREE.Vector3} center
+ * @param {number} radius
+ * @param {number} segmentCount
+ * @returns {THREE.Mesh[]} Array of invisible box colliders
+ */
+function createEdgeBoundaries(center, radius, segmentCount) {
+  const boundaries = [];
+  const wallHeight = 0.5;
+  const wallThickness = 0.3;
+  const arcLength = (2 * Math.PI * radius) / segmentCount;
+
+  for (let i = 0; i < segmentCount; i++) {
+    const angle = (i / segmentCount) * Math.PI * 2;
+    const x = center.x + Math.cos(angle) * radius;
+    const z = center.z + Math.sin(angle) * radius;
+
+    const geo = new THREE.BoxGeometry(arcLength, wallHeight, wallThickness);
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0x000000,
+      visible: false,
+    });
+    const wall = new THREE.Mesh(geo, mat);
+    wall.position.set(x, center.y - 0.6 + wallHeight * 0.5, z);
+    wall.rotation.y = -angle + Math.PI * 0.5;
+    boundaries.push(wall);
+  }
+
+  return boundaries;
 }
 
 /* ============================================
@@ -186,10 +375,20 @@ function createLightBridge(scene, from, to, arcHeight = 2) {
 
 /**
  * @param {THREE.Scene} scene
- * @returns {{ spawnPosition: THREE.Vector3, animationCallbacks: Function[], contentSlots: Object }}
+ * @returns {Promise<{ spawnPosition: THREE.Vector3, animationCallbacks: Function[], contentSlots: Object, colliderGroup: THREE.Group }>}
  */
-export function buildClouds(scene) {
+export async function buildClouds(scene) {
   const animationCallbacks = [];
+
+  // --- Load Kenney models ---
+  const models = await loadModels({
+    pottedPlant:  '/assets/models/clouds/pottedPlant.glb',
+    plantSmall1:  '/assets/models/clouds/plantSmall1.glb',
+    benchCushion: '/assets/models/clouds/benchCushion.glb',
+  });
+
+  // --- Collider group (populated throughout, returned at end) ---
+  const colliderGroup = new THREE.Group();
 
   // --- Sky & fog ---
   scene.background = new THREE.Color(C.sky);
@@ -235,18 +434,130 @@ export function buildClouds(scene) {
     },
   };
 
-  // Build each platform
-  Object.values(platforms).forEach((p) => {
-    createCloudPlatform(scene, p.center, p.radius);
+  // Build each platform and collect top meshes for collision
+  const platformMeshes = {};
+  Object.entries(platforms).forEach(([name, p]) => {
+    const { group, topMesh } = createCloudPlatform(scene, p.center, p.radius);
+    platformMeshes[name] = topMesh;
+
+    // Add the cylinder top to the collider group (clone for octree)
+    const colliderCylinder = topMesh.clone();
+    colliderCylinder.position.copy(topMesh.position);
+    colliderGroup.add(colliderCylinder);
+
+    // Add invisible edge boundaries to prevent falling off
+    const edgeSegments = Math.max(12, Math.floor(p.radius * 3));
+    const boundaries = createEdgeBoundaries(p.center, p.radius + 0.1, edgeSegments);
+    boundaries.forEach((wall) => {
+      scene.add(wall);
+      colliderGroup.add(wall.clone());
+    });
   });
 
   // --- Light bridges ---
   // Main -> Blog
-  createLightBridge(scene, platforms.main.center, platforms.blog.center, 2.5);
+  const bridgePlanks1 = createLightBridge(scene, platforms.main.center, platforms.blog.center, 2.5);
   // Main -> Projects
-  createLightBridge(scene, platforms.main.center, platforms.projects.center, 2.0);
+  const bridgePlanks2 = createLightBridge(scene, platforms.main.center, platforms.projects.center, 2.0);
   // Main -> About
-  createLightBridge(scene, platforms.main.center, platforms.about.center, 2.0);
+  const bridgePlanks3 = createLightBridge(scene, platforms.main.center, platforms.about.center, 2.0);
+
+  // Add bridge planks to collider group
+  [...bridgePlanks1, ...bridgePlanks2, ...bridgePlanks3].forEach((plank) => {
+    const plankCollider = plank.clone();
+    plankCollider.position.copy(plank.position);
+    plankCollider.rotation.copy(plank.rotation);
+    colliderGroup.add(plankCollider);
+  });
+
+  // --- Decorative arch/pillars at bridge entry points (6 total, one at each end of each bridge) ---
+  // Helper: compute position on platform edge facing a direction
+  function bridgeArchPosition(platformCenter, platformRadius, targetCenter) {
+    const dir = new THREE.Vector3().subVectors(targetCenter, platformCenter).normalize();
+    const edgePos = new THREE.Vector3(
+      platformCenter.x + dir.x * (platformRadius - 0.5),
+      platformCenter.y - 0.6,
+      platformCenter.z + dir.z * (platformRadius - 0.5)
+    );
+    const rotY = Math.atan2(dir.x, dir.z);
+    return { position: edgePos, rotationY: rotY };
+  }
+
+  // Main -> Blog bridge arches
+  const archMB1 = bridgeArchPosition(platforms.main.center, platforms.main.radius, platforms.blog.center);
+  const arch1 = createArchPillar(archMB1.position, archMB1.rotationY);
+  scene.add(arch1);
+
+  const archMB2 = bridgeArchPosition(platforms.blog.center, platforms.blog.radius, platforms.main.center);
+  const arch2 = createArchPillar(archMB2.position, archMB2.rotationY);
+  scene.add(arch2);
+
+  // Main -> Projects bridge arches
+  const archMP1 = bridgeArchPosition(platforms.main.center, platforms.main.radius, platforms.projects.center);
+  const arch3 = createArchPillar(archMP1.position, archMP1.rotationY);
+  scene.add(arch3);
+
+  const archMP2 = bridgeArchPosition(platforms.projects.center, platforms.projects.radius, platforms.main.center);
+  const arch4 = createArchPillar(archMP2.position, archMP2.rotationY);
+  scene.add(arch4);
+
+  // Main -> About bridge arches
+  const archMA1 = bridgeArchPosition(platforms.main.center, platforms.main.radius, platforms.about.center);
+  const arch5 = createArchPillar(archMA1.position, archMA1.rotationY);
+  scene.add(arch5);
+
+  const archMA2 = bridgeArchPosition(platforms.about.center, platforms.about.radius, platforms.main.center);
+  const arch6 = createArchPillar(archMA2.position, archMA2.rotationY);
+  scene.add(arch6);
+
+  // --- Procedural crystal clusters on each platform (3-5 per platform) ---
+  Object.values(platforms).forEach((p) => {
+    const clusterCount = 3 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < clusterCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 1.0 + Math.random() * (p.radius - 2.0);
+      const baseSize = 0.3 + Math.random() * 0.5;
+      const pos = new THREE.Vector3(
+        p.center.x + Math.cos(angle) * dist,
+        p.center.y - 0.6,
+        p.center.z + Math.sin(angle) * dist
+      );
+      const cluster = createCrystalCluster(pos, baseSize);
+      scene.add(cluster);
+    }
+  });
+
+  // --- Procedural benches on blog and projects platforms (2-3 each) ---
+  // Blog platform benches
+  const blogBenchPositions = [
+    { angle: Math.PI * 0.3, dist: 3.5, rot: Math.PI * 0.3 },
+    { angle: Math.PI * 1.0, dist: 4.0, rot: Math.PI * 1.0 },
+    { angle: Math.PI * 1.6, dist: 3.0, rot: Math.PI * 1.6 },
+  ];
+  blogBenchPositions.forEach(({ angle, dist, rot }) => {
+    const pos = new THREE.Vector3(
+      platforms.blog.center.x + Math.cos(angle) * dist,
+      platforms.blog.center.y - 0.6,
+      platforms.blog.center.z + Math.sin(angle) * dist
+    );
+    const bench = createProceduralBench(pos, rot);
+    scene.add(bench);
+  });
+
+  // Projects platform benches
+  const projBenchPositions = [
+    { angle: Math.PI * 0.7, dist: 3.0, rot: Math.PI * 0.7 },
+    { angle: Math.PI * 1.4, dist: 4.0, rot: Math.PI * 1.4 },
+  ];
+  projBenchPositions.forEach(({ angle, dist, rot }) => {
+    const pos = new THREE.Vector3(
+      platforms.projects.center.x + Math.cos(angle) * dist,
+      platforms.projects.center.y - 0.6,
+      platforms.projects.center.z + Math.sin(angle) * dist
+    );
+    const bench = createProceduralBench(pos, rot);
+    scene.add(bench);
+  });
 
   // --- Decorative floating clouds ---
   const decorativeCloudMat = new THREE.MeshStandardMaterial({
@@ -311,6 +622,44 @@ export function buildClouds(scene) {
   // Rotate crystal slowly
   animationCallbacks.push((_delta, elapsed) => {
     crystal.rotation.y = elapsed * 0.3;
+  });
+
+  // --- Floating crystal decorations orbiting near blog platform (4 small octahedrons) ---
+  const orbitingCrystals = [];
+  const orbitCrystalMat = new THREE.MeshStandardMaterial({
+    color: C.crystal,
+    emissive: C.crystal,
+    emissiveIntensity: 0.7,
+    transparent: true,
+    opacity: 0.8,
+    roughness: 0.05,
+    metalness: 0.9,
+  });
+
+  for (let i = 0; i < 4; i++) {
+    const size = 0.15 + Math.random() * 0.2;
+    const geo = new THREE.OctahedronGeometry(size, 0);
+    const mesh = new THREE.Mesh(geo, orbitCrystalMat);
+    const baseAngle = (i / 4) * Math.PI * 2;
+    const orbitRadius = 3.0 + Math.random() * 2.0;
+    const baseY = platforms.blog.center.y + 1.0 + Math.random() * 2.0;
+    mesh.castShadow = true;
+    scene.add(mesh);
+    orbitingCrystals.push({ mesh, baseAngle, orbitRadius, baseY, speed: 0.3 + Math.random() * 0.3 });
+  }
+
+  // Animate orbiting crystals with sin-wave vertical motion
+  animationCallbacks.push((_delta, elapsed) => {
+    orbitingCrystals.forEach(({ mesh, baseAngle, orbitRadius, baseY, speed }) => {
+      const angle = baseAngle + elapsed * speed;
+      mesh.position.set(
+        platforms.blog.center.x + Math.cos(angle) * orbitRadius,
+        baseY + Math.sin(elapsed * 1.2 + baseAngle) * 0.5,
+        platforms.blog.center.z + Math.sin(angle) * orbitRadius
+      );
+      mesh.rotation.y = elapsed * 0.8;
+      mesh.rotation.x = elapsed * 0.5;
+    });
   });
 
   // --- Zone labels ---
@@ -386,12 +735,90 @@ export function buildClouds(scene) {
   );
   scene.add(pedestal);
 
-  // --- Gold sparkle particles ---
-  const sparkleCount = 200;
+  // --- Kenney plant models ---
+  // 3 pottedPlant on about platform
+  if (models.pottedPlant) {
+    const pottedPositions = [
+      { angle: Math.PI * 0.4,  dist: 2.5 },
+      { angle: Math.PI * 1.1,  dist: 3.0 },
+      { angle: Math.PI * 1.7,  dist: 2.2 },
+    ];
+    pottedPositions.forEach(({ angle, dist }) => {
+      const plant = cloneModel(models.pottedPlant);
+      const scale = 1.2 + Math.random() * 0.6;
+      plant.scale.set(scale, scale, scale);
+      plant.position.set(
+        platforms.about.center.x + Math.cos(angle) * dist,
+        platforms.about.center.y - 0.6,
+        platforms.about.center.z + Math.sin(angle) * dist
+      );
+      plant.rotation.y = Math.random() * Math.PI * 2;
+      scene.add(plant);
+    });
+  }
+
+  // 4 plantSmall1 on various platform edges
+  if (models.plantSmall1) {
+    const smallPlantPlacements = [
+      { platform: platforms.main,     angle: Math.PI * 0.8,  dist: 3.5 },
+      { platform: platforms.blog,     angle: Math.PI * 0.5,  dist: 6.0 },
+      { platform: platforms.projects, angle: Math.PI * 1.2,  dist: 5.0 },
+      { platform: platforms.about,    angle: Math.PI * 0.0,  dist: 3.8 },
+    ];
+    smallPlantPlacements.forEach(({ platform, angle, dist }) => {
+      const plant = cloneModel(models.plantSmall1);
+      const scale = 1.0 + Math.random() * 0.8;
+      plant.scale.set(scale, scale, scale);
+      plant.position.set(
+        platform.center.x + Math.cos(angle) * dist,
+        platform.center.y - 0.6,
+        platform.center.z + Math.sin(angle) * dist
+      );
+      plant.rotation.y = Math.random() * Math.PI * 2;
+      scene.add(plant);
+    });
+  }
+
+  // 2-3 benchCushion on blog and projects platforms
+  if (models.benchCushion) {
+    const cushionPlacements = [
+      { platform: platforms.blog,     angle: Math.PI * 0.3,  dist: 3.5, rot: Math.PI * 0.3 },
+      { platform: platforms.blog,     angle: Math.PI * 1.6,  dist: 3.0, rot: Math.PI * 1.6 },
+      { platform: platforms.projects, angle: Math.PI * 0.7,  dist: 3.0, rot: Math.PI * 0.7 },
+    ];
+    cushionPlacements.forEach(({ platform, angle, dist, rot }) => {
+      const bench = cloneModel(models.benchCushion);
+      const scale = 1.5;
+      bench.scale.set(scale, scale, scale);
+      bench.position.set(
+        platform.center.x + Math.cos(angle) * dist,
+        platform.center.y - 0.6,
+        platform.center.z + Math.sin(angle) * dist
+      );
+      bench.rotation.y = rot;
+      scene.add(bench);
+    });
+  }
+
+  // --- Gold sparkle particles (more concentrated near platform surfaces) ---
+  const sparkleCount = 350;
   const sparklePositions = new Float32Array(sparkleCount * 3);
   const sparkleBaseY = new Float32Array(sparkleCount);
 
-  for (let i = 0; i < sparkleCount; i++) {
+  // First 200 particles: concentrated near platform surfaces
+  const platformsList = Object.values(platforms);
+  for (let i = 0; i < 200; i++) {
+    const p = platformsList[i % platformsList.length];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = Math.random() * (p.radius + 2);
+    sparklePositions[i * 3]     = p.center.x + Math.cos(angle) * dist;
+    sparklePositions[i * 3 + 1] = p.center.y - 0.5 + Math.random() * 3.0;
+    sparklePositions[i * 3 + 2] = p.center.z + Math.sin(angle) * dist;
+    sparkleBaseY[i] = sparklePositions[i * 3 + 1];
+  }
+
+  // Remaining 150 particles: spread out in the sky
+  for (let i = 200; i < sparkleCount; i++) {
     sparklePositions[i * 3]     = (Math.random() - 0.5) * 60;
     sparklePositions[i * 3 + 1] = -2 + Math.random() * 12;
     sparklePositions[i * 3 + 2] = (Math.random() - 0.5) * 60;
@@ -446,5 +873,6 @@ export function buildClouds(scene) {
       projects: projectSlots,
       about: aboutPosition,
     },
+    colliderGroup,
   };
 }

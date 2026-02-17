@@ -1,9 +1,10 @@
 /**
  * cafe.js — Cozy cafe interior environment (beige theme)
  *
- * Builds an indoor cafe scene with bookshelves, display tables,
- * an armchair reading nook, a coffee counter, warm lighting, and
- * rising steam particles.
+ * Builds an indoor cafe scene using Kenney GLB models for furniture,
+ * with procedural walls/floor/ceiling for collision. Returns a
+ * colliderGroup containing walls and invisible box colliders for
+ * large furniture pieces.
  */
 
 import * as THREE from 'three';
@@ -12,11 +13,11 @@ import {
   createBox,
   createPlane,
   createCylinder,
-  createEmissiveBox,
   createTextSprite,
   createParticles,
   createExitPortal,
 } from './shared.js';
+import { loadModels, cloneModel } from '../model-loader.js';
 
 /* ============================================
    Palette
@@ -34,15 +35,81 @@ const C = {
 };
 
 /* ============================================
+   Helper: invisible box collider
+   ============================================ */
+
+/**
+ * Creates an invisible box mesh for collision detection.
+ * Added to both the scene and the collider group.
+ */
+function createColliderBox(w, h, d, position) {
+  const geometry = new THREE.BoxGeometry(w, h, d);
+  const material = new THREE.MeshStandardMaterial({ visible: false });
+  const mesh = new THREE.Mesh(geometry, material);
+  if (position) mesh.position.copy(position);
+  return mesh;
+}
+
+/**
+ * Places a GLTF model clone in the scene at the given position,
+ * rotation, and scale. Returns the placed mesh group, or null
+ * if the source model failed to load.
+ */
+function placeModel(scene, model, position, rotationY, scale) {
+  if (!model) return null;
+  const instance = cloneModel(model);
+  instance.position.copy(position);
+  if (rotationY !== undefined) instance.rotation.y = rotationY;
+  const s = scale || 1;
+  instance.scale.set(s, s, s);
+  scene.add(instance);
+  return instance;
+}
+
+/* ============================================
    Builder
    ============================================ */
 
 /**
  * @param {THREE.Scene} scene
- * @returns {{ spawnPosition: THREE.Vector3, animationCallbacks: Function[], contentSlots: Object }}
+ * @returns {Promise<{ spawnPosition: THREE.Vector3, animationCallbacks: Function[], contentSlots: Object, colliderGroup: THREE.Group }>}
  */
-export function buildCafe(scene) {
+export async function buildCafe(scene) {
   const animationCallbacks = [];
+  const colliderGroup = new THREE.Group();
+  colliderGroup.name = 'cafeColliders';
+
+  // --- Load all Kenney models ---
+  const manifest = {
+    bookcaseOpen:       '/assets/models/cafe/bookcaseOpen.glb',
+    bookcaseClosed:     '/assets/models/cafe/bookcaseClosed.glb',
+    bookcaseClosedWide: '/assets/models/cafe/bookcaseClosedWide.glb',
+    books:              '/assets/models/cafe/books.glb',
+    tableCross:         '/assets/models/cafe/tableCross.glb',
+    tableRound:         '/assets/models/cafe/tableRound.glb',
+    tableCoffeeSquare:  '/assets/models/cafe/tableCoffeeSquare.glb',
+    tableCoffee:        '/assets/models/cafe/tableCoffee.glb',
+    chairCushion:       '/assets/models/cafe/chairCushion.glb',
+    chairRounded:       '/assets/models/cafe/chairRounded.glb',
+    stoolBarSquare:     '/assets/models/cafe/stoolBarSquare.glb',
+    loungeChair:        '/assets/models/cafe/loungeChair.glb',
+    loungeSofa:         '/assets/models/cafe/loungeSofa.glb',
+    loungeSofaOttoman:  '/assets/models/cafe/loungeSofaOttoman.glb',
+    lampRoundFloor:     '/assets/models/cafe/lampRoundFloor.glb',
+    lampRoundTable:     '/assets/models/cafe/lampRoundTable.glb',
+    lampWall:           '/assets/models/cafe/lampWall.glb',
+    pottedPlant:        '/assets/models/cafe/pottedPlant.glb',
+    plantSmall1:        '/assets/models/cafe/plantSmall1.glb',
+    plantSmall2:        '/assets/models/cafe/plantSmall2.glb',
+    rugRectangle:       '/assets/models/cafe/rugRectangle.glb',
+    rugRound:           '/assets/models/cafe/rugRound.glb',
+    kitchenCoffeeMachine: '/assets/models/cafe/kitchenCoffeeMachine.glb',
+    sideTable:          '/assets/models/cafe/sideTable.glb',
+    coatRackStanding:   '/assets/models/cafe/coatRackStanding.glb',
+    benchCushion:       '/assets/models/cafe/benchCushion.glb',
+  };
+
+  const models = await loadModels(manifest);
 
   // --- Fog & background ---
   scene.fog = new THREE.Fog(0xFAF6F1, 15, 35);
@@ -69,14 +136,6 @@ export function buildCafe(scene) {
     const lamp = new THREE.PointLight(0xFFD699, 0.85, 12);
     lamp.position.copy(pos);
     scene.add(lamp);
-
-    // Small glowing bulb mesh
-    const bulb = createEmissiveBox(
-      0.15, 0.15, 0.15,
-      0xFFD699, 0xFFD699, 1.5,
-      pos
-    );
-    scene.add(bulb);
   });
 
   // --- Floor ---
@@ -97,13 +156,14 @@ export function buildCafe(scene) {
   );
   scene.add(ceiling);
 
-  // --- Walls ---
+  // --- Walls (procedural boxes for collision) ---
   // Front wall (blog zone wall, z = -12)
   const frontWall = createBox(
     24, 4.5, 0.3, C.wall,
     new THREE.Vector3(0, 2.25, -12)
   );
   scene.add(frontWall);
+  colliderGroup.add(frontWall.clone());
 
   // Back wall (exit zone, z = 12)
   const backWall = createBox(
@@ -111,6 +171,7 @@ export function buildCafe(scene) {
     new THREE.Vector3(0, 2.25, 12)
   );
   scene.add(backWall);
+  colliderGroup.add(backWall.clone());
 
   // Left wall (about zone, x = -12)
   const leftWall = createBox(
@@ -118,6 +179,7 @@ export function buildCafe(scene) {
     new THREE.Vector3(-12, 2.25, 0)
   );
   scene.add(leftWall);
+  colliderGroup.add(leftWall.clone());
 
   // Right wall (projects zone side, x = 12)
   const rightWall = createBox(
@@ -125,48 +187,46 @@ export function buildCafe(scene) {
     new THREE.Vector3(12, 2.25, 0)
   );
   scene.add(rightWall);
+  colliderGroup.add(rightWall.clone());
 
-  // --- Bookshelves along front wall (blog zone) ---
+  // Floor collider
+  const floorCollider = createColliderBox(24, 0.3, 24, new THREE.Vector3(0, -0.15, 0));
+  scene.add(floorCollider);
+  colliderGroup.add(floorCollider.clone());
+
+  // =============================================
+  // GLTF MODEL PLACEMENT
+  // =============================================
+
+  // --- Bookshelves along front wall (blog zone, z ≈ -11) ---
   const blogSlots = [];
   const shelfCount = 5;
   const shelfStartX = -8;
   const shelfSpacing = 4;
+  const bookcaseTypes = [
+    models.bookcaseOpen,
+    models.bookcaseClosed,
+    models.bookcaseClosedWide,
+    models.bookcaseOpen,
+    models.bookcaseClosed,
+  ];
 
   for (let i = 0; i < shelfCount; i++) {
     const sx = shelfStartX + i * shelfSpacing;
     const sz = -11.2;
+    const bookcaseModel = bookcaseTypes[i];
+    const bookcaseScale = 2.0;
 
-    // Shelf upright (back panel)
-    const back = createBox(
-      2.0, 3.2, 0.12, C.shelf,
-      new THREE.Vector3(sx, 1.8, sz - 0.3)
-    );
-    scene.add(back);
+    placeModel(scene, bookcaseModel, new THREE.Vector3(sx, 0, sz), 0, bookcaseScale);
 
-    // Left upright
-    const leftUpright = createBox(
-      0.1, 3.2, 0.6, C.woodDark,
-      new THREE.Vector3(sx - 1.0, 1.8, sz)
-    );
-    scene.add(leftUpright);
+    // Invisible collider for bookcase (approx 2m wide, 3.2m tall, 0.6m deep)
+    const bcCollider = createColliderBox(2.0, 3.2, 0.8, new THREE.Vector3(sx, 1.6, sz));
+    scene.add(bcCollider);
+    colliderGroup.add(bcCollider.clone());
 
-    // Right upright
-    const rightUpright = createBox(
-      0.1, 3.2, 0.6, C.woodDark,
-      new THREE.Vector3(sx + 1.0, 1.8, sz)
-    );
-    scene.add(rightUpright);
-
-    // Three shelf planks and content slots per shelf unit
+    // Content slots: three levels per bookcase (on the shelf surfaces)
     const shelfHeights = [0.8, 1.8, 2.8];
     for (let j = 0; j < shelfHeights.length; j++) {
-      const plank = createBox(
-        2.0, 0.08, 0.5, C.wood,
-        new THREE.Vector3(sx, shelfHeights[j], sz)
-      );
-      scene.add(plank);
-
-      // Content slot sits on top of each plank
       blogSlots.push(
         new THREE.Vector3(sx, shelfHeights[j] + 0.4, sz - 0.15)
       );
@@ -176,9 +236,22 @@ export function buildCafe(scene) {
   // Trim to 12 blog slots
   const finalBlogSlots = blogSlots.slice(0, 12);
 
-  // --- Display tables along left wall (projects zone) ---
-  // Projects zone is at x=14 in LAYOUT, but the cafe is enclosed.
-  // We place display tables on the right-hand side of the cafe interior.
+  // --- Books scattered on/near bookshelves ---
+  const bookPositions = [
+    { pos: new THREE.Vector3(-8, 0.9, -10.5), rotY: 0.3, scale: 1.8 },
+    { pos: new THREE.Vector3(-4, 1.9, -10.6), rotY: -0.5, scale: 1.6 },
+    { pos: new THREE.Vector3(0, 0.9, -10.4), rotY: 0.8, scale: 2.0 },
+    { pos: new THREE.Vector3(4, 2.9, -10.5), rotY: -0.2, scale: 1.7 },
+    { pos: new THREE.Vector3(8, 1.9, -10.6), rotY: 1.1, scale: 1.5 },
+    { pos: new THREE.Vector3(-6, 0, -10.0), rotY: 0.6, scale: 2.0 },
+    { pos: new THREE.Vector3(2, 0, -10.2), rotY: -0.9, scale: 1.8 },
+  ];
+
+  bookPositions.forEach(({ pos, rotY, scale }) => {
+    placeModel(scene, models.books, pos, rotY, scale);
+  });
+
+  // --- Display tables + chairs along right wall (projects zone, x ≈ 10) ---
   const projectSlots = [];
   const tableCount = 5;
   const tableStartZ = -6;
@@ -187,89 +260,124 @@ export function buildCafe(scene) {
   for (let i = 0; i < tableCount; i++) {
     const tz = tableStartZ + i * tableSpacing;
     const tx = 10;
+    const tableScale = 2.0;
 
-    // Table top
-    const top = createBox(
-      1.8, 0.12, 1.2, C.wood,
-      new THREE.Vector3(tx, 1.0, tz)
-    );
-    scene.add(top);
+    // Alternate between tableCross and tableRound
+    const tableModel = i % 2 === 0 ? models.tableCross : models.tableRound;
+    placeModel(scene, tableModel, new THREE.Vector3(tx, 0, tz), 0, tableScale);
 
-    // Four legs
-    const legOffsets = [
-      [-0.7, -0.45],
-      [0.7, -0.45],
-      [-0.7, 0.45],
-      [0.7, 0.45],
-    ];
+    // Chair next to each table (facing the table, offset in z)
+    const chairModel = i % 2 === 0 ? models.chairCushion : models.chairRounded;
+    placeModel(scene, chairModel, new THREE.Vector3(tx - 1.4, 0, tz), Math.PI / 2, 2.0);
 
-    legOffsets.forEach(([dx, dz]) => {
-      const leg = createCylinder(
-        0.05, 0.05, 1.0, 8, C.woodDark,
-        new THREE.Vector3(tx + dx, 0.5, tz + dz)
-      );
-      scene.add(leg);
-    });
+    // Invisible collider for table (approx 1.8 wide, 1.0 tall, 1.2 deep)
+    const tCollider = createColliderBox(1.8, 1.0, 1.2, new THREE.Vector3(tx, 0.5, tz));
+    scene.add(tCollider);
+    colliderGroup.add(tCollider.clone());
 
+    // Content slot on top of table
     projectSlots.push(new THREE.Vector3(tx, 1.15, tz));
   }
 
-  // --- Armchair + side table for about zone ---
-  // About zone centered at x=-14 in LAYOUT; we place at x=-10 inside walls.
-  const chairX = -10;
-  const chairZ = 0;
+  // --- 3 additional seating groups in the open floor area ---
+  const floorSeatingGroups = [
+    { tablePos: new THREE.Vector3(-3, 0, -4), chair1Offset: new THREE.Vector3(-1.5, 0, 0), chair2Offset: new THREE.Vector3(1.5, 0, 0), chair1RotY: Math.PI / 2, chair2RotY: -Math.PI / 2 },
+    { tablePos: new THREE.Vector3(3, 0, 2), chair1Offset: new THREE.Vector3(0, 0, -1.5), chair2Offset: new THREE.Vector3(0, 0, 1.5), chair1RotY: 0, chair2RotY: Math.PI },
+    { tablePos: new THREE.Vector3(-2, 0, 6), chair1Offset: new THREE.Vector3(-1.5, 0, 0), chair2Offset: new THREE.Vector3(1.5, 0, 0), chair1RotY: Math.PI / 2, chair2RotY: -Math.PI / 2 },
+  ];
 
-  // Seat
-  const seat = createBox(
-    1.6, 0.4, 1.4, C.accent,
-    new THREE.Vector3(chairX, 0.6, chairZ)
-  );
-  scene.add(seat);
+  floorSeatingGroups.forEach(({ tablePos, chair1Offset, chair2Offset, chair1RotY, chair2RotY }, idx) => {
+    const tModel = idx % 2 === 0 ? models.tableRound : models.tableCross;
+    placeModel(scene, tModel, tablePos, 0, 2.0);
 
-  // Backrest
-  const backrest = createBox(
-    1.6, 1.2, 0.2, C.accent,
-    new THREE.Vector3(chairX, 1.2, chairZ - 0.6)
-  );
-  scene.add(backrest);
+    const c1Pos = new THREE.Vector3().addVectors(tablePos, chair1Offset);
+    const c2Pos = new THREE.Vector3().addVectors(tablePos, chair2Offset);
 
-  // Armrests
-  const armrestLeft = createBox(
-    0.15, 0.5, 1.2, C.woodDark,
-    new THREE.Vector3(chairX - 0.85, 1.0, chairZ)
-  );
-  scene.add(armrestLeft);
+    placeModel(scene, models.chairRounded, c1Pos, chair1RotY, 2.0);
+    placeModel(scene, models.chairCushion, c2Pos, chair2RotY, 2.0);
 
-  const armrestRight = createBox(
-    0.15, 0.5, 1.2, C.woodDark,
-    new THREE.Vector3(chairX + 0.85, 1.0, chairZ)
-  );
-  scene.add(armrestRight);
+    // Table collider
+    const ftCollider = createColliderBox(1.6, 1.0, 1.6, new THREE.Vector3(tablePos.x, 0.5, tablePos.z));
+    scene.add(ftCollider);
+    colliderGroup.add(ftCollider.clone());
+  });
 
-  // Side table next to chair
-  const sideTableTop = createBox(
-    0.8, 0.08, 0.8, C.wood,
-    new THREE.Vector3(chairX + 1.8, 0.9, chairZ)
-  );
-  scene.add(sideTableTop);
+  // --- Lounge area (about zone, x=-10, z=0) ---
+  const loungeX = -10;
+  const loungeZ = 0;
 
-  const sideTableLeg = createCylinder(
-    0.06, 0.06, 0.9, 8, C.woodDark,
-    new THREE.Vector3(chairX + 1.8, 0.45, chairZ)
-  );
-  scene.add(sideTableLeg);
+  // Lounge sofa (facing right, towards center of room)
+  placeModel(scene, models.loungeSofa, new THREE.Vector3(loungeX - 0.5, 0, loungeZ), Math.PI / 2, 2.2);
 
-  const aboutPosition = new THREE.Vector3(chairX, 1.7, chairZ);
+  // Lounge chair opposite the sofa
+  placeModel(scene, models.loungeChair, new THREE.Vector3(loungeX + 2.5, 0, loungeZ), -Math.PI / 2, 2.2);
+
+  // Coffee table between sofa and chair
+  placeModel(scene, models.tableCoffee, new THREE.Vector3(loungeX + 1.0, 0, loungeZ), 0, 2.0);
+
+  // Rug under the lounge area
+  placeModel(scene, models.rugRectangle, new THREE.Vector3(loungeX + 1.0, 0.01, loungeZ), 0, 2.5);
+
+  // Ottoman near the sofa
+  placeModel(scene, models.loungeSofaOttoman, new THREE.Vector3(loungeX - 0.5, 0, loungeZ + 2.2), Math.PI / 2, 2.0);
+
+  // Colliders for lounge furniture
+  // Sofa collider
+  const sofaCollider = createColliderBox(1.2, 1.0, 2.4, new THREE.Vector3(loungeX - 0.5, 0.5, loungeZ));
+  scene.add(sofaCollider);
+  colliderGroup.add(sofaCollider.clone());
+
+  // Lounge chair collider
+  const lChairCollider = createColliderBox(1.2, 1.0, 1.2, new THREE.Vector3(loungeX + 2.5, 0.5, loungeZ));
+  scene.add(lChairCollider);
+  colliderGroup.add(lChairCollider.clone());
+
+  // Coffee table collider
+  const ctCollider = createColliderBox(1.2, 0.5, 0.8, new THREE.Vector3(loungeX + 1.0, 0.25, loungeZ));
+  scene.add(ctCollider);
+  colliderGroup.add(ctCollider.clone());
+
+  const aboutPosition = new THREE.Vector3(loungeX, 1.7, loungeZ);
+
+  // --- Floor lamps at existing lamp positions ---
+  const floorLampPositions = [
+    new THREE.Vector3(-8, 0, -6),
+    new THREE.Vector3(8, 0, -6),
+    new THREE.Vector3(-8, 0, 6),
+    new THREE.Vector3(6, 0, 4),
+  ];
+
+  floorLampPositions.forEach((pos) => {
+    placeModel(scene, models.lampRoundFloor, pos, 0, 2.5);
+  });
+
+  // --- Potted plants in corners and edges ---
+  const plantPlacements = [
+    { model: models.pottedPlant, pos: new THREE.Vector3(-11, 0, -11), rotY: 0.4, scale: 2.2 },
+    { model: models.pottedPlant, pos: new THREE.Vector3(11, 0, -11), rotY: -0.6, scale: 2.0 },
+    { model: models.plantSmall1, pos: new THREE.Vector3(-11, 0, 8), rotY: 0.8, scale: 2.5 },
+    { model: models.plantSmall2, pos: new THREE.Vector3(11, 0, 8), rotY: -0.3, scale: 2.5 },
+    { model: models.pottedPlant, pos: new THREE.Vector3(5, 0, -11), rotY: 1.2, scale: 1.8 },
+  ];
+
+  plantPlacements.forEach(({ model, pos, rotY, scale }) => {
+    placeModel(scene, model, pos, rotY, scale);
+  });
 
   // --- Coffee counter at back ---
   const counterZ = 10;
 
-  // Main counter body
+  // Main counter body (procedural for collision)
   const counter = createBox(
     6, 1.2, 1.0, C.woodDark,
     new THREE.Vector3(0, 0.6, counterZ)
   );
   scene.add(counter);
+
+  // Counter collider
+  const counterCollider = createColliderBox(6, 1.2, 1.0, new THREE.Vector3(0, 0.6, counterZ));
+  scene.add(counterCollider);
+  colliderGroup.add(counterCollider.clone());
 
   // Counter top surface
   const counterTop = createBox(
@@ -278,7 +386,21 @@ export function buildCafe(scene) {
   );
   scene.add(counterTop);
 
-  // Coffee cups on counter (small cylinders)
+  // --- Bar stools at the coffee counter (z ≈ 10, facing the counter) ---
+  const stoolPositions = [
+    new THREE.Vector3(-2, 0, counterZ - 1.3),
+    new THREE.Vector3(0, 0, counterZ - 1.3),
+    new THREE.Vector3(2, 0, counterZ - 1.3),
+  ];
+
+  stoolPositions.forEach((pos) => {
+    placeModel(scene, models.stoolBarSquare, pos, 0, 2.0);
+  });
+
+  // --- Coffee machine on the counter ---
+  placeModel(scene, models.kitchenCoffeeMachine, new THREE.Vector3(2.0, 1.25, counterZ), 0, 1.8);
+
+  // --- Coffee cups on counter (small cylinders for decoration) ---
   const cupPositions = [
     new THREE.Vector3(-1.5, 1.4, counterZ),
     new THREE.Vector3(0, 1.4, counterZ),
@@ -295,12 +417,36 @@ export function buildCafe(scene) {
   menuSign.position.set(0, 3.0, counterZ - 0.6);
   scene.add(menuSign);
 
+  // --- Coat rack near entrance area (center of room) ---
+  placeModel(scene, models.coatRackStanding, new THREE.Vector3(3, 0, -1), 0, 2.2);
+
+  // --- Bench along left wall ---
+  placeModel(scene, models.benchCushion, new THREE.Vector3(-11, 0, -5), Math.PI / 2, 2.2);
+
+  // --- Side table near lounge ---
+  placeModel(scene, models.sideTable, new THREE.Vector3(loungeX + 1.0, 0, loungeZ - 2.5), 0, 2.0);
+
+  // --- Wall lamps for extra atmosphere ---
+  placeModel(scene, models.lampWall, new THREE.Vector3(-11.7, 2.8, -6), Math.PI / 2, 2.0);
+  placeModel(scene, models.lampWall, new THREE.Vector3(11.7, 2.8, -6), -Math.PI / 2, 2.0);
+  placeModel(scene, models.lampWall, new THREE.Vector3(-11.7, 2.8, 6), Math.PI / 2, 2.0);
+
+  // --- Table lamp on the counter for decoration ---
+  placeModel(scene, models.lampRoundTable, new THREE.Vector3(-1.0, 1.25, counterZ), 0, 1.5);
+
+  // --- Additional rugs ---
+  placeModel(scene, models.rugRound, new THREE.Vector3(-3, 0.01, -4), 0, 2.5);
+  placeModel(scene, models.rugRound, new THREE.Vector3(3, 0.01, 2), 0.5, 2.0);
+
+  // =============================================
+  // PARTICLES
+  // =============================================
+
   // --- Steam particles ---
   const steamCount = 60;
   const steamPositions = new Float32Array(steamCount * 3);
 
   for (let i = 0; i < steamCount; i++) {
-    // Start near coffee cups
     const cupIdx = Math.floor(Math.random() * cupPositions.length);
     const cup = cupPositions[cupIdx];
     steamPositions[i * 3]     = cup.x + (Math.random() - 0.5) * 0.3;
@@ -363,6 +509,10 @@ export function buildCafe(scene) {
     dust.geometry.attributes.position.needsUpdate = true;
   });
 
+  // =============================================
+  // PORTAL & LABELS
+  // =============================================
+
   // --- Exit portal ---
   const exitPortal = createExitPortal(
     new THREE.Vector3(0, 1.7, 11),
@@ -380,10 +530,13 @@ export function buildCafe(scene) {
   scene.add(projectsLabel);
 
   const aboutLabel = createTextSprite('About', 32, '#4A2F1A');
-  aboutLabel.position.set(chairX, 2.8, chairZ);
+  aboutLabel.position.set(loungeX, 2.8, loungeZ);
   scene.add(aboutLabel);
 
-  // --- Return ---
+  // =============================================
+  // RETURN
+  // =============================================
+
   return {
     spawnPosition: LAYOUT.spawnPosition.clone(),
     animationCallbacks,
@@ -392,5 +545,6 @@ export function buildCafe(scene) {
       projects: projectSlots,
       about: aboutPosition,
     },
+    colliderGroup,
   };
 }

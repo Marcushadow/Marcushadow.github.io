@@ -1,11 +1,13 @@
 /**
- * controls.js — First-person pointer-lock controls
+ * controls.js — First-person pointer-lock controls with collision
  *
- * Provides WASD + Arrow key movement and mouse-look with pointer lock.
+ * Provides WASD + Arrow key movement, mouse-look with pointer lock,
+ * and Octree-based collision detection against world geometry.
  * Camera Y is fixed at 1.7 (eye height) — no jumping or gravity.
  *
  * Usage:
  *   const controls = createControls(camera, renderer.domElement);
+ *   controls.setOctree(worldOctree);  // enable collision
  *   controls.onLockChange = (locked) => { ... };
  *   controls.lock();
  *   // in animation loop:
@@ -13,6 +15,7 @@
  */
 
 import * as THREE from 'three';
+import { Capsule } from 'three/addons/math/Capsule.js';
 
 const MOVE_SPEED = 6.0;
 const DECELERATION = 4.0;
@@ -21,6 +24,7 @@ const VELOCITY_DEADZONE = 0.001;
 const MOUSE_SENSITIVITY = 0.002;
 const PITCH_LIMIT = THREE.MathUtils.degToRad(89);
 const EYE_HEIGHT = 1.7;
+const PLAYER_RADIUS = 0.35;
 
 /**
  * Creates a first-person controls object.
@@ -35,6 +39,14 @@ export function createControls(camera, domElement) {
   const _euler = new THREE.Euler(0, 0, 0, 'YXZ');
   const _velocity = new THREE.Vector3();
   const _direction = new THREE.Vector3();
+
+  // Collision state
+  let _octree = null;
+  const _capsule = new Capsule(
+    new THREE.Vector3(0, PLAYER_RADIUS, 0),
+    new THREE.Vector3(0, EYE_HEIGHT, 0),
+    PLAYER_RADIUS
+  );
 
   // Keyboard state
   const _keys = {
@@ -135,6 +147,47 @@ export function createControls(camera, domElement) {
   const _right = new THREE.Vector3();
   const _up = new THREE.Vector3(0, 1, 0);
 
+  // --- Collision helper ---
+
+  /**
+   * Checks for capsule intersection with the octree and
+   * pushes the capsule out of any colliding geometry.
+   */
+  function resolveCollisions() {
+    if (!_octree) return;
+
+    const result = _octree.capsuleIntersect(_capsule);
+    if (result) {
+      // Push capsule out of collision along the surface normal
+      _capsule.translate(result.normal.multiplyScalar(result.depth));
+    }
+  }
+
+  // --- Sync helpers ---
+
+  /** Copies camera position into the capsule. */
+  function syncCapsuleFromCamera() {
+    _capsule.start.set(
+      camera.position.x,
+      camera.position.y - EYE_HEIGHT + PLAYER_RADIUS,
+      camera.position.z
+    );
+    _capsule.end.set(
+      camera.position.x,
+      camera.position.y,
+      camera.position.z
+    );
+  }
+
+  /** Copies capsule top position back to the camera. */
+  function syncCameraFromCapsule() {
+    camera.position.set(
+      _capsule.end.x,
+      EYE_HEIGHT,
+      _capsule.end.z
+    );
+  }
+
   // --- Public API ---
 
   const controls = {
@@ -154,6 +207,18 @@ export function createControls(camera, domElement) {
     },
     set onLockChange(fn) {
       _onLockChange = fn;
+    },
+
+    /**
+     * Sets the Octree used for collision detection.
+     * Call once after the environment is built.
+     *
+     * @param {import('three/addons/math/Octree.js').Octree} octree
+     */
+    setOctree(octree) {
+      _octree = octree;
+      // Sync capsule to current camera position
+      syncCapsuleFromCamera();
     },
 
     /**
@@ -225,6 +290,13 @@ export function createControls(camera, domElement) {
 
       // Lock vertical position to eye height
       camera.position.y = EYE_HEIGHT;
+
+      // --- Collision resolution ---
+      if (_octree) {
+        syncCapsuleFromCamera();
+        resolveCollisions();
+        syncCameraFromCapsule();
+      }
     },
 
     /**

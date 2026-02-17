@@ -7,6 +7,7 @@
  */
 
 import * as THREE from 'three';
+import { Octree } from 'three/addons/math/Octree.js';
 import { createControls } from './controls.js';
 import { buildCafe } from './environments/cafe.js';
 import { buildCyberpunk } from './environments/cyberpunk.js';
@@ -149,9 +150,9 @@ async function init() {
 
   setProgress(40);
 
-  // --- Build environment ---
-  const { spawnPosition, animationCallbacks: envCallbacks, contentSlots } =
-    theme.builder(scene);
+  // --- Build environment (async for model loading) ---
+  const { spawnPosition, animationCallbacks: envCallbacks, contentSlots, colliderGroup } =
+    await theme.builder(scene);
 
   // Place camera at spawn
   if (spawnPosition) {
@@ -169,6 +170,13 @@ async function init() {
 
   // --- Controls ---
   const controls = createControls(camera, renderer.domElement);
+
+  // --- Build collision octree ---
+  if (colliderGroup) {
+    const worldOctree = new Octree();
+    worldOctree.fromGraphNode(colliderGroup);
+    controls.setOctree(worldOctree);
+  }
 
   // Merge all animation callbacks
   const allCallbacks = [...(envCallbacks || []), ...(contentCallbacks || [])];
