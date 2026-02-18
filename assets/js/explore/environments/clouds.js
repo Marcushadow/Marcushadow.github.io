@@ -418,19 +418,19 @@ export async function buildClouds(scene) {
   const platforms = {
     main: {
       center: new THREE.Vector3(0, 0, 0),
-      radius: 5,
+      radius: 4,
     },
     blog: {
-      center: new THREE.Vector3(0, 0, -20),
-      radius: 8,
+      center: new THREE.Vector3(0, 0, -10),
+      radius: 5,
     },
     projects: {
-      center: new THREE.Vector3(20, 0, 0),
-      radius: 7,
+      center: new THREE.Vector3(10, 0, 0),
+      radius: 5,
     },
     about: {
-      center: new THREE.Vector3(-18, 0, 0),
-      radius: 5,
+      center: new THREE.Vector3(-10, 0, 0),
+      radius: 4,
     },
   };
 
@@ -572,9 +572,9 @@ export async function buildClouds(scene) {
 
   for (let i = 0; i < 20; i++) {
     const cloudGroup = new THREE.Group();
-    const cx = (Math.random() - 0.5) * 70;
+    const cx = (Math.random() - 0.5) * 40;
     const cy = 3 + Math.random() * 12;
-    const cz = (Math.random() - 0.5) * 70;
+    const cz = (Math.random() - 0.5) * 40;
 
     // 2-4 stretched spheres per cloud
     const puffCount = 2 + Math.floor(Math.random() * 3);
@@ -666,7 +666,7 @@ export async function buildClouds(scene) {
   const blogLabel = createTextSprite('Blog', 36, '#0066cc');
   blogLabel.position.set(
     platforms.blog.center.x,
-    platforms.blog.center.y + 2.5,
+    platforms.blog.center.y + 1.5,
     platforms.blog.center.z
   );
   scene.add(blogLabel);
@@ -674,7 +674,7 @@ export async function buildClouds(scene) {
   const projectsLabel = createTextSprite('Projects', 36, '#0066cc');
   projectsLabel.position.set(
     platforms.projects.center.x,
-    platforms.projects.center.y + 2.5,
+    platforms.projects.center.y + 1.5,
     platforms.projects.center.z
   );
   scene.add(projectsLabel);
@@ -682,7 +682,7 @@ export async function buildClouds(scene) {
   const aboutLabel = createTextSprite('About', 36, '#0066cc');
   aboutLabel.position.set(
     platforms.about.center.x,
-    platforms.about.center.y + 2.5,
+    platforms.about.center.y + 1.5,
     platforms.about.center.z
   );
   scene.add(aboutLabel);
@@ -697,7 +697,7 @@ export async function buildClouds(scene) {
     const radius = 5.0;
     blogSlots.push(new THREE.Vector3(
       blogCenter.x + Math.cos(angle) * radius,
-      blogCenter.y + 0.9,
+      blogCenter.y + 0.5,
       blogCenter.z + Math.sin(angle) * radius
     ));
   }
@@ -712,7 +712,7 @@ export async function buildClouds(scene) {
     const radius = 4.5;
     projectSlots.push(new THREE.Vector3(
       projCenter.x + Math.cos(angle) * radius,
-      projCenter.y + 0.9,
+      projCenter.y + 0.5,
       projCenter.z + Math.sin(angle) * radius
     ));
   }
@@ -720,7 +720,7 @@ export async function buildClouds(scene) {
   // --- Content slot: About (center of about platform) ---
   const aboutPosition = new THREE.Vector3(
     platforms.about.center.x,
-    platforms.about.center.y + 1.5,
+    0.5,
     platforms.about.center.z
   );
 
@@ -819,9 +819,9 @@ export async function buildClouds(scene) {
 
   // Remaining 150 particles: spread out in the sky
   for (let i = 200; i < sparkleCount; i++) {
-    sparklePositions[i * 3]     = (Math.random() - 0.5) * 60;
+    sparklePositions[i * 3]     = (Math.random() - 0.5) * 40;
     sparklePositions[i * 3 + 1] = Math.random() * 12;
-    sparklePositions[i * 3 + 2] = (Math.random() - 0.5) * 60;
+    sparklePositions[i * 3 + 2] = (Math.random() - 0.5) * 40;
     sparkleBaseY[i] = sparklePositions[i * 3 + 1];
   }
 
@@ -859,14 +859,14 @@ export async function buildClouds(scene) {
 
   // --- Exit portal on main platform ---
   const exitPortal = createExitPortal(
-    new THREE.Vector3(0, 1.0, 3.5),
+    new THREE.Vector3(0, 0.5, 3),
     C.accent
   );
   scene.add(exitPortal);
 
   // --- Return ---
   return {
-    spawnPosition: new THREE.Vector3(0, 1.7, 0),
+    spawnPosition: new THREE.Vector3(0, 0, 0),
     animationCallbacks,
     contentSlots: {
       blog: blogSlots,

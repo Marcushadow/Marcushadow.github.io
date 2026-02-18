@@ -569,6 +569,7 @@ export function placeContentObjects(scene, data, theme, slots) {
       animationCallbacks.push(result.animationCallback);
     }
 
+    group.rotation.y = Math.PI / 4; // face isometric camera
     scene.add(group);
     objects.push(group);
   }
@@ -594,6 +595,7 @@ export function placeContentObjects(scene, data, theme, slots) {
       animationCallbacks.push(result.animationCallback);
     }
 
+    group.rotation.y = Math.PI / 4; // face isometric camera
     scene.add(group);
     objects.push(group);
   }
@@ -601,6 +603,7 @@ export function placeContentObjects(scene, data, theme, slots) {
   // --- Place about display ---
   if (slots.about) {
     const aboutGroup = createAboutDisplay(about, slots.about, theme);
+    aboutGroup.rotation.y = Math.PI / 4; // face isometric camera
     scene.add(aboutGroup);
     objects.push(aboutGroup);
   }

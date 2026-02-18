@@ -4,6 +4,8 @@
  * Builds a dense cyberpunk alleyway with buildings on both sides,
  * neon signs, rain, floating data bits, vendor stalls, overhead wires,
  * street puddles, ground-level clutter, and Kenney model accents.
+ *
+ * Shortened street for isometric camera view (Z range: -10 to +10).
  */
 
 import * as THREE from 'three';
@@ -337,14 +339,15 @@ export async function buildCyberpunk(scene) {
   scene.add(ambient);
 
   // Main neon lights — mounted on building walls with brackets
+  // Z positions compressed ~50% from original
   const neonLightConfigs = [
-    { pos: new THREE.Vector3(-6.4, 4, -8),  color: C.neonCyan,    intensity: 1.5, len: 1.8 },
-    { pos: new THREE.Vector3(6.4, 4, -4),   color: C.neonMagenta, intensity: 1.5, len: 1.5 },
-    { pos: new THREE.Vector3(-6.4, 4, 0),   color: C.neonPurple,  intensity: 1.2, len: 2.0 },
-    { pos: new THREE.Vector3(6.4, 4, 4),    color: C.neonCyan,    intensity: 1.0, len: 1.5 },
-    { pos: new THREE.Vector3(-6.4, 4, 8),   color: C.neonMagenta, intensity: 1.0, len: 1.8 },
-    { pos: new THREE.Vector3(-6.4, 5, 14),  color: C.neonGreen,   intensity: 1.0, len: 1.2 },
-    { pos: new THREE.Vector3(6.4, 5, 12),   color: C.neonPurple,  intensity: 1.0, len: 1.4 },
+    { pos: new THREE.Vector3(-6.4, 4, -4),   color: C.neonCyan,    intensity: 1.5, len: 1.8 },
+    { pos: new THREE.Vector3(6.4, 4, -2),    color: C.neonMagenta, intensity: 1.5, len: 1.5 },
+    { pos: new THREE.Vector3(-6.4, 4, 0),    color: C.neonPurple,  intensity: 1.2, len: 2.0 },
+    { pos: new THREE.Vector3(6.4, 4, 2),     color: C.neonCyan,    intensity: 1.0, len: 1.5 },
+    { pos: new THREE.Vector3(-6.4, 4, 4),    color: C.neonMagenta, intensity: 1.0, len: 1.8 },
+    { pos: new THREE.Vector3(-6.4, 5, 7),    color: C.neonGreen,   intensity: 1.0, len: 1.2 },
+    { pos: new THREE.Vector3(6.4, 5, 6),     color: C.neonPurple,  intensity: 1.0, len: 1.4 },
   ];
 
   const neonTubes = [];
@@ -364,7 +367,7 @@ export async function buildCyberpunk(scene) {
   });
 
   // --- Ground (wet asphalt) ---
-  const groundGeo = new THREE.PlaneGeometry(40, 60);
+  const groundGeo = new THREE.PlaneGeometry(40, 30);
   const groundMat = new THREE.MeshStandardMaterial({
     color: C.ground,
     roughness: 0.3,
@@ -377,43 +380,40 @@ export async function buildCyberpunk(scene) {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  // Neon strip on ground (center line)
+  // Neon strip on ground (center line) — shortened
   const neonStrip = createEmissiveBox(
-    0.15, 0.02, 44,
+    0.15, 0.02, 22,
     C.neonCyan, C.neonCyan, 1.0,
     new THREE.Vector3(0, 0.02, 0)
   );
   scene.add(neonStrip);
 
-  // Side neon strips (pushed outward for tighter street)
+  // Side neon strips (pushed outward for tighter street) — shortened
   const leftStrip = createEmissiveBox(
-    0.1, 0.02, 44,
+    0.1, 0.02, 22,
     C.neonMagenta, C.neonMagenta, 0.6,
     new THREE.Vector3(-6.5, 0.02, 0)
   );
   scene.add(leftStrip);
 
   const rightStrip = createEmissiveBox(
-    0.1, 0.02, 44,
+    0.1, 0.02, 22,
     C.neonMagenta, C.neonMagenta, 0.6,
     new THREE.Vector3(6.5, 0.02, 0)
   );
   scene.add(rightStrip);
 
-  // --- Buildings — Left side (blog billboards) — 10 buildings ---
+  // --- Buildings — Left side (blog billboards) — 6 buildings ---
+  // Z range: -10 to +10, ~3.5 unit spacing, max height 8
   const blogSlots = [];
 
   const leftBuildings = [
-    { x: -9,  z: -20, w: 5, h: 11, d: 5 },
-    { x: -9,  z: -16, w: 5, h: 14, d: 5 },
-    { x: -10, z: -12, w: 7, h: 10, d: 5 },
-    { x: -9,  z: -8,  w: 5, h: 16, d: 5 },
-    { x: -9,  z: -4,  w: 5, h: 9,  d: 5 },
-    { x: -10, z: 0,   w: 7, h: 13, d: 5 },
-    { x: -9,  z: 4,   w: 5, h: 11, d: 5 },
-    { x: -9,  z: 8,   w: 5, h: 15, d: 5 },
-    { x: -10, z: 12,  w: 7, h: 8,  d: 5 },
-    { x: -9,  z: 16,  w: 5, h: 12, d: 5 },
+    { x: -9,  z: -9,   w: 5, h: 7, d: 5 },
+    { x: -10, z: -5.5, w: 7, h: 6, d: 5 },
+    { x: -9,  z: -2,   w: 5, h: 8, d: 5 },
+    { x: -10, z: 1.5,  w: 7, h: 7, d: 5 },
+    { x: -9,  z: 5,    w: 5, h: 5, d: 5 },
+    { x: -9,  z: 8.5,  w: 5, h: 8, d: 5 },
   ];
 
   leftBuildings.forEach((b, i) => {
@@ -430,25 +430,22 @@ export async function buildCyberpunk(scene) {
 
     blogSlots.push(new THREE.Vector3(billboardX, billboardY, b.z));
 
-    if (b.h > 10) {
+    if (b.h > 6) {
       blogSlots.push(new THREE.Vector3(billboardX, billboardY + 2.5, b.z));
     }
   });
 
-  // --- Buildings — Right side (project storefronts) — 10 buildings ---
+  // --- Buildings — Right side (project storefronts) — 6 buildings ---
+  // Z range: -10 to +10, ~3.5 unit spacing, max height 8
   const projectSlots = [];
 
   const rightBuildings = [
-    { x: 9,  z: -20, w: 5, h: 10, d: 5 },
-    { x: 9,  z: -16, w: 5, h: 13, d: 5 },
-    { x: 10, z: -12, w: 7, h: 11, d: 5 },
-    { x: 9,  z: -8,  w: 5, h: 15, d: 5 },
-    { x: 9,  z: -4,  w: 5, h: 9,  d: 5 },
-    { x: 10, z: 0,   w: 7, h: 12, d: 5 },
-    { x: 9,  z: 4,   w: 5, h: 14, d: 5 },
-    { x: 9,  z: 8,   w: 5, h: 10, d: 5 },
-    { x: 10, z: 12,  w: 7, h: 16, d: 5 },
-    { x: 9,  z: 16,  w: 5, h: 11, d: 5 },
+    { x: 9,  z: -9,   w: 5, h: 6, d: 5 },
+    { x: 10, z: -5.5, w: 7, h: 7, d: 5 },
+    { x: 9,  z: -2,   w: 5, h: 8, d: 5 },
+    { x: 10, z: 1.5,  w: 7, h: 6, d: 5 },
+    { x: 9,  z: 5,    w: 5, h: 7, d: 5 },
+    { x: 9,  z: 8.5,  w: 5, h: 5, d: 5 },
   ];
 
   rightBuildings.forEach((b) => {
@@ -463,10 +460,11 @@ export async function buildCyberpunk(scene) {
   });
 
   // --- Neon sign accents ---
+  // Z positions compressed ~50%
   const signs = [
-    { text: 'BLOG',     pos: new THREE.Vector3(-5.5, 5.0, -14), color: '#00d4ff' },
-    { text: 'PROJECTS', pos: new THREE.Vector3(5.5, 5.0, -4),   color: '#ff00aa' },
-    { text: 'ABOUT',    pos: new THREE.Vector3(-2, 5.0, 18),     color: '#7c3aed' },
+    { text: 'BLOG',     pos: new THREE.Vector3(-5.5, 5.0, -7),  color: '#00d4ff' },
+    { text: 'PROJECTS', pos: new THREE.Vector3(5.5, 5.0, -2),   color: '#ff00aa' },
+    { text: 'ABOUT',    pos: new THREE.Vector3(-2, 5.0, 9),     color: '#7c3aed' },
   ];
 
   signs.forEach(({ text, pos, color }) => {
@@ -475,16 +473,16 @@ export async function buildCyberpunk(scene) {
     scene.add(sign);
   });
 
-  // Decorative neon bars on building faces
+  // Decorative neon bars on building faces — Z compressed ~50%
   const neonBarConfigs = [
-    { pos: new THREE.Vector3(-6.4, 6, -14),  color: C.neonCyan,    w: 3 },
-    { pos: new THREE.Vector3(-6.4, 4, -6),   color: C.neonMagenta, w: 2.5 },
-    { pos: new THREE.Vector3(6.4, 5, -12),   color: C.neonPurple,  w: 2 },
+    { pos: new THREE.Vector3(-6.4, 6, -7),   color: C.neonCyan,    w: 3 },
+    { pos: new THREE.Vector3(-6.4, 4, -3),   color: C.neonMagenta, w: 2.5 },
+    { pos: new THREE.Vector3(6.4, 5, -6),    color: C.neonPurple,  w: 2 },
     { pos: new THREE.Vector3(6.4, 7, 0),     color: C.neonCyan,    w: 3.5 },
-    { pos: new THREE.Vector3(-6.4, 8, 2),    color: C.neonMagenta, w: 2 },
-    { pos: new THREE.Vector3(6.4, 3, 8),     color: C.neonGreen,   w: 2.5 },
-    { pos: new THREE.Vector3(-6.4, 5, 10),   color: C.neonPurple,  w: 3 },
-    { pos: new THREE.Vector3(6.4, 6, 16),    color: C.neonCyan,    w: 2 },
+    { pos: new THREE.Vector3(-6.4, 8, 1),    color: C.neonMagenta, w: 2 },
+    { pos: new THREE.Vector3(6.4, 3, 4),     color: C.neonGreen,   w: 2.5 },
+    { pos: new THREE.Vector3(-6.4, 5, 5),    color: C.neonPurple,  w: 3 },
+    { pos: new THREE.Vector3(6.4, 6, 8),     color: C.neonCyan,    w: 2 },
   ];
 
   neonBarConfigs.forEach(({ pos, color, w }) => {
@@ -504,12 +502,12 @@ export async function buildCyberpunk(scene) {
     }
   });
 
-  // --- Ground-level clutter: Procedural crates ---
+  // --- Ground-level clutter: Procedural crates --- Z compressed ~50%
   const cratePositions = [
-    { x: -6.2, z: -17, size: 0.6 },
-    { x: 6.2,  z: -14, size: 0.55 },
-    { x: -6.0, z: 3,   size: 0.7 },
-    { x: 6.0,  z: 10,  size: 0.5 },
+    { x: -6.2, z: -8.5, size: 0.6 },
+    { x: 6.2,  z: -7,   size: 0.55 },
+    { x: -6.0, z: 1.5,  size: 0.7 },
+    { x: 6.0,  z: 5,    size: 0.5 },
   ];
 
   cratePositions.forEach(({ x, z, size }) => {
@@ -520,10 +518,10 @@ export async function buildCyberpunk(scene) {
     );
   });
 
-  // --- Ground-level clutter: Barriers ---
+  // --- Ground-level clutter: Barriers --- Z compressed ~50%
   const barrierConfigs = [
-    { x: -3, z: -10, rot: 0.3 },
-    { x: 3,  z: 5,   rot: -0.2 },
+    { x: -3, z: -5, rot: 0.3 },
+    { x: 3,  z: 2.5, rot: -0.2 },
   ];
 
   barrierConfigs.forEach(({ x, z, rot }) => {
@@ -533,10 +531,10 @@ export async function buildCyberpunk(scene) {
     );
   });
 
-  // --- Ground-level clutter: Dumpsters ---
+  // --- Ground-level clutter: Dumpsters --- Z compressed ~50%
   const dumpsterPositions = [
-    { x: -6.5, z: -3 },
-    { x: 6.5,  z: 15 },
+    { x: -6.5, z: -1.5 },
+    { x: 6.5,  z: 7.5 },
   ];
 
   dumpsterPositions.forEach(({ x, z }) => {
@@ -546,12 +544,12 @@ export async function buildCyberpunk(scene) {
     );
   });
 
-  // --- Neon vendor stalls (3-4 along the street) ---
+  // --- Neon vendor stalls (4 along the street) --- Z compressed ~50%
   const stallConfigs = [
-    { x: -4.5, z: -5,  roofColor: C.neonCyan,    trimColor: C.neonMagenta },
-    { x: 4.5,  z: 2,   roofColor: C.neonMagenta,  trimColor: C.neonCyan },
-    { x: -4.0, z: 9,   roofColor: C.neonPurple,   trimColor: C.neonGreen },
-    { x: 4.0,  z: -15, roofColor: C.neonGreen,    trimColor: C.neonPurple },
+    { x: -4.5, z: -2.5, roofColor: C.neonCyan,    trimColor: C.neonMagenta },
+    { x: 4.5,  z: 1,    roofColor: C.neonMagenta,  trimColor: C.neonCyan },
+    { x: -4.0, z: 4.5,  roofColor: C.neonPurple,   trimColor: C.neonGreen },
+    { x: 4.0,  z: -7.5, roofColor: C.neonGreen,    trimColor: C.neonPurple },
   ];
 
   stallConfigs.forEach(({ x, z, roofColor, trimColor }) => {
@@ -561,14 +559,14 @@ export async function buildCyberpunk(scene) {
     );
   });
 
-  // --- Overhead wires with pole supports ---
+  // --- Overhead wires with pole supports --- Z compressed ~50%
   const wireConfigs = [
-    { start: new THREE.Vector3(-6.5, 8,  -18), end: new THREE.Vector3(6.5, 7.5, -18) },
-    { start: new THREE.Vector3(-6.5, 9,  -10), end: new THREE.Vector3(6.5, 8,   -10) },
-    { start: new THREE.Vector3(-6.5, 7,  -2),  end: new THREE.Vector3(6.5, 7.5, -2) },
-    { start: new THREE.Vector3(-6.5, 10, 4),   end: new THREE.Vector3(6.5, 9,   4) },
-    { start: new THREE.Vector3(-6.5, 8,  10),  end: new THREE.Vector3(6.5, 8.5, 10) },
-    { start: new THREE.Vector3(-6.5, 7,  16),  end: new THREE.Vector3(6.5, 7,   16) },
+    { start: new THREE.Vector3(-6.5, 8,  -9),  end: new THREE.Vector3(6.5, 7.5, -9) },
+    { start: new THREE.Vector3(-6.5, 9,  -5),  end: new THREE.Vector3(6.5, 8,   -5) },
+    { start: new THREE.Vector3(-6.5, 7,  -1),  end: new THREE.Vector3(6.5, 7.5, -1) },
+    { start: new THREE.Vector3(-6.5, 10, 2),   end: new THREE.Vector3(6.5, 9,   2) },
+    { start: new THREE.Vector3(-6.5, 8,  5),   end: new THREE.Vector3(6.5, 8.5, 5) },
+    { start: new THREE.Vector3(-6.5, 7,  8),   end: new THREE.Vector3(6.5, 7,   8) },
   ];
 
   wireConfigs.forEach(({ start, end }) => {
@@ -595,26 +593,26 @@ export async function buildCyberpunk(scene) {
     });
   });
 
-  // --- Street puddles (reflective planes) ---
+  // --- Street puddles (reflective planes) --- Z compressed ~50%
   const puddleConfigs = [
-    { x: -2.5, z: -12, w: 2.0, d: 1.0 },
-    { x: 1.5,  z: -3,  w: 1.5, d: 0.8 },
-    { x: -1.0, z: 6,   w: 2.5, d: 1.2 },
-    { x: 3.0,  z: 13,  w: 1.8, d: 0.9 },
-    { x: -3.5, z: 17,  w: 1.2, d: 1.0 },
+    { x: -2.5, z: -6,   w: 2.0, d: 1.0 },
+    { x: 1.5,  z: -1.5, w: 1.5, d: 0.8 },
+    { x: -1.0, z: 3,    w: 2.5, d: 1.2 },
+    { x: 3.0,  z: 6.5,  w: 1.8, d: 0.9 },
+    { x: -3.5, z: 8.5,  w: 1.2, d: 1.0 },
   ];
 
   puddleConfigs.forEach(({ x, z, w, d }) => {
     createPuddle(scene, x, z, w, d);
   });
 
-  // --- Kenney model accents: trashcans ---
+  // --- Kenney model accents: trashcans --- Z compressed ~50%
   if (models.trashcan) {
     const trashcanPlacements = [
-      { x: -6.3, z: -19, scale: 1.2 },
-      { x: 6.3,  z: -11, scale: 1.0 },
-      { x: -6.1, z: -1,  scale: 1.1 },
-      { x: 6.1,  z: 7,   scale: 1.3 },
+      { x: -6.3, z: -9.5, scale: 1.2 },
+      { x: 6.3,  z: -5.5, scale: 1.0 },
+      { x: -6.1, z: -0.5, scale: 1.1 },
+      { x: 6.1,  z: 3.5,  scale: 1.3 },
     ];
 
     trashcanPlacements.forEach(({ x, z, scale }) => {
@@ -629,11 +627,11 @@ export async function buildCyberpunk(scene) {
     });
   }
 
-  // --- Kenney model accents: cardboard boxes ---
+  // --- Kenney model accents: cardboard boxes --- Z compressed ~50%
   if (models.cardboardBoxClosed) {
     const closedBoxPlacements = [
-      { x: -6.0, z: -15, scale: 1.0 },
-      { x: 6.0,  z: -5,  scale: 1.2 },
+      { x: -6.0, z: -7.5, scale: 1.0 },
+      { x: 6.0,  z: -2.5, scale: 1.2 },
     ];
 
     closedBoxPlacements.forEach(({ x, z, scale }) => {
@@ -647,8 +645,8 @@ export async function buildCyberpunk(scene) {
 
   if (models.cardboardBoxOpen) {
     const openBoxPlacements = [
-      { x: -5.9, z: -14.5, scale: 1.0 },
-      { x: 5.9,  z: -4.5,  scale: 1.3 },
+      { x: -5.9, z: -7.25, scale: 1.0 },
+      { x: 5.9,  z: -2.25, scale: 1.3 },
     ];
 
     openBoxPlacements.forEach(({ x, z, scale }) => {
@@ -661,11 +659,12 @@ export async function buildCyberpunk(scene) {
   }
 
   // --- Kenney model accents: computer screens on vendor stalls and crates ---
+  // Z positions adjusted to match compressed stall positions
   if (models.computerScreen) {
     const screenPlacements = [
-      { x: -4.5, z: -4.7, y: 1.1, scale: 1.2, rotY: 0 },
-      { x: 4.5,  z: 2.3,  y: 1.1, scale: 1.0, rotY: Math.PI },
-      { x: -4.0, z: 9.3,  y: 1.1, scale: 1.1, rotY: 0 },
+      { x: -4.5, z: -2.2, y: 1.1, scale: 1.2, rotY: 0 },
+      { x: 4.5,  z: 1.3,  y: 1.1, scale: 1.0, rotY: Math.PI },
+      { x: -4.0, z: 4.8,  y: 1.1, scale: 1.1, rotY: 0 },
     ];
 
     screenPlacements.forEach(({ x, z, y, scale, rotY }) => {
@@ -677,22 +676,22 @@ export async function buildCyberpunk(scene) {
     });
   }
 
-  // --- About zone (end of street) ---
-  const aboutPosition = new THREE.Vector3(0, 1.7, 20);
+  // --- About zone (end of street) --- moved from z=20 to z=9
+  const aboutPosition = new THREE.Vector3(0, 0, 9);
 
   const kiosk = createBox(
     2, 2.5, 0.3, 0x1a1a2e,
-    new THREE.Vector3(0, 1.25, 21)
+    new THREE.Vector3(0, 1.25, 10)
   );
   scene.add(kiosk);
   colliderGroup.add(
-    createCollisionBox(2, 2.5, 0.3, new THREE.Vector3(0, 1.25, 21))
+    createCollisionBox(2, 2.5, 0.3, new THREE.Vector3(0, 1.25, 10))
   );
 
   const screen = createEmissiveBox(
     1.6, 1.8, 0.05,
     C.neonCyan, C.neonCyan, 0.4,
-    new THREE.Vector3(0, 1.5, 20.82)
+    new THREE.Vector3(0, 1.5, 9.82)
   );
   scene.add(screen);
 
@@ -703,7 +702,7 @@ export async function buildCyberpunk(scene) {
   for (let i = 0; i < rainCount; i++) {
     rainPositions[i * 3]     = (Math.random() - 0.5) * 30;
     rainPositions[i * 3 + 1] = Math.random() * 20;
-    rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+    rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 25;
   }
 
   const rainGeometry = new THREE.BufferGeometry();
@@ -733,7 +732,7 @@ export async function buildCyberpunk(scene) {
       if (positions[i * 3 + 1] < -0.5) {
         positions[i * 3]     = (Math.random() - 0.5) * 30;
         positions[i * 3 + 1] = 18 + Math.random() * 4;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 25;
       }
     }
 
@@ -748,7 +747,7 @@ export async function buildCyberpunk(scene) {
   for (let i = 0; i < dataBitCount; i++) {
     dataBitPositions[i * 3]     = (Math.random() - 0.5) * 25;
     dataBitPositions[i * 3 + 1] = 1 + Math.random() * 8;
-    dataBitPositions[i * 3 + 2] = (Math.random() - 0.5) * 40;
+    dataBitPositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
     dataBitBaseY[i] = dataBitPositions[i * 3 + 1];
   }
 
@@ -791,9 +790,9 @@ export async function buildCyberpunk(scene) {
     });
   });
 
-  // --- Exit portal ---
+  // --- Exit portal --- moved from z=-22 to z=-11
   const exitPortal = createExitPortal(
-    new THREE.Vector3(0, 1.7, -22),
+    new THREE.Vector3(0, 1.7, -11),
     C.neonCyan
   );
   scene.add(exitPortal);
@@ -803,7 +802,7 @@ export async function buildCyberpunk(scene) {
 
   // --- Return ---
   return {
-    spawnPosition: LAYOUT.spawnPosition.clone(),
+    spawnPosition: new THREE.Vector3(0, 0, 0),
     animationCallbacks,
     contentSlots: {
       blog: blogSlots.slice(0, 10),
