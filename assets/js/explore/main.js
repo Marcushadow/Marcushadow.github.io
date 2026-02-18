@@ -157,7 +157,6 @@ async function init() {
   // Place camera at spawn
   if (spawnPosition) {
     camera.position.copy(spawnPosition);
-    camera.position.y = 1.7;
   }
 
   setProgress(70);
