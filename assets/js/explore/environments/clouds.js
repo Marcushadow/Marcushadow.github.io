@@ -61,7 +61,7 @@ function createCloudPlatform(scene, center, radius) {
     metalness: 0.0,
   });
   const top = new THREE.Mesh(topGeo, topMat);
-  top.position.set(center.x, center.y - 0.8, center.z);
+  top.position.set(center.x, center.y - 0.2, center.z);
   top.receiveShadow = true;
   top.castShadow = true;
   group.add(top);
@@ -85,7 +85,7 @@ function createCloudPlatform(scene, center, radius) {
     const puff = new THREE.Mesh(puffGeo, puffMat);
     puff.position.set(
       center.x + Math.cos(angle) * dist,
-      center.y - 1.2 - Math.random() * 0.6,
+      center.y - 0.7 - Math.random() * 0.6,
       center.z + Math.sin(angle) * dist
     );
     puff.scale.set(1, 0.5 + Math.random() * 0.3, 1);
@@ -98,7 +98,7 @@ function createCloudPlatform(scene, center, radius) {
     const puff = new THREE.Mesh(puffGeo, puffMat);
     puff.position.set(
       center.x + (Math.random() - 0.5) * 1.5,
-      center.y - 1.0 - Math.random() * 0.4,
+      center.y - 0.5 - Math.random() * 0.4,
       center.z + (Math.random() - 0.5) * 1.5
     );
     puff.scale.set(1, 0.6, 1);
@@ -123,7 +123,7 @@ function createCloudPlatform(scene, center, radius) {
  * @param {number} [arcHeight=2] - Maximum arc height above midpoint
  * @returns {THREE.Mesh[]} Array of plank meshes for collision
  */
-function createLightBridge(scene, from, to, arcHeight = 2) {
+function createLightBridge(scene, from, to, arcHeight = 0) {
   const plankCount = 20;
   const planks = [];
 
@@ -164,7 +164,7 @@ function createLightBridge(scene, from, to, arcHeight = 2) {
     // Plank
     const plankGeo = new THREE.BoxGeometry(1.2, 0.08, 0.4);
     const plank = new THREE.Mesh(plankGeo, bridgeMat);
-    plank.position.set(px, py - 0.8, pz);
+    plank.position.set(px, py, pz);
     plank.rotation.y = bridgeAngle;
     plank.receiveShadow = true;
     scene.add(plank);
@@ -178,12 +178,12 @@ function createLightBridge(scene, from, to, arcHeight = 2) {
       // Left post
       const leftPostGeo = new THREE.CylinderGeometry(0.03, 0.03, 0.6, 6);
       const leftPost = new THREE.Mesh(leftPostGeo, railMat);
-      leftPost.position.set(px + perpX, py - 0.5, pz + perpZ);
+      leftPost.position.set(px + perpX, py + 0.3, pz + perpZ);
       scene.add(leftPost);
 
       // Right post
       const rightPost = new THREE.Mesh(leftPostGeo.clone(), railMat);
-      rightPost.position.set(px - perpX, py - 0.5, pz - perpZ);
+      rightPost.position.set(px - perpX, py + 0.3, pz - perpZ);
       scene.add(rightPost);
     }
   }
@@ -361,7 +361,7 @@ function createEdgeBoundaries(center, radius, segmentCount) {
       visible: false,
     });
     const wall = new THREE.Mesh(geo, mat);
-    wall.position.set(x, center.y - 0.6 + wallHeight * 0.5, z);
+    wall.position.set(x, center.y + wallHeight * 0.5, z);
     wall.rotation.y = -angle + Math.PI * 0.5;
     boundaries.push(wall);
   }
@@ -456,11 +456,11 @@ export async function buildClouds(scene) {
 
   // --- Light bridges ---
   // Main -> Blog
-  const bridgePlanks1 = createLightBridge(scene, platforms.main.center, platforms.blog.center, 2.5);
+  const bridgePlanks1 = createLightBridge(scene, platforms.main.center, platforms.blog.center);
   // Main -> Projects
-  const bridgePlanks2 = createLightBridge(scene, platforms.main.center, platforms.projects.center, 2.0);
+  const bridgePlanks2 = createLightBridge(scene, platforms.main.center, platforms.projects.center);
   // Main -> About
-  const bridgePlanks3 = createLightBridge(scene, platforms.main.center, platforms.about.center, 2.0);
+  const bridgePlanks3 = createLightBridge(scene, platforms.main.center, platforms.about.center);
 
   // Add bridge planks to collider group
   [...bridgePlanks1, ...bridgePlanks2, ...bridgePlanks3].forEach((plank) => {
@@ -476,7 +476,7 @@ export async function buildClouds(scene) {
     const dir = new THREE.Vector3().subVectors(targetCenter, platformCenter).normalize();
     const edgePos = new THREE.Vector3(
       platformCenter.x + dir.x * (platformRadius - 0.5),
-      platformCenter.y - 0.6,
+      platformCenter.y,
       platformCenter.z + dir.z * (platformRadius - 0.5)
     );
     const rotY = Math.atan2(dir.x, dir.z);
@@ -519,7 +519,7 @@ export async function buildClouds(scene) {
       const baseSize = 0.3 + Math.random() * 0.5;
       const pos = new THREE.Vector3(
         p.center.x + Math.cos(angle) * dist,
-        p.center.y - 0.6,
+        p.center.y,
         p.center.z + Math.sin(angle) * dist
       );
       const cluster = createCrystalCluster(pos, baseSize);
@@ -537,7 +537,7 @@ export async function buildClouds(scene) {
   blogBenchPositions.forEach(({ angle, dist, rot }) => {
     const pos = new THREE.Vector3(
       platforms.blog.center.x + Math.cos(angle) * dist,
-      platforms.blog.center.y - 0.6,
+      platforms.blog.center.y,
       platforms.blog.center.z + Math.sin(angle) * dist
     );
     const bench = createProceduralBench(pos, rot);
@@ -552,7 +552,7 @@ export async function buildClouds(scene) {
   projBenchPositions.forEach(({ angle, dist, rot }) => {
     const pos = new THREE.Vector3(
       platforms.projects.center.x + Math.cos(angle) * dist,
-      platforms.projects.center.y - 0.6,
+      platforms.projects.center.y,
       platforms.projects.center.z + Math.sin(angle) * dist
     );
     const bench = createProceduralBench(pos, rot);
@@ -616,7 +616,7 @@ export async function buildClouds(scene) {
     metalness: 0.8,
   });
   const crystal = new THREE.Mesh(crystalGeo, crystalMat);
-  crystal.position.set(0, 0.2, 0);
+  crystal.position.set(0, 0.75, 0);
   scene.add(crystal);
 
   // Rotate crystal slowly
@@ -697,7 +697,7 @@ export async function buildClouds(scene) {
     const radius = 5.0;
     blogSlots.push(new THREE.Vector3(
       blogCenter.x + Math.cos(angle) * radius,
-      blogCenter.y + 0.5,
+      blogCenter.y + 0.9,
       blogCenter.z + Math.sin(angle) * radius
     ));
   }
@@ -712,7 +712,7 @@ export async function buildClouds(scene) {
     const radius = 4.5;
     projectSlots.push(new THREE.Vector3(
       projCenter.x + Math.cos(angle) * radius,
-      projCenter.y + 0.5,
+      projCenter.y + 0.9,
       projCenter.z + Math.sin(angle) * radius
     ));
   }
@@ -729,7 +729,7 @@ export async function buildClouds(scene) {
     0.6, 0.8, 0.4, 16, C.platform,
     new THREE.Vector3(
       platforms.about.center.x,
-      platforms.about.center.y - 0.6,
+      platforms.about.center.y,
       platforms.about.center.z
     )
   );
@@ -749,7 +749,7 @@ export async function buildClouds(scene) {
       plant.scale.set(scale, scale, scale);
       plant.position.set(
         platforms.about.center.x + Math.cos(angle) * dist,
-        platforms.about.center.y - 0.6,
+        platforms.about.center.y,
         platforms.about.center.z + Math.sin(angle) * dist
       );
       plant.rotation.y = Math.random() * Math.PI * 2;
@@ -771,7 +771,7 @@ export async function buildClouds(scene) {
       plant.scale.set(scale, scale, scale);
       plant.position.set(
         platform.center.x + Math.cos(angle) * dist,
-        platform.center.y - 0.6,
+        platform.center.y,
         platform.center.z + Math.sin(angle) * dist
       );
       plant.rotation.y = Math.random() * Math.PI * 2;
@@ -792,7 +792,7 @@ export async function buildClouds(scene) {
       bench.scale.set(scale, scale, scale);
       bench.position.set(
         platform.center.x + Math.cos(angle) * dist,
-        platform.center.y - 0.6,
+        platform.center.y,
         platform.center.z + Math.sin(angle) * dist
       );
       bench.rotation.y = rot;
@@ -812,7 +812,7 @@ export async function buildClouds(scene) {
     const angle = Math.random() * Math.PI * 2;
     const dist = Math.random() * (p.radius + 2);
     sparklePositions[i * 3]     = p.center.x + Math.cos(angle) * dist;
-    sparklePositions[i * 3 + 1] = p.center.y - 0.5 + Math.random() * 3.0;
+    sparklePositions[i * 3 + 1] = p.center.y + Math.random() * 2.5;
     sparklePositions[i * 3 + 2] = p.center.z + Math.sin(angle) * dist;
     sparkleBaseY[i] = sparklePositions[i * 3 + 1];
   }
@@ -820,7 +820,7 @@ export async function buildClouds(scene) {
   // Remaining 150 particles: spread out in the sky
   for (let i = 200; i < sparkleCount; i++) {
     sparklePositions[i * 3]     = (Math.random() - 0.5) * 60;
-    sparklePositions[i * 3 + 1] = -2 + Math.random() * 12;
+    sparklePositions[i * 3 + 1] = Math.random() * 12;
     sparklePositions[i * 3 + 2] = (Math.random() - 0.5) * 60;
     sparkleBaseY[i] = sparklePositions[i * 3 + 1];
   }
