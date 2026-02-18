@@ -8,7 +8,7 @@ permalink: /explore/
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Explore — {{ site.title }}</title>
-  <meta name="description" content="Navigate {{ site.title }} in an immersive 3D world.">
+  <meta name="description" content="Explore {{ site.title }} in an isometric world.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,7 +88,7 @@ permalink: /explore/
   <div id="start-prompt" class="start-prompt hidden">
     <div class="start-prompt-box">
       <h1 class="start-prompt-title">Explore</h1>
-      <p class="start-prompt-subtitle">Navigate the blog in 3D</p>
+      <p class="start-prompt-subtitle">Navigate the blog in an isometric world</p>
 
       <div class="controls-hint">
         <div class="controls-hint-row">
@@ -96,20 +96,16 @@ permalink: /explore/
           <span>Move</span>
         </div>
         <div class="controls-hint-row">
-          <kbd>Mouse</kbd>
-          <span>Look around</span>
-        </div>
-        <div class="controls-hint-row">
-          <kbd>Click</kbd>
+          <kbd>E</kbd>
           <span>Interact</span>
         </div>
         <div class="controls-hint-row">
           <kbd>Esc</kbd>
-          <span>Pause</span>
+          <span>Exit</span>
         </div>
       </div>
 
-      <button id="start-button" class="start-button">Click to Enter</button>
+      <button id="start-button" class="start-button">Click to Start</button>
       <a href="{{ '/' | relative_url }}" class="back-link">Back to blog</a>
     </div>
   </div>
@@ -118,7 +114,6 @@ permalink: /explore/
        HUD Overlay
        ============================================ -->
   <div id="hud" class="hud hidden">
-    <div class="hud-crosshair"></div>
     <div id="hud-label" class="hud-label hidden"></div>
     <button id="hud-exit" class="hud-exit">Exit</button>
   </div>
@@ -140,7 +135,7 @@ permalink: /explore/
   <div id="mobile-notice" class="mobile-notice hidden">
     <div class="mobile-notice-box">
       <h2>Desktop Only</h2>
-      <p>The 3D explore experience requires a keyboard and mouse. Please visit on a desktop browser.</p>
+      <p>The isometric explore experience requires a keyboard. Please visit on a desktop browser.</p>
       <a href="{{ '/' | relative_url }}" class="mobile-notice-link">Back to blog</a>
     </div>
   </div>

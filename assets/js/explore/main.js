@@ -1,9 +1,9 @@
 /**
- * main.js — Entry point for the 3D Explore experience
+ * main.js — Entry point for the Isometric Explore experience
  *
- * Orchestrates mobile detection, renderer/scene/camera setup,
- * environment building, content placement, UI wiring, loading
- * progress, and the main animation loop.
+ * Sets up an orthographic camera at a fixed isometric angle,
+ * builds the themed environment, places content, and runs
+ * the animation loop with smooth camera follow.
  */
 
 import * as THREE from 'three';
@@ -30,7 +30,7 @@ const THEME_CONFIG = {
     builder: buildCyberpunk,
     loadingMessage: 'Booting cyberpunk city...',
     welcomeTitle: 'Welcome to the City',
-    themeClass: null, // dark is the default — no class needed
+    themeClass: null,
   },
   light: {
     builder: buildClouds,
@@ -39,6 +39,13 @@ const THEME_CONFIG = {
     themeClass: 'theme-light',
   },
 };
+
+// Isometric camera constants
+const ISO_FRUSTUM = 18;
+const ISO_ANGLE_Y = Math.PI / 4;
+const ISO_ANGLE_X = Math.atan(1 / Math.sqrt(2));
+const ISO_DISTANCE = 30;
+const CAMERA_LERP = 0.08;
 
 /* ============================================
    DOM References
@@ -56,7 +63,7 @@ const pauseResume     = document.getElementById('pause-resume');
 const mobileNotice    = document.getElementById('mobile-notice');
 
 /* ============================================
-   Mobile Detection
+   Helpers
    ============================================ */
 
 function isMobile() {
@@ -67,27 +74,14 @@ function isMobile() {
   return userAgent || smallViewport;
 }
 
-/* ============================================
-   Progress Helper
-   ============================================ */
-
 function setProgress(pct) {
   if (progressBar) {
     progressBar.style.width = `${pct}%`;
   }
 }
 
-/* ============================================
-   Theme Application
-   ============================================ */
-
-/**
- * Applies the appropriate theme class to the loading screen, body,
- * and all overlay containers so CSS theme selectors take effect.
- */
 function applyThemeClass(themeClass) {
   if (!themeClass) return;
-
   document.body.classList.add(themeClass);
   loadingScreen?.classList.add(themeClass);
   startPrompt?.classList.add(themeClass);
@@ -97,25 +91,46 @@ function applyThemeClass(themeClass) {
 }
 
 /* ============================================
+   Isometric Camera
+   ============================================ */
+
+function createIsometricCamera() {
+  const aspect = window.innerWidth / window.innerHeight;
+  const camera = new THREE.OrthographicCamera(
+    ISO_FRUSTUM * aspect / -2,
+    ISO_FRUSTUM * aspect / 2,
+    ISO_FRUSTUM / 2,
+    ISO_FRUSTUM / -2,
+    0.1,
+    200
+  );
+
+  camera.position.set(
+    ISO_DISTANCE * Math.sin(ISO_ANGLE_Y) * Math.cos(ISO_ANGLE_X),
+    ISO_DISTANCE * Math.sin(ISO_ANGLE_X),
+    ISO_DISTANCE * Math.cos(ISO_ANGLE_Y) * Math.cos(ISO_ANGLE_X)
+  );
+  camera.lookAt(0, 0, 0);
+
+  return camera;
+}
+
+/* ============================================
    Initialisation
    ============================================ */
 
 async function init() {
-  // --- Resolve theme ---
   const themeName = window.EXPLORE_THEME || 'beige';
   const theme = THEME_CONFIG[themeName] || THEME_CONFIG.beige;
 
-  // Apply theme class immediately so loading screen is styled
   applyThemeClass(theme.themeClass);
 
-  // Set loading message
   if (loadingText) {
     loadingText.textContent = theme.loadingMessage;
   }
 
   setProgress(10);
 
-  // --- Mobile gate ---
   if (isMobile()) {
     loadingScreen?.classList.add('hidden');
     mobileNotice?.classList.remove('hidden');
@@ -125,9 +140,7 @@ async function init() {
   setProgress(20);
 
   // --- Renderer ---
-  const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-  });
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
@@ -136,28 +149,21 @@ async function init() {
   renderer.toneMappingExposure = 1.0;
   document.body.appendChild(renderer.domElement);
 
+  // Make canvas focusable
+  renderer.domElement.tabIndex = 0;
+  renderer.domElement.style.outline = 'none';
+
   setProgress(30);
 
   // --- Scene & Camera ---
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    70,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    200
-  );
-  camera.position.set(0, 1.7, 0);
+  const camera = createIsometricCamera();
 
   setProgress(40);
 
-  // --- Build environment (async for model loading) ---
+  // --- Build environment ---
   const { spawnPosition, animationCallbacks: envCallbacks, contentSlots, colliderGroup } =
     await theme.builder(scene);
-
-  // Place camera at spawn
-  if (spawnPosition) {
-    camera.position.copy(spawnPosition);
-  }
 
   setProgress(70);
 
@@ -168,7 +174,11 @@ async function init() {
   setProgress(90);
 
   // --- Controls ---
-  const controls = createControls(camera, renderer.domElement);
+  const controls = createControls(camera, renderer.domElement, scene, interactiveObjects);
+
+  if (spawnPosition) {
+    controls.setPosition(spawnPosition.x, spawnPosition.z);
+  }
 
   // --- Build collision octree ---
   if (colliderGroup) {
@@ -177,10 +187,9 @@ async function init() {
     controls.setOctree(worldOctree);
   }
 
-  // Merge all animation callbacks
   const allCallbacks = [...(envCallbacks || []), ...(contentCallbacks || [])];
 
-  // --- Build state object for UI ---
+  // --- UI Setup ---
   const state = {
     scene,
     camera,
@@ -190,63 +199,76 @@ async function init() {
     animationCallbacks: allCallbacks,
   };
 
-  // --- UI Setup ---
   setupUI(state, themeName);
 
   setProgress(100);
 
-  // --- Fade out loading screen, show start prompt ---
+  // --- Fade out loading screen ---
   await fadeOutLoading();
 
-  // Update start prompt title
   if (startTitle) {
     startTitle.textContent = theme.welcomeTitle;
   }
   startPrompt?.classList.remove('hidden');
 
-  // --- Start button handler ---
+  // --- Start button ---
+  let gameStarted = false;
+
   startButton?.addEventListener('click', () => {
     startPrompt?.classList.add('hidden');
-    controls.lock();
+    hud?.classList.remove('hidden');
+    renderer.domElement.focus();
+    controls.setActive(true);
+    gameStarted = true;
   });
 
-  // --- Pointer-lock state changes ---
-  controls.onLockChange = (locked) => {
-    if (locked) {
+  // --- Focus/blur for pause/resume ---
+  renderer.domElement.addEventListener('focus', () => {
+    if (gameStarted) {
+      controls.setActive(true);
       hud?.classList.remove('hidden');
       pauseMenu?.classList.add('hidden');
-    } else {
-      hud?.classList.add('hidden');
-      // Show pause menu only if we were in-game and content panel is not open
-      if (startPrompt?.classList.contains('hidden') &&
-          !(controls._contentPanel && controls._contentPanel.isOpen)) {
+    }
+  });
+
+  renderer.domElement.addEventListener('blur', () => {
+    if (gameStarted) {
+      controls.setActive(false);
+      if (!(controls._contentPanel && controls._contentPanel.isOpen)) {
+        hud?.classList.add('hidden');
         pauseMenu?.classList.remove('hidden');
       }
     }
-  };
+  });
 
   // --- Pause menu resume ---
   pauseResume?.addEventListener('click', () => {
-    controls.lock();
+    renderer.domElement.focus();
   });
 
-  // --- ESC key: close content panel before showing pause menu ---
+  // --- ESC: close content panel ---
   document.addEventListener('keydown', (e) => {
     if (e.code !== 'Escape') return;
-
-    // If content panel is open, close it instead of showing pause menu
     if (controls._contentPanel && controls._contentPanel.isOpen) {
       e.preventDefault();
       controls._contentPanel.close();
+      renderer.domElement.focus();
     }
   });
 
   // --- Resize handler ---
   window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const aspect = window.innerWidth / window.innerHeight;
+    camera.left   = ISO_FRUSTUM * aspect / -2;
+    camera.right  = ISO_FRUSTUM * aspect / 2;
+    camera.top    = ISO_FRUSTUM / 2;
+    camera.bottom = ISO_FRUSTUM / -2;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+
+  // --- Camera follow ---
+  const cameraOffset = camera.position.clone();
 
   // --- Animation loop ---
   const clock = new THREE.Clock();
@@ -256,10 +278,20 @@ async function init() {
 
     const delta = Math.min(clock.getDelta(), 0.05);
 
-    // Update controls (only moves when locked)
     controls.update(delta);
 
-    // Run all animation callbacks
+    // Smooth camera follow
+    const charPos = controls.getPosition();
+    const targetX = charPos.x + cameraOffset.x;
+    const targetZ = charPos.z + cameraOffset.z;
+    camera.position.x += (targetX - camera.position.x) * CAMERA_LERP;
+    camera.position.z += (targetZ - camera.position.z) * CAMERA_LERP;
+    camera.lookAt(
+      camera.position.x - cameraOffset.x,
+      0,
+      camera.position.z - cameraOffset.z
+    );
+
     for (const cb of allCallbacks) {
       cb(delta, clock.elapsedTime);
     }
@@ -276,26 +308,15 @@ async function init() {
 
 function fadeOutLoading() {
   return new Promise((resolve) => {
-    if (!loadingScreen) {
-      resolve();
-      return;
-    }
-
+    if (!loadingScreen) { resolve(); return; }
     loadingScreen.style.opacity = '0';
-
-    const onTransitionEnd = () => {
+    const onEnd = () => {
       loadingScreen.classList.add('hidden');
-      loadingScreen.removeEventListener('transitionend', onTransitionEnd);
+      loadingScreen.removeEventListener('transitionend', onEnd);
       resolve();
     };
-
-    loadingScreen.addEventListener('transitionend', onTransitionEnd);
-
-    // Fallback in case transitionend never fires
-    setTimeout(() => {
-      loadingScreen.classList.add('hidden');
-      resolve();
-    }, 600);
+    loadingScreen.addEventListener('transitionend', onEnd);
+    setTimeout(() => { loadingScreen.classList.add('hidden'); resolve(); }, 600);
   });
 }
 
