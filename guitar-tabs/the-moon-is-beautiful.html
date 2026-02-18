@@ -1,0 +1,1153 @@
+---
+layout: default
+title: "The Moon is Beautiful — Guitar Tab"
+permalink: /guitar-tabs/the-moon-is-beautiful/
+---
+
+<style>
+  /* Scoped styles for guitar tab page */
+  .guitar-tab {
+    --gt-bg: #faf8f5;
+    --gt-card: #ffffff;
+    --gt-text: #1a1a1a;
+    --gt-muted: #6b6b6b;
+    --gt-accent: #8b5e3c;
+    --gt-accent-light: #d4a574;
+    --gt-border: #e8e2da;
+    --gt-chord-bg: #fef7ed;
+    --gt-chord-border: #e8d5bf;
+    --gt-section-intro: #4a7c59;
+    --gt-section-verse: #5b7fa5;
+    --gt-section-chorus: #a0527a;
+    --gt-section-bridge: #7a6ba5;
+    --gt-section-outro: #8a7a6a;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+    color: var(--gt-text);
+    line-height: 1.6;
+  }
+
+  /* Header banner */
+  .guitar-tab .gt-header {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 50%, #2c1810 100%);
+    color: #fff;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .guitar-tab .gt-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,220,150,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .guitar-tab .gt-header h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.5px;
+    color: #fff;
+  }
+
+  .guitar-tab .gt-header .japanese {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .guitar-tab .gt-header .artist {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--gt-accent-light);
+  }
+
+  /* Song Info Bar */
+  .guitar-tab .song-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    background: var(--gt-card);
+    border: 1px solid var(--gt-border);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .guitar-tab .info-item {
+    text-align: center;
+  }
+
+  .guitar-tab .info-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gt-muted);
+    font-weight: 600;
+  }
+
+  .guitar-tab .info-item .value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gt-accent);
+  }
+
+  /* Chord Diagrams */
+  .guitar-tab .chord-diagrams {
+    background: var(--gt-card);
+    border: 1px solid var(--gt-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .guitar-tab .chord-diagrams h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gt-muted);
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+  }
+
+  .guitar-tab .diagrams-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .guitar-tab .chord-diagram {
+    text-align: center;
+  }
+
+  .guitar-tab .chord-diagram .chord-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gt-accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .guitar-tab .chord-diagram svg {
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Key Selector */
+  .guitar-tab .key-selector {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .guitar-tab .key-btn {
+    padding: 0.6rem 1.5rem;
+    border: 2px solid var(--gt-border);
+    background: var(--gt-card);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--gt-text);
+  }
+
+  .guitar-tab .key-btn:hover {
+    border-color: var(--gt-accent-light);
+  }
+
+  .guitar-tab .key-btn.active {
+    background: var(--gt-accent);
+    color: #fff;
+    border-color: var(--gt-accent);
+  }
+
+  /* Sections */
+  .guitar-tab .gt-section {
+    background: var(--gt-card);
+    border: 1px solid var(--gt-border);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+
+  .guitar-tab .gt-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--gt-border);
+    background: #fafafa;
+  }
+
+  .guitar-tab .gt-section-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 0.2rem 0.75rem;
+    border-radius: 4px;
+    color: #fff;
+  }
+
+  .guitar-tab .gt-section-badge.intro { background: var(--gt-section-intro); }
+  .guitar-tab .gt-section-badge.verse { background: var(--gt-section-verse); }
+  .guitar-tab .gt-section-badge.chorus { background: var(--gt-section-chorus); }
+  .guitar-tab .gt-section-badge.bridge { background: var(--gt-section-bridge); }
+  .guitar-tab .gt-section-badge.outro { background: var(--gt-section-outro); }
+
+  .guitar-tab .gt-section-note {
+    font-size: 0.8rem;
+    color: var(--gt-muted);
+    font-style: italic;
+  }
+
+  .guitar-tab .gt-section-body {
+    padding: 1.25rem;
+  }
+
+  /* Chord Progression Rows */
+  .guitar-tab .chord-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1rem;
+  }
+
+  .guitar-tab .chord-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .guitar-tab .chord-bar {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    background: var(--gt-chord-bg);
+    border: 1px solid var(--gt-chord-border);
+    border-right: none;
+    position: relative;
+  }
+
+  .guitar-tab .chord-bar:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .guitar-tab .chord-bar:last-child {
+    border-radius: 0 8px 8px 0;
+    border-right: 1px solid var(--gt-chord-border);
+  }
+
+  .guitar-tab .chord-bar:only-child {
+    border-radius: 8px;
+    border-right: 1px solid var(--gt-chord-border);
+  }
+
+  .guitar-tab .chord-bar .chord {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--gt-accent);
+  }
+
+  .guitar-tab .chord-bar .beats {
+    font-size: 0.7rem;
+    color: var(--gt-muted);
+    margin-top: 0.15rem;
+  }
+
+  /* Lyrics with chords */
+  .guitar-tab .lyrics-block {
+    padding: 0.5rem 0;
+  }
+
+  .guitar-tab .lyric-pair {
+    margin-bottom: 0.25rem;
+  }
+
+  .guitar-tab .lyric-pair .chords {
+    color: var(--gt-accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    white-space: pre;
+  }
+
+  .guitar-tab .lyric-pair .words {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Tab notation */
+  .guitar-tab .tab-block {
+    background: #f9f6f2;
+    border: 1px solid var(--gt-border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+
+  .guitar-tab .tab-block pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--gt-text);
+    white-space: pre;
+    margin: 0;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .guitar-tab .tab-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gt-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Repeat markers */
+  .guitar-tab .repeat-marker {
+    font-size: 0.8rem;
+    color: var(--gt-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  /* Legend */
+  .guitar-tab .gt-legend {
+    background: var(--gt-card);
+    border: 1px solid var(--gt-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .guitar-tab .gt-legend h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gt-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .guitar-tab .legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .guitar-tab .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .guitar-tab .legend-item code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--gt-chord-bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    border: 1px solid var(--gt-chord-border);
+  }
+
+  /* Tips */
+  .guitar-tab .gt-tips {
+    background: var(--gt-card);
+    border: 1px solid var(--gt-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .guitar-tab .gt-tips h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gt-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .guitar-tab .gt-tips ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .guitar-tab .gt-tips li {
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .guitar-tab .gt-tips li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--gt-accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+
+  /* Footer */
+  .guitar-tab .gt-footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--gt-muted);
+    font-size: 0.8rem;
+  }
+
+  .guitar-tab .gt-footer a {
+    color: var(--gt-accent);
+    text-decoration: none;
+  }
+
+  /* Back link */
+  .guitar-tab .gt-back {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--gt-accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .guitar-tab .gt-back:hover {
+    text-decoration: underline;
+  }
+
+  /* Hidden class for key switching */
+  .guitar-tab .key-content { display: none; }
+  .guitar-tab .key-content.active { display: block; }
+
+  /* Print styles */
+  @media print {
+    .guitar-tab .gt-header {
+      background: #333 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .guitar-tab .key-selector { display: none; }
+    .guitar-tab .gt-section, .guitar-tab .chord-diagrams,
+    .guitar-tab .song-info, .guitar-tab .gt-legend, .guitar-tab .gt-tips {
+      break-inside: avoid;
+      border: 1px solid #ccc;
+    }
+    .guitar-tab .gt-section-badge,
+    .guitar-tab .chord-bar {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .guitar-tab .gt-header h2 { font-size: 1.6rem; }
+    .guitar-tab .song-info { gap: 1rem; }
+    .guitar-tab .diagrams-grid { gap: 1rem; }
+    .guitar-tab .chord-bar .chord { font-size: 1rem; }
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+
+<div class="guitar-tab">
+
+  <!-- Header -->
+  <div class="gt-header">
+    <h2>The Moon is Beautiful</h2>
+    <div class="japanese">月が綺麗ですね (Tsuki ga Kirei desu ne)</div>
+    <div class="artist">Yuta Kakizaki (柿崎ユウタ)</div>
+  </div>
+
+  <!-- Song Info -->
+  <div class="song-info">
+    <div class="info-item">
+      <div class="label">Key</div>
+      <div class="value" id="key-display">F Major</div>
+    </div>
+    <div class="info-item">
+      <div class="label">Tempo</div>
+      <div class="value">~150 BPM</div>
+    </div>
+    <div class="info-item">
+      <div class="label">Time</div>
+      <div class="value">4/4</div>
+    </div>
+    <div class="info-item">
+      <div class="label">Tuning</div>
+      <div class="value">Standard</div>
+    </div>
+    <div class="info-item">
+      <div class="label">Capo</div>
+      <div class="value" id="capo-display">None</div>
+    </div>
+  </div>
+
+  <!-- Key Selector -->
+  <div class="key-selector">
+    <button class="key-btn active" onclick="switchGuitarKey('original')">Key of F (Original)</button>
+    <button class="key-btn" onclick="switchGuitarKey('easy')">Key of C (Easier)</button>
+  </div>
+
+  <!-- ===== ORIGINAL KEY (F) ===== -->
+  <div id="key-original" class="key-content active">
+
+    <!-- Chord Diagrams -->
+    <div class="chord-diagrams">
+      <h3>Chord Diagrams — Key of F</h3>
+      <div class="diagrams-grid">
+
+        <!-- Bbmaj7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">Bbmaj7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <circle cx="22" cy="28.75" r="4.5" fill="#333"/>
+            <circle cx="34" cy="63.75" r="4.5" fill="#333"/>
+            <circle cx="46" cy="46.25" r="4.5" fill="#333"/>
+            <circle cx="58" cy="63.75" r="4.5" fill="#333"/>
+            <circle cx="70" cy="28.75" r="4.5" fill="#333"/>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">x 1 3 2 3 1</text>
+          </svg>
+        </div>
+
+        <!-- A7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">A7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <text x="22" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="34" cy="46.25" r="4.5" fill="#333"/>
+            <text x="46" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="58" cy="46.25" r="4.5" fill="#333"/>
+            <text x="70" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">x 0 2 0 2 0</text>
+          </svg>
+        </div>
+
+        <!-- Dm7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">Dm7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <text x="22" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <text x="34" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="46" cy="46.25" r="4.5" fill="#333"/>
+            <circle cx="58" cy="28.75" r="4.5" fill="#333"/>
+            <circle cx="70" cy="28.75" r="4.5" fill="#333"/>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">x x 0 2 1 1</text>
+          </svg>
+        </div>
+
+        <!-- F7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">F7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <rect x="7" y="24.5" width="66" height="8" rx="4" fill="#333" opacity="0.8"/>
+            <circle cx="22" cy="63.75" r="4.5" fill="#333"/>
+            <circle cx="46" cy="46.25" r="4.5" fill="#333"/>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">1 3 1 2 1 1</text>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge intro">Intro</span>
+        <span class="gt-section-note">Fingerpicking or light strumming — no vocals</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="chord-row">
+          <div class="chord-bar"><div class="chord">Bbmaj7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">A7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">Dm7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">F7</div><div class="beats">1 2 3 4</div></div>
+        </div>
+        <div class="repeat-marker">x2</div>
+      </div>
+    </div>
+
+    <!-- Verse 1 -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge verse">Verse 1</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Bbmaj7                  A7</div><div class="words">Senchimentaru iya ni naru</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                          F7</div><div class="words">Kanashimi no kimi no kotoba asobi</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                   A7</div><div class="words">Kimi no kuchi kara deru kanjou no</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                       F7</div><div class="words">Uragaeshi ga zenbu watashi</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pre-chorus 1 -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge bridge">Pre-chorus</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Bbmaj7                       A7</div><div class="words">Hanauranai demo yatte miyou ka na</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                 F7</div><div class="words">Suki? Kirai? Suki? Kirai?</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                     A7</div><div class="words">Kimi uranai nara watashi wa zutto</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                    F7</div><div class="words">Kirai, kirai, demo... suki</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chorus -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge chorus">Chorus</span>
+        <span class="gt-section-note">Strum with more energy</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Bbmaj7                        A7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                                F7</div><div class="words">Kimi no me no saki zutto watashi de itai</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                              A7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7          F7</div><div class="words">Nara konya dake</div></div>
+          <br>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                        A7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                                 F7</div><div class="words">Watashi no tonari sotto sasayakaretai</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                              A7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7          F7</div><div class="words">Nara konya dake</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verse 2 -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge verse">Verse 2</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Bbmaj7                   A7</div><div class="words">Romanchikku na yume wo miru</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                           F7</div><div class="words">Kimi nari no sai no ai no katachi?</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                A7</div><div class="words">Onaji iro majiwaranai</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                                  F7</div><div class="words">Koi wa iwanakereba nai to onaji</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pre-chorus 2 / Bridge -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge bridge">Pre-chorus / Bridge</span>
+        <span class="gt-section-note">Softer dynamics, let chords ring</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Bbmaj7                                         A7</div><div class="words">"Tsuki no yoru ni saku ichirin no hana mitai ne"</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                      F7</div><div class="words">Kimi wo mite kaita ku wa</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                  A7</div><div class="words">Itsumo itsudemo jiamari</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7              F7</div><div class="words">Watashi mitai da ne</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chorus (repeat) -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge chorus">Chorus</span>
+        <span class="gt-section-note">Repeat</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Bbmaj7                        A7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                                F7</div><div class="words">Kimi no me no saki zutto watashi de itai</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                              A7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7          F7</div><div class="words">Nara konya dake</div></div>
+          <br>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                        A7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7                                 F7</div><div class="words">Watashi no tonari sotto sasayakaretai</div></div>
+          <div class="lyric-pair"><div class="chords">Bbmaj7                              A7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Dm7          F7</div><div class="words">Nara konya dake</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outro -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge outro">Outro</span>
+        <span class="gt-section-note">Slow down / fade out</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="chord-row">
+          <div class="chord-bar"><div class="chord">Bbmaj7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">A7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">Dm7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">Bbmaj7</div><div class="beats">hold...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fingerpicking Tab -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge intro">Fingerpicking</span>
+        <span class="gt-section-note">Suggested picking pattern for intro/verse</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="tab-label">Fingerpicking Pattern (Bbmaj7 → A7)</div>
+        <div class="tab-block">
+<pre>  Bbmaj7                    A7
+e|----1-------1-------  ----0-------0-------
+B|------3-------3-----  ------2-------2-----
+G|--------3-------3---  --------0-------0---
+D|--------------------  --------2-----------
+A|--1-----------------  --0-----------------
+E|--------------------  --------------------
+
+  Dm7                       F7
+e|----1-------1-------  ----1-------1-------
+B|------1-------1-----  ------1-------1-----
+G|--------2-------2---  --------2-------2---
+D|--0-----------------  --------3-----------
+A|--------------------  --3-----------------
+E|--------------------  --1-----------------</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== EASY KEY (C) ===== -->
+  <div id="key-easy" class="key-content">
+
+    <!-- Chord Diagrams -->
+    <div class="chord-diagrams">
+      <h3>Chord Diagrams — Key of C (Transposed)</h3>
+      <div class="diagrams-grid">
+
+        <!-- Fmaj7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">Fmaj7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <text x="22" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <circle cx="34" cy="63.75" r="4.5" fill="#333"/>
+            <circle cx="46" cy="46.25" r="4.5" fill="#333"/>
+            <circle cx="58" cy="28.75" r="4.5" fill="#333"/>
+            <text x="70" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">x x 3 2 1 0</text>
+          </svg>
+        </div>
+
+        <!-- E7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">E7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="22" cy="46.25" r="4.5" fill="#333"/>
+            <text x="34" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="46" cy="28.75" r="4.5" fill="#333"/>
+            <text x="58" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <text x="70" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">0 2 0 1 0 0</text>
+          </svg>
+        </div>
+
+        <!-- Am7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">Am7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <text x="22" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="34" cy="46.25" r="4.5" fill="#333"/>
+            <text x="46" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <circle cx="58" cy="28.75" r="4.5" fill="#333"/>
+            <text x="70" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">x 0 2 0 1 0</text>
+          </svg>
+        </div>
+
+        <!-- C7 -->
+        <div class="chord-diagram">
+          <div class="chord-name">C7</div>
+          <svg width="90" height="100" viewBox="0 0 90 100">
+            <line x1="10" y1="20" x2="10" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="22" y1="20" x2="22" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="34" y1="20" x2="34" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="46" y1="20" x2="46" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="58" y1="20" x2="58" y2="90" stroke="#aaa" stroke-width="1"/>
+            <line x1="70" y1="20" x2="70" y2="90" stroke="#333" stroke-width="1.5"/>
+            <line x1="10" y1="20" x2="70" y2="20" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="37.5" x2="70" y2="37.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="55" x2="70" y2="55" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="72.5" x2="70" y2="72.5" stroke="#ccc" stroke-width="1"/>
+            <line x1="10" y1="90" x2="70" y2="90" stroke="#ccc" stroke-width="1"/>
+            <text x="10" y="13" text-anchor="middle" font-size="11" fill="#c00" font-weight="700">x</text>
+            <circle cx="22" cy="63.75" r="4.5" fill="#333"/>
+            <circle cx="34" cy="46.25" r="4.5" fill="#333"/>
+            <circle cx="46" cy="63.75" r="4.5" fill="#333"/>
+            <circle cx="58" cy="28.75" r="4.5" fill="#333"/>
+            <text x="70" y="13" text-anchor="middle" font-size="10" fill="#333" font-weight="600">o</text>
+            <text x="40" y="98" text-anchor="middle" font-size="8" fill="#888">x 3 2 3 1 0</text>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge intro">Intro</span>
+        <span class="gt-section-note">Fingerpicking or light strumming — no vocals</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="chord-row">
+          <div class="chord-bar"><div class="chord">Fmaj7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">E7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">Am7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">C7</div><div class="beats">1 2 3 4</div></div>
+        </div>
+        <div class="repeat-marker">x2</div>
+      </div>
+    </div>
+
+    <!-- Verse 1 -->
+    <div class="gt-section">
+      <div class="gt-section-header"><span class="gt-section-badge verse">Verse 1</span></div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Fmaj7                   E7</div><div class="words">Senchimentaru iya ni naru</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                          C7</div><div class="words">Kanashimi no kimi no kotoba asobi</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                    E7</div><div class="words">Kimi no kuchi kara deru kanjou no</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                       C7</div><div class="words">Uragaeshi ga zenbu watashi</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pre-chorus 1 -->
+    <div class="gt-section">
+      <div class="gt-section-header"><span class="gt-section-badge bridge">Pre-chorus</span></div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Fmaj7                        E7</div><div class="words">Hanauranai demo yatte miyou ka na</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                 C7</div><div class="words">Suki? Kirai? Suki? Kirai?</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                      E7</div><div class="words">Kimi uranai nara watashi wa zutto</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                    C7</div><div class="words">Kirai, kirai, demo... suki</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chorus -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge chorus">Chorus</span>
+        <span class="gt-section-note">Strum with more energy</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Fmaj7                         E7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                                C7</div><div class="words">Kimi no me no saki zutto watashi de itai</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                               E7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Am7          C7</div><div class="words">Nara konya dake</div></div>
+          <br>
+          <div class="lyric-pair"><div class="chords">Fmaj7                         E7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                                  C7</div><div class="words">Watashi no tonari sotto sasayakaretai</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                               E7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Am7          C7</div><div class="words">Nara konya dake</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verse 2 -->
+    <div class="gt-section">
+      <div class="gt-section-header"><span class="gt-section-badge verse">Verse 2</span></div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Fmaj7                    E7</div><div class="words">Romanchikku na yume wo miru</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                           C7</div><div class="words">Kimi nari no sai no ai no katachi?</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                 E7</div><div class="words">Onaji iro majiwaranai</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                                  C7</div><div class="words">Koi wa iwanakereba nai to onaji</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pre-chorus 2 / Bridge -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge bridge">Pre-chorus / Bridge</span>
+        <span class="gt-section-note">Softer dynamics, let chords ring</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Fmaj7                                          E7</div><div class="words">"Tsuki no yoru ni saku ichirin no hana mitai ne"</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                      C7</div><div class="words">Kimi wo mite kaita ku wa</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                   E7</div><div class="words">Itsumo itsudemo jiamari</div></div>
+          <div class="lyric-pair"><div class="chords">Am7              C7</div><div class="words">Watashi mitai da ne</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chorus (repeat) -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge chorus">Chorus</span>
+        <span class="gt-section-note">Repeat</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="lyrics-block">
+          <div class="lyric-pair"><div class="chords">Fmaj7                         E7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                                C7</div><div class="words">Kimi no me no saki zutto watashi de itai</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                               E7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Am7          C7</div><div class="words">Nara konya dake</div></div>
+          <br>
+          <div class="lyric-pair"><div class="chords">Fmaj7                         E7</div><div class="words">Tsuki ga kirei ne to iwaretai!</div></div>
+          <div class="lyric-pair"><div class="chords">Am7                                  C7</div><div class="words">Watashi no tonari sotto sasayakaretai</div></div>
+          <div class="lyric-pair"><div class="chords">Fmaj7                               E7</div><div class="words">Tsuki ga kirei ne ga watashi ja nai kara</div></div>
+          <div class="lyric-pair"><div class="chords">Am7          C7</div><div class="words">Nara konya dake</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outro -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge outro">Outro</span>
+        <span class="gt-section-note">Slow down / fade out</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="chord-row">
+          <div class="chord-bar"><div class="chord">Fmaj7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">E7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">Am7</div><div class="beats">1 2 3 4</div></div>
+          <div class="chord-bar"><div class="chord">Fmaj7</div><div class="beats">hold...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fingerpicking Tab -->
+    <div class="gt-section">
+      <div class="gt-section-header">
+        <span class="gt-section-badge intro">Fingerpicking</span>
+        <span class="gt-section-note">Suggested picking pattern for intro/verse</span>
+      </div>
+      <div class="gt-section-body">
+        <div class="tab-label">Fingerpicking Pattern (Fmaj7 → E7)</div>
+        <div class="tab-block">
+<pre>  Fmaj7                     E7
+e|----0-------0-------  ----0-------0-------
+B|------1-------1-----  ------0-------0-----
+G|--------2-------2---  --------1-------1---
+D|----3---------------  --------0-----------
+A|--------------------  --2-----------------
+E|--------------------  --0-----------------
+
+  Am7                       C7
+e|----0-------0-------  ----0-------0-------
+B|------1-------1-----  ------1-------1-----
+G|--------0-------0---  --------3-------3---
+D|----2---------------  --------2-----------
+A|--0-----------------  --3-----------------
+E|--------------------  --------------------</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Strumming Patterns (shared across keys) -->
+  <div class="gt-section">
+    <div class="gt-section-header">
+      <span class="gt-section-badge verse">Strumming</span>
+      <span class="gt-section-note">Strumming patterns (D = Down, U = Up, x = mute/slap, . = rest)</span>
+    </div>
+    <div class="gt-section-body">
+      <div class="tab-label">1. Island Strum — All-purpose (Verse / Chorus)</div>
+      <div class="tab-block">
+<pre>  |  D  .  D  U  .  U  D  U  |
+  |  1  &  2  &  3  &  4  &  |</pre>
+      </div>
+
+      <div class="tab-label" style="margin-top: 1.25rem;">2. Jazzy Swing — Laid-back feel (Verse / Pre-chorus)</div>
+      <div class="tab-block">
+<pre>  |  D  .  .  U  .  U  D  .  |
+  |  1  &  2  &  3  &  4  &  |
+  Emphasize beat 1, ghost beats 3-4 for a relaxed jazz feel.</pre>
+      </div>
+
+      <div class="tab-label" style="margin-top: 1.25rem;">3. Muted Percussive — More energy (Chorus)</div>
+      <div class="tab-block">
+<pre>  |  D  .  D  U  x  U  D  U  |
+  |  1  &  2  &  3  &  4  &  |
+  The 'x' on beat 3 is a palm mute/slap for rhythmic punch.</pre>
+      </div>
+
+      <div class="tab-label" style="margin-top: 1.25rem;">4. Gentle Down-Strum — Let chords ring (Intro / Bridge)</div>
+      <div class="tab-block">
+<pre>  |  D  .  .  .  D  .  .  .  |
+  |  1  &  2  &  3  &  4  &  |
+  Two slow downstrokes per bar — lets the maj7 and 7th tones breathe.</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="gt-legend">
+    <h3>Legend</h3>
+    <div class="legend-grid">
+      <div class="legend-item"><code>x</code> Don't play this string</div>
+      <div class="legend-item"><code>o</code> Play string open</div>
+      <div class="legend-item"><code>D</code> Downstroke</div>
+      <div class="legend-item"><code>U</code> Upstroke</div>
+      <div class="legend-item"><code>.</code> Rest / mute</div>
+      <div class="legend-item"><code>x</code> Palm mute / slap</div>
+      <div class="legend-item"><code>x2</code> Repeat 2 times</div>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="gt-tips">
+    <h3>Playing Tips</h3>
+    <ul>
+      <li>This song uses a repeating 4-chord loop throughout — once you nail the progression, you've got the whole song</li>
+      <li>The <strong>Key of C</strong> version uses open chords and is easier for beginners (no barre chords)</li>
+      <li>For the jazzy feel, let the 7th chord tones ring out — avoid muting strings prematurely</li>
+      <li>Try fingerpicking for verses and switching to light strumming for the chorus to add dynamics</li>
+      <li>The tempo is around 150 BPM but feels relaxed — don't rush the chord changes</li>
+      <li>To match the original key using the easy shapes, place a <strong>capo on fret 5</strong> and play the Key of C shapes</li>
+    </ul>
+  </div>
+
+  <!-- Footer -->
+  <div class="gt-footer">
+    <p><strong>The Moon is Beautiful</strong> — Yuta Kakizaki (柿崎ユウタ)</p>
+    <p>Chord data sourced from <a href="https://chordify.net/chords/the-moon-is-beautiful-yuta-kakizaki-king-penumbra" target="_blank" rel="noopener noreferrer">Chordify</a>
+      & <a href="https://www.songsterr.com/a/wsa/yuta-kakizaki-the-moon-is-beautiful-tab-s3775857" target="_blank" rel="noopener noreferrer">Songsterr</a></p>
+    <p style="margin-top: 0.5rem; opacity: 0.6;">For personal use only.</p>
+  </div>
+
+  <a href="{{ '/guitar-tabs/' | relative_url }}" class="gt-back">&larr; All Guitar Tabs</a>
+
+</div>
+
+<script>
+  function switchGuitarKey(key) {
+    document.querySelectorAll('.guitar-tab .key-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.guitar-tab .key-btn').forEach(function(el) { el.classList.remove('active'); });
+
+    if (key === 'original') {
+      document.getElementById('key-original').classList.add('active');
+      document.querySelectorAll('.guitar-tab .key-btn')[0].classList.add('active');
+      document.getElementById('key-display').textContent = 'F Major';
+      document.getElementById('capo-display').textContent = 'None';
+    } else {
+      document.getElementById('key-easy').classList.add('active');
+      document.querySelectorAll('.guitar-tab .key-btn')[1].classList.add('active');
+      document.getElementById('key-display').textContent = 'C Major';
+      document.getElementById('capo-display').textContent = 'Fret 5 (for original key)';
+    }
+  }
+</script>
