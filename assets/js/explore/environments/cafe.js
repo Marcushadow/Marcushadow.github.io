@@ -238,11 +238,11 @@ export async function buildCafe(scene) {
 
   // --- Books scattered on/near bookshelves ---
   const bookPositions = [
-    { pos: new THREE.Vector3(-8, 0.9, -10.5), rotY: 0.3, scale: 1.8 },
-    { pos: new THREE.Vector3(-4, 1.9, -10.6), rotY: -0.5, scale: 1.6 },
-    { pos: new THREE.Vector3(0, 0.9, -10.4), rotY: 0.8, scale: 2.0 },
-    { pos: new THREE.Vector3(4, 2.9, -10.5), rotY: -0.2, scale: 1.7 },
-    { pos: new THREE.Vector3(8, 1.9, -10.6), rotY: 1.1, scale: 1.5 },
+    { pos: new THREE.Vector3(-8, 0.6, -10.5), rotY: 0.3, scale: 1.8 },
+    { pos: new THREE.Vector3(-4, 1.6, -10.6), rotY: -0.5, scale: 1.6 },
+    { pos: new THREE.Vector3(0, 0.6, -10.4), rotY: 0.8, scale: 2.0 },
+    { pos: new THREE.Vector3(4, 2.6, -10.5), rotY: -0.2, scale: 1.7 },
+    { pos: new THREE.Vector3(8, 1.6, -10.6), rotY: 1.1, scale: 1.5 },
     { pos: new THREE.Vector3(-6, 0, -10.0), rotY: 0.6, scale: 2.0 },
     { pos: new THREE.Vector3(2, 0, -10.2), rotY: -0.9, scale: 1.8 },
   ];
@@ -426,10 +426,24 @@ export async function buildCafe(scene) {
   // --- Side table near lounge ---
   placeModel(scene, models.sideTable, new THREE.Vector3(loungeX + 1.0, 0, loungeZ - 2.5), 0, 2.0);
 
-  // --- Wall lamps for extra atmosphere ---
-  placeModel(scene, models.lampWall, new THREE.Vector3(-11.7, 2.8, -6), Math.PI / 2, 2.0);
-  placeModel(scene, models.lampWall, new THREE.Vector3(11.7, 2.8, -6), -Math.PI / 2, 2.0);
-  placeModel(scene, models.lampWall, new THREE.Vector3(-11.7, 2.8, 6), Math.PI / 2, 2.0);
+  // --- Wall lamps with mounting brackets ---
+  const wallLampPlacements = [
+    { pos: new THREE.Vector3(-11.7, 2.8, -6), rotY: Math.PI / 2 },
+    { pos: new THREE.Vector3(11.7, 2.8, -6), rotY: -Math.PI / 2 },
+    { pos: new THREE.Vector3(-11.7, 2.8, 6), rotY: Math.PI / 2 },
+  ];
+
+  wallLampPlacements.forEach(({ pos, rotY }) => {
+    placeModel(scene, models.lampWall, pos, rotY, 2.0);
+
+    // Mounting bracket (small box touching the wall behind the lamp)
+    const bracketX = pos.x < 0 ? pos.x - 0.15 : pos.x + 0.15;
+    const bracket = createBox(
+      0.1, 0.1, 0.1, C.woodDark,
+      new THREE.Vector3(bracketX, pos.y, pos.z)
+    );
+    scene.add(bracket);
+  });
 
   // --- Table lamp on the counter for decoration ---
   placeModel(scene, models.lampRoundTable, new THREE.Vector3(-1.0, 1.25, counterZ), 0, 1.5);
