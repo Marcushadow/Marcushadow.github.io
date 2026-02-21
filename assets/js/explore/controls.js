@@ -1,12 +1,13 @@
 /**
- * controls.js — Isometric character controls with collision
+ * controls.js — Isometric character controls with simple boundary collision
  *
  * Provides WASD movement in isometric directions, a visible character
  * mesh, and proximity detection for interactive objects.
  *
  * Usage:
  *   const controls = createControls(camera, domElement, scene, interactiveObjects);
- *   controls.setOctree(worldOctree);
+ *   controls.setBounds({ minX: -10, maxX: 10, minZ: -10, maxZ: 10 });
+ *   controls.setObstacles([{ x: 5, z: 3, radius: 1.0 }]);
  *   controls.setPosition(x, z);
  *   controls.setActive(true);
  *   // in animation loop:
@@ -14,20 +15,16 @@
  */
 
 import * as THREE from 'three';
-import { Capsule } from 'three/addons/math/Capsule.js';
 
 const MOVE_SPEED = 5.0;
 const DECELERATION = 6.0;
 const LERP_FACTOR = 0.12;
 const VELOCITY_DEADZONE = 0.001;
 const PLAYER_RADIUS = 0.3;
-const PLAYER_HEIGHT = 0.5;
 const PROXIMITY_RANGE = 2.5;
 
 // Isometric basis vectors (camera at 45 degrees Y rotation)
-// "Forward" on screen (up) = (-1, 0, -1) in world space
 const ISO_FORWARD = new THREE.Vector3(-1, 0, -1).normalize();
-// "Right" on screen = (1, 0, -1) in world space
 const ISO_RIGHT = new THREE.Vector3(1, 0, -1).normalize();
 
 /**
@@ -42,13 +39,9 @@ export function createControls(camera, domElement, scene, interactiveObjects) {
   const _velocity = new THREE.Vector3();
   const _direction = new THREE.Vector3();
 
-  // Collision
-  let _octree = null;
-  const _capsule = new Capsule(
-    new THREE.Vector3(0, PLAYER_RADIUS, 0),
-    new THREE.Vector3(0, PLAYER_HEIGHT, 0),
-    PLAYER_RADIUS
-  );
+  // Simple collision
+  let _bounds = null;       // { minX, maxX, minZ, maxZ } or { centerX, centerZ, radius }
+  let _obstacles = [];      // [{ x, z, radius }]
 
   // Keyboard state
   const _keys = { forward: false, backward: false, left: false, right: false };
@@ -134,23 +127,44 @@ export function createControls(camera, domElement, scene, interactiveObjects) {
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
 
-  // --- Collision ---
-  function resolveCollisions() {
-    if (!_octree) return;
-    const result = _octree.capsuleIntersect(_capsule);
-    if (result) {
-      _capsule.translate(result.normal.multiplyScalar(result.depth));
+  // --- Simple boundary + obstacle collision ---
+  function resolveBounds() {
+    if (!_bounds) return;
+
+    if (_bounds.radius !== undefined) {
+      // Circular bounds
+      const cx = _bounds.centerX || 0;
+      const cz = _bounds.centerZ || 0;
+      const dx = charGroup.position.x - cx;
+      const dz = charGroup.position.z - cz;
+      const dist = Math.sqrt(dx * dx + dz * dz);
+      const maxDist = _bounds.radius - PLAYER_RADIUS;
+      if (dist > maxDist && dist > 0) {
+        charGroup.position.x = cx + (dx / dist) * maxDist;
+        charGroup.position.z = cz + (dz / dist) * maxDist;
+      }
+    } else {
+      // Rectangular bounds
+      charGroup.position.x = Math.max(_bounds.minX + PLAYER_RADIUS,
+        Math.min(_bounds.maxX - PLAYER_RADIUS, charGroup.position.x));
+      charGroup.position.z = Math.max(_bounds.minZ + PLAYER_RADIUS,
+        Math.min(_bounds.maxZ - PLAYER_RADIUS, charGroup.position.z));
     }
   }
 
-  function syncCapsuleFromCharacter() {
-    _capsule.start.set(charGroup.position.x, PLAYER_RADIUS, charGroup.position.z);
-    _capsule.end.set(charGroup.position.x, PLAYER_HEIGHT, charGroup.position.z);
-  }
-
-  function syncCharacterFromCapsule() {
-    charGroup.position.x = _capsule.end.x;
-    charGroup.position.z = _capsule.end.z;
+  function resolveObstacles() {
+    for (const obs of _obstacles) {
+      const dx = charGroup.position.x - obs.x;
+      const dz = charGroup.position.z - obs.z;
+      const dist = Math.sqrt(dx * dx + dz * dz);
+      const minDist = obs.radius + PLAYER_RADIUS;
+      if (dist < minDist && dist > 0) {
+        const nx = dx / dist;
+        const nz = dz / dist;
+        charGroup.position.x = obs.x + nx * minDist;
+        charGroup.position.z = obs.z + nz * minDist;
+      }
+    }
   }
 
   // --- Proximity detection ---
@@ -198,14 +212,16 @@ export function createControls(camera, domElement, scene, interactiveObjects) {
       }
     },
 
-    setOctree(octree) {
-      _octree = octree;
-      syncCapsuleFromCharacter();
+    setBounds(bounds) {
+      _bounds = bounds;
+    },
+
+    setObstacles(obstacles) {
+      _obstacles = obstacles || [];
     },
 
     setPosition(x, z) {
       charGroup.position.set(x, 0, z);
-      syncCapsuleFromCharacter();
     },
 
     getPosition() {
@@ -249,12 +265,9 @@ export function createControls(camera, domElement, scene, interactiveObjects) {
       charGroup.position.z += _velocity.z * delta;
       charGroup.position.y = 0;
 
-      // Collision
-      if (_octree) {
-        syncCapsuleFromCharacter();
-        resolveCollisions();
-        syncCharacterFromCapsule();
-      }
+      // Simple collision
+      resolveBounds();
+      resolveObstacles();
 
       // Proximity detection
       updateProximity();
