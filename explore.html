@@ -8,7 +8,7 @@ permalink: /explore/
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Explore — {{ site.title }}</title>
-  <meta name="description" content="Explore {{ site.title }} in an isometric world.">
+  <meta name="description" content="Explore {{ site.title }} in a pixel art RPG world.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,21 +53,13 @@ permalink: /explore/
       }
     };
 
-    // Read theme from localStorage (matches main blog behaviour)
     window.EXPLORE_THEME = localStorage.getItem('theme') || 'beige';
   </script>
 
   <!-- ============================================
-       Three.js Import Map
+       Pixi.js
        ============================================ -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
-    }
-  }
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.4.3/dist/pixi.min.js"></script>
 
   <!-- ============================================
        Loading Screen
@@ -88,9 +80,12 @@ permalink: /explore/
   <div id="start-prompt" class="start-prompt hidden">
     <div class="start-prompt-box">
       <h1 class="start-prompt-title">Explore</h1>
-      <p class="start-prompt-subtitle">Navigate the blog in an isometric world</p>
+      <p class="start-prompt-subtitle">Navigate the blog in a pixel art world</p>
 
       <div class="controls-hint">
+        <div class="controls-hint-row">
+          <span>Click a tile to move</span>
+        </div>
         <div class="controls-hint-row">
           <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
           <span>Move</span>
@@ -98,10 +93,6 @@ permalink: /explore/
         <div class="controls-hint-row">
           <kbd>E</kbd>
           <span>Interact</span>
-        </div>
-        <div class="controls-hint-row">
-          <kbd>Esc</kbd>
-          <span>Exit</span>
         </div>
       </div>
 
@@ -119,23 +110,12 @@ permalink: /explore/
   </div>
 
   <!-- ============================================
-       Pause Menu
-       ============================================ -->
-  <div id="pause-menu" class="pause-menu hidden">
-    <div class="pause-menu-box">
-      <h2 class="pause-menu-title">Paused</h2>
-      <button id="pause-resume" class="pause-menu-btn">Resume</button>
-      <a href="{{ '/' | relative_url }}" class="pause-menu-btn pause-menu-btn-secondary">Back to Blog</a>
-    </div>
-  </div>
-
-  <!-- ============================================
        Mobile Notice
        ============================================ -->
   <div id="mobile-notice" class="mobile-notice hidden">
     <div class="mobile-notice-box">
       <h2>Desktop Only</h2>
-      <p>The isometric explore experience requires a keyboard. Please visit on a desktop browser.</p>
+      <p>The pixel art explore experience requires a larger screen. Please visit on a desktop browser.</p>
       <a href="{{ '/' | relative_url }}" class="mobile-notice-link">Back to blog</a>
     </div>
   </div>
@@ -155,7 +135,7 @@ permalink: /explore/
   <!-- ============================================
        Application Entry
        ============================================ -->
-  <script type="module" src="{{ '/assets/js/explore/main.js' | relative_url }}"></script>
+  <script type="module" src="{{ '/assets/js/explore/game.js' | relative_url }}"></script>
 
 </body>
 </html>
