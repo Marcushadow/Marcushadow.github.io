@@ -1,25 +1,21 @@
 ---
 title: DistributedMacInference
-description: Distributed inference across multiple Mac machines, leveraging Apple Silicon for parallel ML model execution.
+description: Distributed LLM inference across multiple Mac machines using llama.cpp's RPC backend to pool Apple Silicon compute.
 github: https://github.com/Marcushadow/DistributedMacInference
-tags: [python, ml, distributed-systems]
+tags: [python, ml, distributed-systems, llm]
 featured: true
 permalink: /projects/distributed-mac-inference/
 ---
 
 ## Overview
 
-*Write your project overview here.*
+A setup for running distributed large language model inference across multiple Mac machines. Built on top of [llama.cpp's RPC backend](https://github.com/ggml-org/llama.cpp/tree/master/examples/rpc), this project automates the installation and configuration needed to pool Apple Silicon compute from several Macs into a single inference cluster.
 
-## Architecture
+The idea is simple: one Mac isn't enough to run a large model efficiently, but a few Macs networked together can split the workload across their combined memory and compute.
 
-*Describe the system architecture — how machines discover each other, how work is distributed, etc.*
+## How It Works
 
-## Tech Stack
-
-- **Language:** Python
-- **Hardware:** Apple Silicon (M-series)
-- **Key Libraries:** *(list them here)*
+The project uses llama.cpp's RPC (Remote Procedure Call) feature, which allows tensor operations to be offloaded to remote machines over the network. Each Mac in the cluster runs an RPC server, and the main node coordinates inference by distributing layer computations across all available machines.
 
 ## Getting Started
 
@@ -27,8 +23,19 @@ permalink: /projects/distributed-mac-inference/
 # Clone the repo
 git clone https://github.com/Marcushadow/DistributedMacInference.git
 
-# Installation steps...
+# Make the setup script executable
+chmod +x setup_llama.sh
+
+# Run the installer
+./install_llama.sh
 ```
+
+## Tech Stack
+
+- **Runtime:** llama.cpp (C/C++ with RPC backend)
+- **Hardware:** Apple Silicon (M-series) Macs
+- **Setup:** Bash scripts for automated installation
+- **Protocol:** RPC for inter-machine tensor offloading
 
 ## What I Learned
 

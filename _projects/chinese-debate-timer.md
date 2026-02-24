@@ -9,17 +9,22 @@ permalink: /projects/chinese-debate-timer/
 
 ## Overview
 
-*Write your project overview here.*
+A simple, focused timer designed specifically for Chinese-format debate rounds. Built with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies, just a clean page that does one thing well.
+
+Meant to be opened in a browser during debate practice or competitions, giving speakers and timekeepers a clear, easy-to-read countdown.
 
 ## Features
 
-- *Feature 1*
-- *Feature 2*
-- *Feature 3*
+- Preset timers for standard Chinese debate round segments
+- Clean, large-format display readable from a distance
+- Start, pause, and reset controls
+- Visual and/or audio alerts when time is running out
+- Works entirely in the browser — no installation needed
 
 ## Tech Stack
 
 - **Frontend:** Vanilla HTML, CSS, JavaScript
+- **Hosting:** GitHub Pages (static site)
 
 ## What I Learned
 

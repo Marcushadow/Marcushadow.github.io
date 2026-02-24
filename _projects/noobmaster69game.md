@@ -2,32 +2,35 @@
 title: noobmaster69game
 description: A browser-based gaming platform featuring multiple classic arcade games, built with vanilla JavaScript, HTML, and CSS.
 github: https://github.com/Marcushadow/noobmaster69game
-tags: [javascript, game, html]
+tags: [javascript, game, html, node]
 featured: false
 permalink: /projects/noobmaster69game/
 ---
 
 ## Overview
 
-A browser-based gaming platform featuring multiple classic arcade games, built with vanilla JavaScript, HTML, and CSS, powered by a Node.js backend.
+A browser-based gaming platform that bundles several classic arcade games into one site. Built from scratch with vanilla JavaScript and HTML5 Canvas on the frontend, with a Node.js + Express backend handling user accounts and high score tracking.
+
+No game engines, no frameworks — just raw JavaScript and canvas rendering.
 
 ## Games
 
-- **Breakout** — The classic brick-breaking arcade game. Bounce the ball, break the bricks, don't let it drop.
-- **Snake** — Grow the snake, eat the food, avoid the walls and yourself. A timeless classic.
-- **Jumpy** — A platformer-style jumping game. Time your jumps right and keep going.
+- **Breakout** — The classic brick-breaking arcade game. Bounce the ball off your paddle, smash through rows of bricks, and don't let the ball drop.
+- **Snake** — Guide the snake around the board, eat food to grow longer, and avoid crashing into the walls or yourself.
+- **Jumpy** — A platformer-style jumping game. Time your jumps to clear obstacles and keep your streak going.
 
 ## Features
 
-- Multiple arcade games in one platform
-- Leaderboard system to track high scores
-- Login and user accounts
-- Clean retro-styled UI
+- Three complete arcade games in one platform
+- User account system with login/signup
+- Leaderboard tracking high scores across all games
+- Clean retro-styled UI tying the games together
 
 ## Tech Stack
 
 - **Frontend:** Vanilla JavaScript, HTML5 Canvas, CSS
 - **Backend:** Node.js with Express
+- **Data:** Server-side score tracking and user management
 
 ## What I Learned
 

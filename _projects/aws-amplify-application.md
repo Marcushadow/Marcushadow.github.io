@@ -9,22 +9,24 @@ permalink: /projects/aws-amplify-application/
 
 ## Overview
 
-*Write your project overview here.*
+A demo application built to showcase AWS Amplify's capabilities during a live presentation at LLI. The project demonstrates how Amplify simplifies full-stack cloud development by handling authentication, APIs, and hosting out of the box — going from zero to a deployed application in minutes.
 
 ## Demo Context
 
-*Describe the LLI demo — what was presented, the audience, etc.*
+This was prepared for a live demo session at LLI, walking the audience through the full AWS Amplify workflow: initializing a project, connecting backend services (auth, data, storage), and deploying to the cloud. The goal was to show how Amplify abstracts away the infrastructure complexity so developers can focus on building.
 
 ## Features
 
-- *Feature 1*
-- *Feature 2*
-- *Feature 3*
+- Full-stack cloud app scaffolded with AWS Amplify CLI
+- User authentication flow (sign up, sign in, sign out)
+- Cloud-hosted backend with API and data layer
+- One-command deployment to AWS
 
 ## Tech Stack
 
-- **Platform:** AWS Amplify
-- **Services Used:** *(list AWS services)*
+- **Platform:** AWS Amplify (Gen 2)
+- **Services:** Amplify Hosting, Authentication, API, Storage
+- **Frontend:** JavaScript
 
 ## What I Learned
 
