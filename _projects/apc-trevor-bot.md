@@ -31,4 +31,4 @@ The system offers three server modes depending on the use case:
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+Building APCTrevorBot gave me hands-on experience wiring together multiple AI services into a single coherent pipeline. Working with ASR models taught me about audio preprocessing and the quirks of real-time speech-to-text. Setting up the RAG pipeline — both locally and with AWS Bedrock — showed me the tradeoffs between latency, cost, and answer quality when choosing between local and cloud-based inference. The TypeScript frontend was a good exercise in building a responsive UI that handles streaming AI responses gracefully.

@@ -30,4 +30,4 @@ This was prepared for a live demo session at LLI, walking the audience through t
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+Preparing a live demo forced me to understand AWS Amplify deeply enough to explain it on the spot. I learned how Amplify abstracts away CloudFormation stacks, Cognito user pools, and AppSync APIs behind a developer-friendly CLI. The pressure of a live audience also taught me the value of having a solid backup plan — pre-recorded fallbacks, offline-ready demos, and a clear narrative arc for the presentation.

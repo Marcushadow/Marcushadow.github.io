@@ -34,4 +34,4 @@ No game engines, no frameworks — just raw JavaScript and canvas rendering.
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+Building games with raw Canvas and no engine was a great way to learn game loops, collision detection, and state management from first principles. The backend side — user accounts, leaderboard persistence, Express routing — was my introduction to full-stack development. Keeping three different games consistent in a shared platform also taught me about code organization and creating reusable patterns across different game mechanics.

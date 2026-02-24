@@ -39,4 +39,4 @@ chmod +x setup_llama.sh
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+This project taught me about the networking side of ML inference — how tensor operations can be serialized and sent over RPC, and how latency between machines affects throughput. I learned to work with llama.cpp's internals and gained an appreciation for how much optimization goes into making LLM inference fast. The practical lesson was that pooling consumer hardware can be a viable alternative to expensive cloud GPU instances for certain workloads.

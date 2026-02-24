@@ -49,4 +49,4 @@ The CNN-LSTM achieved **70% validation accuracy** on a data subset. While modest
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+The biggest lesson was that architecture choice matters more than tuning when data is limited. Training 3D CNNs from scratch sounded cool but was impractical with our dataset size — transfer learning on 2D slices with a pretrained EfficientNet crushed the 3D approaches. I also got deep into AWS SageMaker's training pipeline, learning how FastFile mode streams data from S3 to avoid the bottleneck of downloading massive medical datasets to disk. Working with MONAI gave me a solid foundation in medical imaging preprocessing that I've carried into other projects.

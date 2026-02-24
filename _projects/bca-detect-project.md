@@ -35,4 +35,4 @@ A custom data processing pipeline handles the conversion and tiling of these hig
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+This project was my introduction to working with real clinical data. I learned that data preprocessing is often the hardest part — converting whole-slide `.svs` images into usable patches required understanding both the medical imaging domain and the tooling (OpenSlide). Collaborating with NUS researchers taught me how to communicate technical ML concepts to domain experts, and how important it is to validate your pipeline against ground truth before trusting any model output.

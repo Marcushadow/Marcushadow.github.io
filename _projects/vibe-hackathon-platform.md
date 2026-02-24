@@ -49,4 +49,4 @@ The platform has two main surfaces: an admin dashboard for organizers and a part
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+This project was a deep dive into AWS infrastructure automation. I learned how ECS Fargate, CloudFront, ECR, and VPC networking fit together to create isolated, scalable environments. Building the bulk instance management system taught me about handling concurrent AWS API calls, managing state across dozens of resources, and cleaning up gracefully when things go wrong. Integrating the Continue AI extension with Bedrock showed me how to pre-configure developer tools at the container level so participants get a zero-setup experience.

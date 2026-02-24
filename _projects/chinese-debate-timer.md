@@ -28,4 +28,4 @@ Meant to be opened in a browser during debate practice or competitions, giving s
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+A small project, but a good reminder that not everything needs a framework. Vanilla HTML/CSS/JS was the right tool here — fast to build, zero dependencies to maintain, and it just works in any browser. I also learned to think about UX for a specific context: a debate timer needs to be readable from across a room, so font sizes, contrast, and visual cues for time warnings all had to be considered carefully.

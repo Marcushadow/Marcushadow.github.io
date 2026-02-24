@@ -33,4 +33,4 @@ The goal was to have a space that feels distinctly mine: a place to write about 
 
 ## What I Learned
 
-*Reflect on what you learned building this project.*
+Building a blog from scratch instead of using a pre-made theme taught me CSS in a way that tutorials never could. Implementing multi-theme support with CSS variables gave me a deep understanding of how design systems work under the hood. Working with Jekyll's Liquid templating and collection system taught me how static site generators turn structured data into pages. And the explore mode experiment has been a fun crash course in game development — from Three.js to Pixi.js, learning what works and what doesn't through iteration.
