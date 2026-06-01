@@ -306,6 +306,64 @@ ul, ol {
 }
 
 /* ============================================
+   Post List (dated index)
+   ============================================ */
+.post-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-row {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 1.25rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.post-row:hover {
+  color: var(--accent);
+}
+
+.post-row:hover .post-row-title {
+  color: var(--accent);
+}
+
+.post-row-date {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.post-row-title {
+  font-size: 1.05rem;
+  color: var(--text);
+  transition: color var(--transition);
+}
+
+.post-row-tags {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .post-row {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+  .post-row-tags {
+    text-align: left;
+  }
+}
+
+/* ============================================
    Tags
    ============================================ */
 .tag {
