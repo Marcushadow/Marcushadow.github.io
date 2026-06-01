@@ -22,9 +22,9 @@ title: Home
     <a href="{{ '/blog' | relative_url }}" class="section-link">View all &rarr;</a>
   </div>
 
-  <div class="post-grid">
+  <div class="post-list">
     {% for post in site.posts limit:4 %}
-      {% include post-card.html post=post %}
+      {% include post-row.html post=post %}
     {% endfor %}
   </div>
 </section>

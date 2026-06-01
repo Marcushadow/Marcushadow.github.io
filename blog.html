@@ -27,10 +27,10 @@ permalink: /blog/
 </div>
 {% endif %}
 
-<div class="post-grid" id="post-grid">
+<div class="post-list" id="post-list">
   {% for post in site.posts %}
-    <div class="post-grid-item" data-tags="{{ post.tags | join: ' ' | slugify }}">
-      {% include post-card.html post=post %}
+    <div class="post-list-item" data-tags="{{ post.tags | join: ' ' | slugify }}">
+      {% include post-row.html post=post %}
     </div>
   {% endfor %}
 </div>
@@ -42,7 +42,7 @@ permalink: /blog/
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const filterTags = document.querySelectorAll('.filter-tag');
-    const posts = document.querySelectorAll('.post-grid-item');
+    const posts = document.querySelectorAll('.post-list-item');
 
     filterTags.forEach(tag => {
       tag.addEventListener('click', function() {
