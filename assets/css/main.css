@@ -431,11 +431,10 @@ ul, ol {
 .post-body blockquote,
 .page-body blockquote,
 .project-body blockquote {
-  border-left: 3px solid var(--accent);
-  padding: 0.75rem 1.25rem;
+  border-left: 3px solid var(--text-muted);
+  padding: 0.5rem 1.25rem;
   margin: 1.5rem 0;
-  background: var(--surface);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  background: transparent;
   color: var(--text-secondary);
   font-style: italic;
 }
@@ -479,7 +478,7 @@ ul, ol {
 .project-body code {
   font-family: var(--font-mono);
   font-size: 0.88em;
-  background: var(--surface);
+  background: var(--surface-soft);
   padding: 0.15em 0.4em;
   border-radius: 4px;
   border: 1px solid var(--border);
@@ -490,7 +489,7 @@ ul, ol {
 .post-body pre,
 .page-body pre,
 .project-body pre {
-  background: var(--surface);
+  background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
@@ -526,17 +525,16 @@ ul, ol {
 
 .post-nav-link {
   display: block;
-  padding: 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition: border-color var(--transition);
-  color: inherit;
+  padding: 0.75rem 0;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  text-decoration: none;
+  transition: color var(--transition);
 }
 
 .post-nav-link:hover {
-  border-color: var(--text-secondary);
-  color: inherit;
+  color: var(--accent);
 }
 
 .post-nav-link.next {
@@ -554,7 +552,9 @@ ul, ol {
   display: block;
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--text-heading);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.15rem;
 }
 
 /* ============================================
@@ -909,7 +909,7 @@ ul, ol {
    Syntax Highlighting (Rouge — warm muted)
    ============================================ */
 .highlight {
-  background: var(--surface);
+  background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
