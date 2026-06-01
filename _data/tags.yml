@@ -21,3 +21,15 @@
 - name: ai
   description: Artificial intelligence and machine learning
   color: "#7c3aed"
+
+- name: philosophy
+  description: "Personal reflections and stray thoughts"
+  color: "#6e6960"
+
+- name: agents
+  description: "LLM agents and orchestration"
+  color: "#8b4a2b"
+
+- name: tech
+  description: "General tech and software essays"
+  color: "#6e6960"
