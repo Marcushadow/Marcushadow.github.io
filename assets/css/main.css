@@ -186,24 +186,21 @@ ul, ol {
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+  font-size: 2.4rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
   color: var(--text-heading);
   margin-bottom: 1rem;
 }
 
-.hero-title .accent {
-  color: var(--accent);
-}
-
 .hero-tagline {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
   max-width: 550px;
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  font-style: italic;
 }
 
 /* ============================================
@@ -842,28 +839,29 @@ ul, ol {
    Quick Links
    ============================================ */
 .quick-links {
-  display: flex;
-  gap: 1rem;
   margin-top: 2rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
 }
 
-.quick-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+.quick-links a {
   color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: border-color var(--transition), color var(--transition);
+  text-decoration: none;
+  transition: color var(--transition);
 }
 
-.quick-link:hover {
-  border-color: var(--text-secondary);
-  color: var(--text);
+.quick-links a:hover {
+  color: var(--accent);
+}
+
+.quick-links-sep {
+  margin: 0 0.75rem;
+  color: var(--text-muted);
+}
+
+.quick-links-disabled {
+  color: var(--text-muted);
+  cursor: default;
 }
 
 /* ============================================
@@ -1061,7 +1059,7 @@ ul, ol {
   }
 
   .quick-links {
-    flex-direction: column;
+    font-size: 0.9rem;
   }
 
   .blog-header h1 {
