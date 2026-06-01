@@ -654,7 +654,7 @@ ul, ol {
 }
 
 .project-card {
-  background: var(--surface);
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
@@ -668,11 +668,21 @@ ul, ol {
 }
 
 .project-card-featured {
-  border-color: var(--border);
+  border-color: var(--text-muted);
+  position: relative;
 }
 
 .project-card-featured:hover {
   border-color: var(--text-secondary);
+}
+
+.project-card-featured-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .project-card h3 {
@@ -734,7 +744,7 @@ ul, ol {
 .tag-section-name {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--text-heading);
 }
 
 .tag-section-count {
