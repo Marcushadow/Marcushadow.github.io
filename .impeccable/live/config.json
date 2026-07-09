@@ -1,0 +1,7 @@
+{
+  "files": ["_layouts/default.html"],
+  "insertBefore": "</head>",
+  "commentSyntax": "html",
+  "framework": "jekyll",
+  "cspChecked": true
+}
