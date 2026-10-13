@@ -1,10 +1,10 @@
 # Site settings
-title: Marcus Wee
+title: Marcus W
 description: "Personal & tech blog — code, projects, and thoughts."
 url: "https://marcushadow.github.io"
 baseurl: ""
 author:
-  name: Marcus Wee
+  name: Marcus W
   url: "https://marcushadow.github.io"
 
 # Build settings

@@ -186,9 +186,6 @@ a.cat-label:hover { opacity: 0.8; }
 }
 
 .nav-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-3);
   font-weight: 600;
   font-size: 1.15rem;
   color: var(--text-heading);
@@ -196,28 +193,6 @@ a.cat-label:hover { opacity: 0.8; }
 }
 
 .nav-logo:hover { color: var(--text-heading); }
-
-/* A coffee bean: two lobes, one seam */
-.logo-mark {
-  position: relative;
-  width: 14px;
-  height: 19px;
-  border-radius: 50%;
-  background: var(--tech);
-  transform: rotate(28deg);
-}
-
-.logo-mark::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  left: 50%;
-  width: 1.5px;
-  margin-left: -0.75px;
-  border-radius: 1px;
-  background: var(--bg);
-}
 
 .nav-links {
   display: flex;
