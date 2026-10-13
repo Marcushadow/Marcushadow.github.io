@@ -1,0 +1,104 @@
+# Sveltia CMS config — https://github.com/sveltia/sveltia-cms
+# Edits made at /admin are committed directly to the repo below.
+# GitHub Pages rebuilds the site about a minute after each save.
+
+backend:
+  name: github
+  repo: Marcushadow/Marcushadow.github.io
+  branch: main
+  commit_messages:
+    create: "content: add {{collection}} \"{{slug}}\""
+    update: "content: update {{collection}} \"{{slug}}\""
+    delete: "content: delete {{collection}} \"{{slug}}\""
+    uploadMedia: "content: upload \"{{path}}\""
+    deleteMedia: "content: delete \"{{path}}\""
+
+site_url: https://marcushadow.github.io
+display_url: https://marcushadow.github.io
+
+media_folder: assets/images/uploads
+public_folder: /assets/images/uploads
+
+collections:
+  - name: posts
+    label: Posts
+    label_singular: Post
+    folder: _posts
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} · {{category}} · {{date}}"
+    sortable_fields: [date, title, category]
+    view_filters:
+      - label: Technical
+        field: category
+        pattern: "^tech$"
+      - label: Personal
+        field: category
+        pattern: "^(?!tech$)"
+      - label: Unpublished
+        field: published
+        pattern: false
+    preview_path: "blog/{{year}}/{{month}}/{{day}}/{{slug}}/"
+    fields:
+      - { name: layout, widget: hidden, default: post }
+      - { name: title, label: Title, widget: string }
+      - name: date
+        label: Date
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - name: category
+        label: Section
+        widget: select
+        default: personal
+        options:
+          - { label: Technical, value: tech }
+          - { label: Personal, value: personal }
+      - name: description
+        label: Description
+        widget: string
+        required: false
+        hint: One-line summary shown in listings and link previews.
+      - name: tags
+        label: Tags
+        widget: list
+        required: false
+        hint: Comma-separated. Ideally ones listed in _data/tags.yml.
+      - name: published
+        label: Published
+        widget: boolean
+        default: true
+        required: false
+        hint: Turn off to keep this post as a hidden draft. It won't appear on the live site.
+      - { name: body, label: Body, widget: markdown }
+
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: _projects
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: string }
+      - name: permalink
+        label: URL
+        widget: string
+        hint: "e.g. /projects/my-project/"
+      - { name: github, label: GitHub URL, widget: string, required: false }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: pages
+    label: Pages
+    files:
+      - name: about
+        label: About
+        file: about.md
+        fields:
+          - { name: layout, widget: hidden, default: page }
+          - { name: title, label: Title, widget: string }
+          - { name: permalink, widget: hidden, default: /about/ }
+          - { name: body, label: Body, widget: markdown }

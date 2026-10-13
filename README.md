@@ -51,6 +51,25 @@ bundle exec jekyll serve --drafts --livereload
 
 ---
 
+## Edit from the browser (/admin)
+
+Posts, projects and the About page can be edited at `https://marcushadow.github.io/admin/` using [Sveltia CMS](https://github.com/sveltia/sveltia-cms). Saving commits straight to `main`; GitHub Pages rebuilds in about a minute.
+
+**Sign in:** click *Sign In Using Access Token* and paste a GitHub fine-grained token:
+
+1. GitHub → Settings → Developer settings → Fine-grained tokens → *Generate new token*.
+2. Repository access: *Only select repositories* → `Marcushadow.github.io`.
+3. Permissions: *Contents* → **Read and write**. Nothing else.
+4. Pick an expiry (e.g. 90 days) and regenerate when it lapses.
+
+The token is stored in that browser only. Use *Log out* on shared machines.
+
+- **Drafts:** untick *Published* to keep a post off the live site.
+- **Images:** uploads go to `assets/images/uploads/`.
+- **Config:** `admin/config.yml`. The CMS version is pinned in `admin/index.html`.
+
+---
+
 ## Add a blog post
 
 1. Copy `_drafts/_template.md` to `_posts/YYYY-MM-DD-slug.md`.
@@ -62,7 +81,7 @@ bundle exec jekyll serve --drafts --livereload
    ---
    title: "Post Title"
    date: 2025-07-09
-   category: tech          # personal | tech | philosophy
+   category: tech          # tech | personal
    tags: [ai, agents]      # must exist in _data/tags.yml
    description: "One-line summary shown in the listing and in meta tags."
    ---
@@ -80,7 +99,7 @@ bundle exec jekyll serve --drafts --livereload
 |---|---|---|
 | `title` | Yes | Shown as the post heading |
 | `date` | Yes | `YYYY-MM-DD`, must match filename |
-| `category` | No | Short label on the post header |
+| `category` | Yes | `tech` → Technical section (/tech/). Anything else → Personal section (/personal/) |
 | `tags` | No | Array — each tag should exist in `_data/tags.yml` |
 | `description` | No | Shown in the post listing and SEO meta |
 
