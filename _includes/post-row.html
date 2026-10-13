@@ -1,7 +1,13 @@
-<a href="{{ include.post.url | relative_url }}" class="post-row">
-  <time class="post-row-date" datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: "%b %d, %Y" }}</time>
-  <span class="post-row-title">{{ include.post.title }}</span>
-  {% if include.post.tags.size > 0 %}
-  <span class="post-row-tags">{{ include.post.tags | join: ", " }}</span>
+{% if include.post.category == "tech" %}{% assign row_cat = "tech" %}{% else %}{% assign row_cat = "personal" %}{% endif %}
+<a href="{{ include.post.url | relative_url }}" class="post-row post-row--{{ row_cat }}">
+  <time class="post-row-date" datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: "%b %d" }}</time>
+  <span class="post-row-main">
+    <span class="post-row-title">{{ include.post.title }}</span>
+    {% if include.show_description and include.post.description %}
+    <span class="post-row-desc">{{ include.post.description }}</span>
+    {% endif %}
+  </span>
+  {% if include.show_category %}
+  <span class="cat-label cat-label--{{ row_cat }}">{% if row_cat == "tech" %}Technical{% else %}Personal{% endif %}</span>
   {% endif %}
 </a>

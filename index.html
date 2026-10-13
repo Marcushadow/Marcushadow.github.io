@@ -3,28 +3,47 @@ layout: default
 title: Home
 ---
 
+{% assign tech_posts = site.posts | where: "category", "tech" %}
+{% assign personal_posts = site.posts | where_exp: "post", "post.category != 'tech'" %}
+
 <section class="hero">
   <h1 class="hero-title">Hey, I'm Marcus.</h1>
-  <p class="hero-tagline">A small home for code, projects, and stray thoughts.</p>
-
-  <p class="quick-links">
-    <a href="{{ '/projects' | relative_url }}">Projects &rarr;</a>
-    <span class="quick-links-sep">·</span>
-    <a href="{{ '/about' | relative_url }}">About &rarr;</a>
-    <span class="quick-links-sep">·</span>
-    <span class="quick-links-disabled">Explore (WIP)</span>
+  <p class="hero-tagline">
+    I write two kinds of things here: <a href="{{ '/tech/' | relative_url }}" class="hero-link hero-link--tech">technical notes</a> from building software,
+    and <a href="{{ '/personal/' | relative_url }}" class="hero-link hero-link--personal">personal essays</a> from figuring out life.
   </p>
 </section>
 
-<section>
-  <div class="section-header">
-    <h2 class="section-title">Recent Posts</h2>
-    <a href="{{ '/blog' | relative_url }}" class="section-link">View all &rarr;</a>
-  </div>
+<div class="shelves">
+  <section class="shelf shelf--tech">
+    <header class="shelf-header">
+      <span class="cat-label cat-label--tech">Technical</span>
+      <p class="shelf-blurb">Build logs, AI &amp; agents, the web.</p>
+    </header>
+    <div class="post-list">
+      {% for post in tech_posts limit:4 %}
+        {% include post-row.html post=post %}
+      {% endfor %}
+    </div>
+    <a href="{{ '/tech/' | relative_url }}" class="shelf-more">All technical posts &rarr;</a>
+  </section>
 
-  <div class="post-list">
-    {% for post in site.posts limit:4 %}
-      {% include post-row.html post=post %}
-    {% endfor %}
-  </div>
-</section>
+  <section class="shelf shelf--personal">
+    <header class="shelf-header">
+      <span class="cat-label cat-label--personal">Personal</span>
+      <p class="shelf-blurb">Reflections and stray thoughts.</p>
+    </header>
+    <div class="post-list">
+      {% for post in personal_posts limit:4 %}
+        {% include post-row.html post=post %}
+      {% endfor %}
+    </div>
+    <a href="{{ '/personal/' | relative_url }}" class="shelf-more">All personal posts &rarr;</a>
+  </section>
+</div>
+
+<p class="quick-links">
+  Also here: <a href="{{ '/projects/' | relative_url }}">projects</a>,
+  <a href="{{ '/guitar-tabs/' | relative_url }}">guitar tabs</a>, and
+  <a href="{{ '/blog/' | relative_url }}">everything in one list</a>.
+</p>

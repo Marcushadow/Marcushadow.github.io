@@ -1,0 +1,33 @@
+{% comment %}
+  Year-grouped post index for one section.
+  Params: cat ("tech" | "personal"), title, blurb
+{% endcomment %}
+{% if include.cat == "tech" %}
+  {% assign listing_posts = site.posts | where: "category", "tech" %}
+{% else %}
+  {% assign listing_posts = site.posts | where_exp: "post", "post.category != 'tech'" %}
+{% endif %}
+
+<div class="listing listing--{{ include.cat }}">
+  <header class="listing-header">
+    <span class="cat-label cat-label--{{ include.cat }}">{{ include.label }}</span>
+    <h1 class="listing-title">{{ include.title }}</h1>
+    <p class="listing-blurb">{{ include.blurb }}</p>
+  </header>
+
+  {% if listing_posts.size == 0 %}
+  <p class="empty-note">Nothing here yet. The kettle's on.</p>
+  {% else %}
+  {% assign by_year = listing_posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+  {% for year in by_year %}
+  <section class="year-group">
+    <h2 class="year-label">{{ year.name }}</h2>
+    <div class="post-list">
+      {% for post in year.items %}
+        {% include post-row.html post=post show_description=true %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+  {% endif %}
+</div>

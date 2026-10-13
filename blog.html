@@ -1,63 +1,52 @@
 ---
 layout: default
-title: Blog
+title: All writing
 permalink: /blog/
 ---
 
-<div class="blog-header">
-  <h1>Blog</h1>
-  <p>Thoughts on code, tech, and everything in between.</p>
+<div class="listing">
+  <header class="listing-header">
+    <h1 class="listing-title">All writing</h1>
+    <p class="listing-blurb">Every post, technical and personal, newest first.</p>
+  </header>
+
+  <div class="filter-tabs" role="group" aria-label="Filter posts by section">
+    <button type="button" class="filter-tab active" data-cat="all" aria-pressed="true">All</button>
+    <button type="button" class="filter-tab filter-tab--tech" data-cat="tech" aria-pressed="false">Technical</button>
+    <button type="button" class="filter-tab filter-tab--personal" data-cat="personal" aria-pressed="false">Personal</button>
+  </div>
+
+  <div class="post-list" id="post-list">
+    {% for post in site.posts %}
+      {% if post.category == "tech" %}{% assign item_cat = "tech" %}{% else %}{% assign item_cat = "personal" %}{% endif %}
+      <div class="post-list-item" data-cat="{{ item_cat }}">
+        {% include post-row.html post=post show_category=true %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if site.posts.size == 0 %}
+  <p class="empty-note">No posts yet. Check back soon!</p>
+  {% endif %}
 </div>
-
-{% assign all_tags = "" | split: "" %}
-{% for post in site.posts %}
-  {% for tag in post.tags %}
-    {% unless all_tags contains tag %}
-      {% assign all_tags = all_tags | push: tag %}
-    {% endunless %}
-  {% endfor %}
-{% endfor %}
-
-{% if all_tags.size > 0 %}
-<div class="filter-tags">
-  <span class="filter-tag active" data-tag="all">All</span>
-  {% for tag in all_tags %}
-  <span class="filter-tag" data-tag="{{ tag | slugify }}">{{ tag }}</span>
-  {% endfor %}
-</div>
-{% endif %}
-
-<div class="post-list" id="post-list">
-  {% for post in site.posts %}
-    <div class="post-list-item" data-tags="{{ post.tags | join: ' ' | slugify }}">
-      {% include post-row.html post=post %}
-    </div>
-  {% endfor %}
-</div>
-
-{% if site.posts.size == 0 %}
-<p style="color: var(--text-secondary); text-align: center; padding: 3rem 0;">No posts yet. Check back soon!</p>
-{% endif %}
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const filterTags = document.querySelectorAll('.filter-tag');
-    const posts = document.querySelectorAll('.post-list-item');
+    const tabs = document.querySelectorAll('.filter-tab');
+    const items = document.querySelectorAll('.post-list-item');
 
-    filterTags.forEach(tag => {
-      tag.addEventListener('click', function() {
-        filterTags.forEach(t => t.classList.remove('active'));
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-pressed', 'false');
+        });
         this.classList.add('active');
+        this.setAttribute('aria-pressed', 'true');
 
-        const selected = this.dataset.tag;
-
-        posts.forEach(post => {
-          if (selected === 'all') {
-            post.style.display = '';
-          } else {
-            const postTags = post.dataset.tags;
-            post.style.display = postTags.includes(selected) ? '' : 'none';
-          }
+        const selected = this.dataset.cat;
+        items.forEach(item => {
+          item.hidden = selected !== 'all' && item.dataset.cat !== selected;
         });
       });
     });

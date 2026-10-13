@@ -2,25 +2,46 @@
 layout: default
 ---
 
-<article class="post">
+{% if page.category == "tech" %}
+  {% assign post_cat = "tech" %}{% assign post_cat_label = "Technical" %}
+  {% assign cat_posts = site.posts | where: "category", "tech" %}
+{% else %}
+  {% assign post_cat = "personal" %}{% assign post_cat_label = "Personal" %}
+  {% assign cat_posts = site.posts | where_exp: "post", "post.category != 'tech'" %}
+{% endif %}
+
+{% comment %} Prev/next stay within the same section. site.posts is newest first. {% endcomment %}
+{% assign newer_post = nil %}{% assign older_post = nil %}
+{% for p in cat_posts %}
+  {% if p.url == page.url %}
+    {% assign newer_i = forloop.index0 | minus: 1 %}
+    {% assign older_i = forloop.index0 | plus: 1 %}
+    {% if forloop.index0 > 0 %}{% assign newer_post = cat_posts[newer_i] %}{% endif %}
+    {% assign older_post = cat_posts[older_i] %}
+  {% endif %}
+{% endfor %}
+
+{% assign words = content | number_of_words %}
+{% assign read_minutes = words | divided_by: 220 | at_least: 1 %}
+
+<article class="post post--{{ post_cat }}">
   <header class="post-header">
-    <div class="post-meta">
-      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
-      {% if page.category %}
-      <span class="post-category">{{ page.category }}</span>
-      {% endif %}
-    </div>
+    <a href="{{ '/' | append: post_cat | append: '/' | relative_url }}" class="cat-label cat-label--{{ post_cat }}">{{ post_cat_label }}</a>
     <h1 class="post-title">{{ page.title }}</h1>
     {% if page.description %}
     <p class="post-description">{{ page.description }}</p>
     {% endif %}
-    {% if page.tags.size > 0 %}
-    <div class="post-tags">
-      {% for tag in page.tags %}
-      <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">{{ tag }}</a>
-      {% endfor %}
+    <div class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+      <span class="post-meta-sep" aria-hidden="true">·</span>
+      <span>{{ read_minutes }} min read</span>
+      {% if page.tags.size > 0 %}
+      <span class="post-meta-sep" aria-hidden="true">·</span>
+      <span class="post-tags">
+        {% for tag in page.tags %}<a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}" class="tag">#{{ tag }}</a>{% endfor %}
+      </span>
+      {% endif %}
     </div>
-    {% endif %}
   </header>
 
   <div class="post-body">
@@ -28,17 +49,18 @@ layout: default
   </div>
 
   <footer class="post-footer">
+    <p class="post-nav-heading">More {{ post_cat_label | downcase }} writing</p>
     <div class="post-nav">
-      {% if page.previous.url %}
-      <a href="{{ page.previous.url | relative_url }}" class="post-nav-link prev">
-        <span class="post-nav-label">&larr; Previous</span>
-        <span class="post-nav-title">{{ page.previous.title }}</span>
+      {% if older_post %}
+      <a href="{{ older_post.url | relative_url }}" class="post-nav-link prev">
+        <span class="post-nav-label">&larr; Older</span>
+        <span class="post-nav-title">{{ older_post.title }}</span>
       </a>
-      {% endif %}
-      {% if page.next.url %}
-      <a href="{{ page.next.url | relative_url }}" class="post-nav-link next">
-        <span class="post-nav-label">Next &rarr;</span>
-        <span class="post-nav-title">{{ page.next.title }}</span>
+      {% else %}<span></span>{% endif %}
+      {% if newer_post %}
+      <a href="{{ newer_post.url | relative_url }}" class="post-nav-link next">
+        <span class="post-nav-label">Newer &rarr;</span>
+        <span class="post-nav-title">{{ newer_post.title }}</span>
       </a>
       {% endif %}
     </div>
