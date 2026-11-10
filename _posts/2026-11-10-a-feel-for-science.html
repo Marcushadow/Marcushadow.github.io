@@ -1,0 +1,197 @@
+---
+layout: default
+title: "A feel for science"
+date: 2026-11-10
+permalink: /feel-for-science/
+category: tech
+tags: [ai]
+description: "AI can give us an answer. What does it take to understand it? An interactive essay about discovery, credit, and keeping humans in science."
+extra_css: /assets/css/feel-for-science.css
+image: /assets/images/feel-for-science/fluid-proof.png
+---
+
+<article class="science-essay" id="science-essay">
+  <a class="science-back" href="{{ '/tech/' | relative_url }}">&larr; Technical writing</a>
+  <header class="science-hero">
+    <div class="science-hero-copy">
+      <p class="science-kicker">An essay you can play with</p>
+      <h1>A feel<br>for <em>science.</em></h1>
+      <p class="science-deck">AI can give us an answer.<br>What does it take to understand it?</p>
+      <p class="science-byline">Words by Marcus Wee <span aria-hidden="true">·</span> November 2026</p>
+      <a class="science-start" href="#understanding">Get your hands into it <span aria-hidden="true">↘</span></a>
+    </div>
+    <div class="flow-lab">
+      <canvas id="flow-canvas" width="600" height="560" aria-label="An illustrative swirling flow field. The controls below change its curl; it is not a simulation of the Navier–Stokes proof."></canvas>
+      <span class="flow-caption">A little order. A little turbulence.</span>
+      <div class="flow-controls" data-enhanced hidden>
+        <label for="flow-curl">Stir the field <input id="flow-curl" type="range" min="0" max="100" value="45"></label>
+        <button id="flow-pause" type="button" aria-pressed="false">Pause motion</button>
+      </div>
+      <p class="flow-note">Move your pointer, or use the slider. An illustration, not a physics simulation.</p>
+    </div>
+  </header>
+
+  <nav class="science-chapters" aria-label="In this essay">
+    <a href="#understanding">Understanding</a>
+    <a href="#prediction">Prediction</a>
+    <a href="#credit">Credit</a>
+    <a href="#judgement">Judgement</a>
+  </nav>
+  <noscript><p class="science-noscript">The essay, images and sources are all here. Enable JavaScript to try the experiments; the interview also has a direct video link.</p></noscript>
+
+  <div class="science-prose science-opening">
+    <p class="science-lead">Unlike humans, generative AI has no hands to feel water.</p>
+    <p>Yet in September 2026, OpenAI announced a claimed solution to the Navier–Stokes Millennium Prize Problem, about the behaviour of fluids. The claim is extraordinary. But producing a proof and giving people an understanding of it are different achievements. <a href="#source-openai" class="science-cite" aria-label="Source: OpenAI announcement">[1]</a></p>
+    <p>For centuries, science has been a human conversation: ask, test, explain, challenge. As AI takes on more of that work, I keep coming back to a question: <strong>what happens when the answers get ahead of our understanding?</strong></p>
+  </div>
+
+  <section id="understanding" class="science-section">
+    <div class="science-prose">
+      <h2>The answer key is open.<br>Are you learning?</h2>
+      <p>Imagine doing homework with the answers beside you. You might score well. But could you explain the method, spot a mistake, or solve a different problem tomorrow?</p>
+      <p>Try this tiny version. A machine follows a hidden rule. You can ask it for outputs as often as you like.</p>
+    </div>
+
+    <div class="rule-lab science-interactive" data-enhanced hidden>
+      <div class="lab-heading"><h3>The answer machine</h3><span>A 1-minute experiment</span></div>
+      <div class="rule-machine">
+        <form id="rule-form" class="rule-input">
+          <label for="rule-number">Give it a whole number</label>
+          <div class="rule-input-row"><input id="rule-number" name="number" type="number" min="-20" max="20" step="1" value="3" required><button class="science-button" type="submit">Ask the machine <span aria-hidden="true">→</span></button></div>
+          <p class="science-small">Choose from −20 to 20.</p>
+        </form>
+        <div class="rule-box" aria-hidden="true"><span>?</span><small>the hidden rule</small></div>
+        <div class="rule-output"><span>Its answer</span><output id="rule-result" aria-live="polite">12</output></div>
+      </div>
+      <p id="rule-error" class="science-feedback" role="status"></p>
+      <div class="rule-observations"><span>Your observations</span><ol id="rule-history" aria-label="Recent inputs and outputs"><li>3 <span aria-hidden="true">→</span> 12</li></ol></div>
+      <div class="rule-challenge">
+        <form id="prediction-form">
+          <label for="rule-guess">Now you try: what happens to <strong>11</strong>?</label>
+          <div class="rule-input-row"><input id="rule-guess" type="number" step="1" placeholder="Your prediction" required><button class="science-button science-button--light" type="submit">Test my prediction</button></div>
+        </form>
+        <p id="prediction-feedback" class="science-feedback" role="status">Can you explain why, as well as give an answer?</p>
+      </div>
+      <details id="rule-explanation" class="science-reveal"><summary>Open the machine and see why</summary><div><p class="rule-equation">n × (n + 1)</p><p>Multiply a number by the next whole number. For 3, that is 3 × 4 = 12. For 11, it is 11 × 12 = 132. You now have a method you can inspect, challenge and reuse.</p><p class="science-small">This is a deliberately simple analogy. A few examples alone do not uniquely determine a rule, and a mathematical proof is much more than pattern matching.</p></div></details>
+    </div>
+    <div class="science-prose science-after-lab">
+      <p>A correct answer is valuable. An explanation lets someone else build on it. Researchers Lisa Messeri and Molly Crockett warn that AI tools can foster an illusion of understanding: we may feel we understand more than we actually do. <a class="science-cite" href="#source-understanding" aria-label="Source: illusions of understanding">[2]</a></p>
+    </div>
+    <figure class="science-proof">
+      <img src="{{ '/assets/images/feel-for-science/fluid-proof.png' | relative_url }}" alt="OpenAI's illustration of a vortex with inward spiralling flow and axial stretching." width="827" height="777" loading="lazy">
+      <figcaption><span class="science-caption-title">A picture of a proof is not the proof.</span>OpenAI's illustration of its claimed Navier–Stokes result. Beautiful to look at; understanding the argument requires much more. <a href="https://openai.com/index/navier-stokes-solution/">Read the announcement and proof ↗</a></figcaption>
+    </figure>
+  </section>
+
+  <section id="prediction" class="science-section">
+    <div class="science-prose">
+      <h2>A convincing shape.<br>A question still open.</h2>
+      <p>AlphaFold predicts protein structures from amino-acid sequences. That gives researchers a powerful starting point. It does not, by itself, tell us everything about how a protein behaves in a living system.</p>
+      <p>Here is the essay's image of human p53, a protein involved in preventing tumour growth. Its colours carry information that a beautiful shape can hide.</p>
+    </div>
+    <div class="protein-lab science-interactive">
+      <figure class="protein-image">
+        <div class="protein-structure">
+        <img src="{{ '/assets/images/feel-for-science/p53-confidence.png' | relative_url }}" alt="Predicted human p53 structure, with a compact blue region and long orange loops indicating different levels of prediction confidence." width="612" height="794" loading="lazy">
+        <button class="protein-spot protein-spot--blue" data-protein="high" aria-label="Explore the blue, higher-confidence region" aria-pressed="true" data-enhanced hidden>+</button>
+        <button class="protein-spot protein-spot--orange" data-protein="low" aria-label="Explore the orange, lower-confidence region" aria-pressed="false" data-enhanced hidden>+</button>
+        </div>
+        <figcaption>Human p53 · UniProt P04637<br>AlphaFold image reproduced from the original essay.</figcaption>
+      </figure>
+      <div class="protein-explainer">
+        <h3>Read between the colours.</h3>
+        <p class="science-small">Explore a region, then ask what a lab still needs to find out.</p>
+        <div class="protein-options" role="group" aria-label="Explore protein confidence" data-enhanced hidden>
+          <button data-protein="high" class="is-selected" aria-pressed="true"><span class="confidence-dot confidence-dot--blue"></span>Blue region</button>
+          <button data-protein="low" aria-pressed="false"><span class="confidence-dot confidence-dot--orange"></span>Orange region</button>
+          <button data-protein="lab" aria-pressed="false">Back to the lab</button>
+        </div>
+        <div id="protein-detail" class="protein-detail" aria-live="polite">
+          <h4>More confidence in the local structure.</h4>
+          <p>Blue indicates a more confident prediction of this region's structure. Confidence is useful evidence, but it is not experimental confirmation or a guarantee of biological function.</p>
+        </div>
+        <p class="protein-footnote">Orange indicates lower confidence. A flexible or disordered region may not have one fixed shape. Colour is about confidence, not whether a region is important.</p>
+        <a class="science-text-link" href="https://alphafold.ebi.ac.uk/entry/P04637">Explore the structure in AlphaFold DB ↗</a>
+      </div>
+    </div>
+    <div class="science-prose science-after-lab">
+      <p>Terwilliger and colleagues describe AlphaFold predictions as valuable hypotheses that accelerate, but do not replace, experimental structure determination. <a class="science-cite" href="#source-alphafold" aria-label="Source: AlphaFold hypotheses paper">[3]</a> That distinction matters: a prediction can guide an experiment without settling the science.</p>
+      <p>My concern is what we give up when we start treating predictive power as a substitute for understanding.</p>
+    </div>
+  </section>
+
+  <section id="credit" class="science-section">
+    <div class="science-prose">
+      <h2>Whose idea was it?</h2>
+      <p>Science depends on people sharing unfinished ideas. If a researcher cannot see where an AI-generated result came from, questions about credit and trust become harder to resolve.</p>
+      <p>After OpenAI announced its fluid-dynamics result, mathematician Tristan Buckmaster questioned whether his private prompts had influenced the work. OpenAI says its investigation found they could not have influenced the system, including through training. <a class="science-cite" href="#source-openai" aria-label="Source: OpenAI response to the credit dispute">[1]</a></p>
+    </div>
+    <div class="credit-explorer">
+      <div class="credit-options" role="group" aria-label="Perspectives on research credit" data-enhanced hidden>
+        <button class="is-selected" data-credit="question" aria-pressed="true">The question</button>
+        <button data-credit="response" aria-pressed="false">The response</button>
+        <button data-credit="lesson" aria-pressed="false">What we can learn</button>
+      </div>
+      <div id="credit-detail" aria-live="polite"><h3>A similar approach, a question of provenance.</h3><p>Buckmaster raised concerns about the relationship between his private work and OpenAI's result. His account is one side of a disputed attribution story, not proof that ideas were taken.</p></div>
+      <noscript><p>OpenAI denies that private prompts influenced the result. The broader lesson is to preserve records of contributions and distinguish a concern from an established finding.</p></noscript>
+    </div>
+    <figure class="science-video">
+      <div class="video-stage" id="interview-stage">
+        <img src="{{ '/assets/images/feel-for-science/buckmaster-interview.png' | relative_url }}" alt="Tristan Buckmaster speaking in his Numberphile interview in front of a blackboard." width="1822" height="1016" loading="lazy">
+        <button id="load-interview" class="video-play" type="button" data-enhanced hidden><span class="video-play-icon" aria-hidden="true">▶</span><span>Watch the conversation<small>Tristan Buckmaster × Numberphile</small></span></button>
+      </div>
+      <figcaption><span>From the original essay: <cite>The Buckmaster Interview (Navier-Stokes)</cite>, Numberphile, 29 September 2026.</span><a href="https://www.youtube.com/watch?v=Mzbtj5nkMXI" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></figcaption>
+      <p class="science-small video-privacy">The embedded player connects to YouTube only when you choose to load it. If playback is unavailable here, use the direct link.</p>
+    </figure>
+    <div class="science-prose science-after-lab"><p>We do not need to settle that dispute to ask for better records. Keeping an auditable account of contributions helps researchers explain where an idea came from, while protecting confidential work.</p></div>
+  </section>
+
+  <section id="judgement" class="science-section">
+    <div class="science-prose">
+      <h2>Give AI a job.<br>Keep someone accountable.</h2>
+      <p>I do not think science should abandon AI. Data analysis, code generation and repetitive tasks are exactly where assistance can buy researchers time to think.</p>
+      <p>But where would you draw the line? Set up your own research team below. Each choice is about who leads the task; a human-led task can still use AI tools.</p>
+    </div>
+    <div class="responsibility-lab science-interactive" data-enhanced hidden>
+      <div class="lab-heading"><h3>Your research team</h3><button class="science-reset" id="reset-team" type="button">Reset choices ↺</button></div>
+      <div class="team-row"><span id="role-data">Clean and organise data</span><div role="group" aria-labelledby="role-data"><button data-task="data" data-owner="human" aria-pressed="false">Human</button><button data-task="data" data-owner="ai" aria-pressed="true" class="is-selected">AI</button></div></div>
+      <div class="team-row"><span id="role-code">Draft analysis code</span><div role="group" aria-labelledby="role-code"><button data-task="code" data-owner="human" aria-pressed="false">Human</button><button data-task="code" data-owner="ai" aria-pressed="true" class="is-selected">AI</button></div></div>
+      <div class="team-row"><span id="role-question">Choose the research question</span><div role="group" aria-labelledby="role-question"><button data-task="question" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="question" data-owner="ai" aria-pressed="false">AI</button></div></div>
+      <div class="team-row"><span id="role-explain">Explain the central claim</span><div role="group" aria-labelledby="role-explain"><button data-task="explain" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="explain" data-owner="ai" aria-pressed="false">AI</button></div></div>
+      <div class="team-row"><span id="role-check">Check the evidence</span><div role="group" aria-labelledby="role-check"><button data-task="check" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="check" data-owner="ai" aria-pressed="false">AI</button></div></div>
+      <div class="team-row"><span id="role-sign">Take responsibility for publication</span><div role="group" aria-labelledby="role-sign"><button data-task="sign" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="sign" data-owner="ai" aria-pressed="false">AI</button></div></div>
+      <div class="team-feedback" id="team-feedback" aria-live="polite"><h4>Assistance with a human at the helm.</h4><p>Your team delegates routine work while keeping explanation, checking and responsibility with people. Even the delegated work still needs review.</p></div>
+      <p class="science-small">A thought experiment reflecting this essay's argument, not a score or a research policy. Your choices stay on this page and reset when you reload.</p>
+    </div>
+    <figure class="science-lab-photo">
+      <img src="{{ '/assets/images/feel-for-science/human-led-lab.jpeg' | relative_url }}" alt="MIT researcher Zhichu Ren working beside a robotic arm at a laboratory bench." width="573" height="390" loading="lazy">
+      <figcaption><span class="science-caption-title">An assistant at the bench.</span>MIT researcher Zhichu Ren working with an AI-assisted laboratory system. Photo: Jason Sparapani / MIT. <a href="https://dmse.mit.edu/news/accelerating-research-with-ai-assisted-experiments/">Read about the research ↗</a></figcaption>
+    </figure>
+    <div class="science-prose science-after-lab">
+      <p>My line is this: a named human should be able to explain a paper's central claim, accept responsibility, and disclose how AI was used. ICMJE guidance already places authorship and accountability with people. <a class="science-cite" href="#source-authorship" aria-label="Source: ICMJE authorship guidance">[4]</a> Auditable records can help without making every confidential prompt public.</p>
+      <p>Researching this essay changed my view. I began with an instinct that using AI in science was like cheating on an exam. I came to see how much time useful tools can give back. What I still want to protect is our ability to understand what we are doing.</p>
+    </div>
+  </section>
+
+  <footer class="science-ending">
+    <p>Unlike humans, AI has no hands to feel water.</p>
+    <h2>Let's keep our<br><em>feel for science.</em></h2>
+    <a href="#science-essay">Back to the beginning ↑</a>
+  </footer>
+
+  <details class="science-sources" id="sources" open>
+    <summary>Sources, credits &amp; a note on this page</summary>
+    <div>
+      <p>Adapted from my commentary, <cite>AI may have just cracked a math problem no human could. Does this spell the end of science?</cite> The experiments are illustrations of the argument, not scientific evidence. Reporting is framed as of November 2026.</p>
+      <ol>
+        <li id="source-openai"><a href="https://openai.com/index/navier-stokes-solution/">OpenAI, On the Navier–Stokes Millennium Prize Problem</a> (September 2026). The claimed result, illustration and OpenAI's response on private prompts.</li>
+        <li id="source-understanding"><a href="https://www.nature.com/articles/s41586-024-07146-0">Messeri &amp; Crockett, Artificial intelligence and illusions of understanding in scientific research</a>, <cite>Nature</cite> (2024).</li>
+        <li id="source-alphafold"><a href="https://www.nature.com/articles/s41592-023-02087-4">Terwilliger et al., AlphaFold predictions are valuable hypotheses and accelerate but do not replace experimental structure determination</a>, <cite>Nature Methods</cite> (2024). <a href="https://alphafold.ebi.ac.uk/entry/P04637">p53 in AlphaFold DB</a>.</li>
+        <li id="source-authorship"><a href="https://www.icmje.org/recommendations/browse/roles-and-responsibilities/defining-the-role-of-authors-and-contributors.html">ICMJE, Defining the Role of Authors and Contributors</a>.</li>
+      </ol>
+      <p>Also in the original essay: <a href="https://www.nature.com/articles/d41586-023-02980-0">Nature's survey of 1,600 researchers</a>; <a href="https://www.youtube.com/watch?v=Mzbtj5nkMXI">the Numberphile interview</a>; and <a href="https://dmse.mit.edu/news/accelerating-research-with-ai-assisted-experiments/">MIT's account of AI-assisted experiments</a>.</p>
+      <p>Images are reproduced from the supplied essay with their original source credits. The flow field is a custom visual illustration. The interactive adaptation and code were created with AI assistance; the argument and reflection are adapted from Marcus Wee's writing.</p>
+    </div>
+  </details>
+</article>
+<script src="{{ '/assets/js/feel-for-science.js' | relative_url }}" defer></script>
