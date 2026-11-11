@@ -5,7 +5,7 @@ date: 2026-11-10
 permalink: /feel-for-science/
 category: tech
 tags: [ai]
-description: "AI can give us an answer. What does it take to understand it? An interactive essay about discovery, credit, and keeping humans in science."
+description: "AI should assist human judgement, not lead autonomous research. An interactive essay about understanding, trust, and human authorship in science."
 extra_css: /assets/css/feel-for-science.css
 image: /assets/images/feel-for-science/fluid-proof.png
 ---
@@ -16,7 +16,7 @@ image: /assets/images/feel-for-science/fluid-proof.png
     <div class="science-hero-copy">
       <p class="science-kicker">An essay you can play with</p>
       <h1>A feel<br>for <em>science.</em></h1>
-      <p class="science-deck">AI can give us an answer.<br>What does it take to understand it?</p>
+      <p class="science-deck">AI can give us an answer.<br>Who understands it, and who takes responsibility?</p>
       <p class="science-byline">Words by Marcus Wee <span aria-hidden="true">·</span> November 2026</p>
       <a class="science-start" href="#understanding">Get your hands into it <span aria-hidden="true">↘</span></a>
     </div>
@@ -32,6 +32,7 @@ image: /assets/images/feel-for-science/fluid-proof.png
   </header>
 
   <nav class="science-chapters" aria-label="In this essay">
+    <a href="#autonomy">AI wave</a>
     <a href="#understanding">Understanding</a>
     <a href="#prediction">Prediction</a>
     <a href="#credit">Credit</a>
@@ -41,9 +42,18 @@ image: /assets/images/feel-for-science/fluid-proof.png
 
   <div class="science-prose science-opening">
     <p class="science-lead">Unlike humans, generative AI has no hands to feel water.</p>
-    <p>Yet in September 2026, OpenAI announced a claimed solution to the Navier–Stokes Millennium Prize Problem, about the behaviour of fluids. The claim is extraordinary. But producing a proof and giving people an understanding of it are different achievements. <a href="#source-openai" class="science-cite" aria-label="Source: OpenAI announcement">[1]</a></p>
-    <p>For centuries, science has been a human conversation: ask, test, explain, challenge. As AI takes on more of that work, I keep coming back to a question: <strong>what happens when the answers get ahead of our understanding?</strong></p>
+    <p>Yet in September 2026, OpenAI announced that its AI had discovered something about fluid flow that the greatest human minds could not. The Navier–Stokes equations describe fluid behaviour; whether their solutions can “blow up” is one of mathematics' seven million-dollar Millennium Prize Problems. OpenAI claims its model has proven one such case, while mathematicians are still verifying it. <a href="#source-openai" class="science-cite" aria-label="Source: OpenAI announcement">[1]</a> <a href="#source-quanta" class="science-cite" aria-label="Source: Quanta reporting on the claimed proof">[2]</a></p>
+    <p>For centuries, science has been a human conversation: ask, test, explain, challenge. As AI takes on more of that work, I keep coming back to a question: <strong>what happens when the answers get ahead of our understanding?</strong> My argument is that AI should remain an assistant to human judgement, rather than spearhead autonomous research.</p>
   </div>
+
+  <section id="autonomy" class="science-section">
+    <div class="science-prose">
+      <h2>From human research<br>to AI monologue.</h2>
+      <p>OpenAI's release of 722 AI-authored mathematics papers brings that question into focus. Oxford mathematician James Maynard said it remained “very difficult to really extract any human understanding” from its Navier–Stokes proof. Producing more research does not necessarily mean people understand more. <a class="science-cite" href="#source-maynard" aria-label="Source: James Maynard in NPR reporting">[3]</a></p>
+      <p>The shift goes beyond mathematics. A study of biomedical abstracts estimated that at least 13.5% of the 2024 abstracts showed signs of LLM-assisted writing. Sakana AI's “AI Scientist” goes further: it generates ideas, runs experiments and produced a paper that passed a workshop's first round of peer review. Writing assistance and autonomous research place very different decisions in a machine's hands. <a class="science-cite" href="#source-biomedical" aria-label="Source: LLM-assisted biomedical writing study">[5]</a> <a class="science-cite" href="#source-ai-scientist" aria-label="Source: AI Scientist research">[6]</a></p>
+      <p>The medicines we take and the buildings we live in depend on science that someone can explain and check. Retraction Watch reported that OpenAI withdrew three of those mathematics preprints after flaws were found. That does not establish that opacity caused the errors. It does show how much human checking is still required. <a class="science-cite" href="#source-withdrawals" aria-label="Source: Retraction Watch on withdrawn preprints">[9]</a></p>
+    </div>
+  </section>
 
   <section id="understanding" class="science-section">
     <div class="science-prose">
@@ -75,7 +85,7 @@ image: /assets/images/feel-for-science/fluid-proof.png
       <details id="rule-explanation" class="science-reveal"><summary>Open the machine and see why</summary><div><p class="rule-equation">n × (n + 1)</p><p>Multiply a number by the next whole number. For 3, that is 3 × 4 = 12. For 11, it is 11 × 12 = 132. You now have a method you can inspect, challenge and reuse.</p><p class="science-small">This is a deliberately simple analogy. A few examples alone do not uniquely determine a rule, and a mathematical proof is much more than pattern matching.</p></div></details>
     </div>
     <div class="science-prose science-after-lab">
-      <p>A correct answer is valuable. An explanation lets someone else build on it. Researchers Lisa Messeri and Molly Crockett warn that AI tools can foster an illusion of understanding: we may feel we understand more than we actually do. <a class="science-cite" href="#source-understanding" aria-label="Source: illusions of understanding">[2]</a></p>
+      <p>A correct answer is valuable, but someone must still understand what makes it correct. An explanation lets other researchers learn from it, challenge it and extend it. Lisa Messeri and Molly Crockett warn that AI tools can foster an illusion of understanding: we may feel we understand more than we actually do. <a class="science-cite" href="#source-understanding" aria-label="Source: illusions of understanding">[4]</a></p>
     </div>
     <figure class="science-proof">
       <img src="{{ '/assets/images/feel-for-science/fluid-proof.png' | relative_url }}" alt="OpenAI's illustration of a vortex with inward spiralling flow and axial stretching." width="827" height="777" loading="lazy">
@@ -86,7 +96,7 @@ image: /assets/images/feel-for-science/fluid-proof.png
   <section id="prediction" class="science-section">
     <div class="science-prose">
       <h2>A convincing shape.<br>A question still open.</h2>
-      <p>AlphaFold predicts protein structures from amino-acid sequences. That gives researchers a powerful starting point. It does not, by itself, tell us everything about how a protein behaves in a living system.</p>
+      <p>AlphaFold predicts protein structures from amino-acid sequences, giving researchers a powerful starting point for work including drug discovery. I agree that this is an important advance. But predictions can disagree with experimental results, and a predicted shape does not fully explain how a protein behaves in a living system.</p>
       <p>Here is the essay's image of human p53, a protein involved in preventing tumour growth. Its colours carry information that a beautiful shape can hide.</p>
     </div>
     <div class="protein-lab science-interactive">
@@ -115,52 +125,57 @@ image: /assets/images/feel-for-science/fluid-proof.png
       </div>
     </div>
     <div class="science-prose science-after-lab">
-      <p>Terwilliger and colleagues describe AlphaFold predictions as valuable hypotheses that accelerate, but do not replace, experimental structure determination. <a class="science-cite" href="#source-alphafold" aria-label="Source: AlphaFold hypotheses paper">[3]</a> That distinction matters: a prediction can guide an experiment without settling the science.</p>
-      <p>My concern is what we give up when we start treating predictive power as a substitute for understanding.</p>
+      <p>Terwilliger and colleagues describe AlphaFold predictions as valuable hypotheses that accelerate, but do not replace, experimental structure determination. <a class="science-cite" href="#source-alphafold" aria-label="Source: AlphaFold hypotheses paper">[11]</a> That distinction matters: a prediction can guide an experiment without settling the science.</p>
+      <p>Scientists still need to understand the underlying mechanisms before applying results, especially when human lives are at stake. To me, trading understanding for raw predictive power means answering questions we no longer understand.</p>
     </div>
   </section>
 
   <section id="credit" class="science-section">
     <div class="science-prose">
       <h2>Whose idea was it?</h2>
-      <p>Science depends on people sharing unfinished ideas. If a researcher cannot see where an AI-generated result came from, questions about credit and trust become harder to resolve.</p>
-      <p>After OpenAI announced its fluid-dynamics result, mathematician Tristan Buckmaster questioned whether his private prompts had influenced the work. OpenAI says its investigation found they could not have influenced the system, including through training. <a class="science-cite" href="#source-openai" aria-label="Source: OpenAI response to the credit dispute">[1]</a></p>
+      <p>Understanding is at risk, but so is trust. Publishing a data-use policy does not mean people understand it: Pew Research found that 67% of U.S. adults understood little or nothing about what companies do with their personal data. Cisco's 2024 survey found that 84% of generative-AI users worried that data they entered would become public. These surveys describe public concerns, rather than establishing what happened in any particular research dispute. <a class="science-cite" href="#source-pew" aria-label="Source: Pew Research data privacy survey">[12]</a> <a class="science-cite" href="#source-cisco" aria-label="Source: Cisco consumer privacy survey">[13]</a></p>
+      <p>Mathematicians Tristan Buckmaster and Levent Alpöge had used AI tools while working on a related fluid-dynamics problem involving the Euler equations. After OpenAI announced its Navier–Stokes result, Buckmaster saw similarities to their approach and questioned whether his private prompts had influenced it. OpenAI says its investigation found no such influence. <a class="science-cite" href="#source-openai" aria-label="Source: OpenAI response to the credit dispute">[1]</a> <a class="science-cite" href="#source-credit" aria-label="Source: reporting on the credit dispute">[7]</a></p>
     </div>
     <div class="credit-explorer">
       <div class="credit-options" role="group" aria-label="Perspectives on research credit" data-enhanced hidden>
         <button class="is-selected" data-credit="question" aria-pressed="true">The question</button>
         <button data-credit="response" aria-pressed="false">The response</button>
-        <button data-credit="lesson" aria-pressed="false">What we can learn</button>
+        <button data-credit="lesson" aria-pressed="false">What trust enables</button>
       </div>
-      <div id="credit-detail" aria-live="polite"><h3>A similar approach, a question of provenance.</h3><p>Buckmaster raised concerns about the relationship between his private work and OpenAI's result. His account is one side of a disputed attribution story, not proof that ideas were taken.</p></div>
-      <noscript><p>OpenAI denies that private prompts influenced the result. The broader lesson is to preserve records of contributions and distinguish a concern from an established finding.</p></noscript>
+      <div id="credit-detail" aria-live="polite"><h3>A similar approach, a question of provenance.</h3><p>Buckmaster questioned whether private prompts from his work with Alpöge influenced OpenAI's result. Similarities prompted a concern about credit; they do not establish that ideas were taken.</p></div>
+      <noscript><p>OpenAI says its investigation found no influence from those private prompts. Even without a proven misuse of data, fear that ideas could reappear under someone else's name can make researchers less willing to share.</p></noscript>
     </div>
     <figure class="science-video">
       <div class="video-stage" id="interview-stage">
         <img src="{{ '/assets/images/feel-for-science/buckmaster-interview.png' | relative_url }}" alt="Tristan Buckmaster speaking in his Numberphile interview in front of a blackboard." width="1822" height="1016" loading="lazy">
         <button id="load-interview" class="video-play" type="button" data-enhanced hidden><span class="video-play-icon" aria-hidden="true">▶</span><span>Watch the conversation<small>Tristan Buckmaster × Numberphile</small></span></button>
       </div>
-      <figcaption><span>From the original essay: <cite>The Buckmaster Interview (Navier-Stokes)</cite>, Numberphile, 29 September 2026.</span><a href="https://www.youtube.com/watch?v=Mzbtj5nkMXI" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></figcaption>
+      <figcaption><span>From the commentary: <cite>The Buckmaster Interview (Navier-Stokes)</cite>, Numberphile, 29 September 2026. <a class="science-cite" href="#source-interview" aria-label="Source: Numberphile interview">[8]</a></span><a href="https://www.youtube.com/watch?v=Mzbtj5nkMXI" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></figcaption>
       <p class="science-small video-privacy">The embedded player connects to YouTube only when you choose to load it. If playback is unavailable here, use the direct link.</p>
     </figure>
-    <div class="science-prose science-after-lab"><p>We do not need to settle that dispute to ask for better records. Keeping an auditable account of contributions helps researchers explain where an idea came from, while protecting confidential work.</p></div>
+    <figure class="science-lab-photo">
+      <img src="{{ '/assets/images/feel-for-science/sam-altman.jpeg' | relative_url }}" alt="OpenAI CEO Sam Altman, who disputed the plagiarism allegations on X." width="862" height="575" loading="lazy">
+      <figcaption><span class="science-caption-title">The company's response.</span>Sam Altman described the claims as “unfounded accusations of plagiarism” on X. Photo: Shelby Tauber / Reuters, reproduced from the commentary. <a href="https://x.com/sama/status/2097385167002415140?lang=en">Read Altman's response ↗</a></figcaption>
+    </figure>
+    <div class="science-prose science-after-lab"><p>Even if OpenAI is cleared, the damage to trust may outlast the dispute. Science advances because people share unfinished ideas. If researchers fear those ideas could resurface under someone else's name, they may become less willing to contribute. The open collaboration science depends on could quietly wither. <a class="science-cite" href="#source-sharing" aria-label="Source: scientists' concerns about sharing ideas with AI">[14]</a></p></div>
   </section>
 
   <section id="judgement" class="science-section">
     <div class="science-prose">
-      <h2>Give AI a job.<br>Keep someone accountable.</h2>
-      <p>I do not think science should abandon AI. Data analysis, code generation and repetitive tasks are exactly where assistance can buy researchers time to think.</p>
-      <p>But where would you draw the line? Set up your own research team below. Each choice is about who leads the task; a human-led task can still use AI tools.</p>
+      <h2>The line between<br>tools and authors.</h2>
+      <p>I do not believe humanity is ready for AI to lead and conduct its own research. That does not mean science should abandon AI. Data analysis, code generation, literature searches and drafting can give scientists more time for scientific judgement. <a class="science-cite" href="#source-survey" aria-label="Source: Nature survey of researchers on AI">[10]</a></p>
+      <p>Where would you draw the line? Set up your own research team below. Each choice is about who leads the task; a human-led task can still use AI tools. Notice when assistance starts becoming control over the scientific claim.</p>
     </div>
     <div class="responsibility-lab science-interactive" data-enhanced hidden>
       <div class="lab-heading"><h3>Your research team</h3><button class="science-reset" id="reset-team" type="button">Reset choices ↺</button></div>
       <div class="team-row"><span id="role-data">Clean and organise data</span><div role="group" aria-labelledby="role-data"><button data-task="data" data-owner="human" aria-pressed="false">Human</button><button data-task="data" data-owner="ai" aria-pressed="true" class="is-selected">AI</button></div></div>
       <div class="team-row"><span id="role-code">Draft analysis code</span><div role="group" aria-labelledby="role-code"><button data-task="code" data-owner="human" aria-pressed="false">Human</button><button data-task="code" data-owner="ai" aria-pressed="true" class="is-selected">AI</button></div></div>
       <div class="team-row"><span id="role-question">Choose the research question</span><div role="group" aria-labelledby="role-question"><button data-task="question" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="question" data-owner="ai" aria-pressed="false">AI</button></div></div>
+      <div class="team-row"><span id="role-design">Design the study and its tests</span><div role="group" aria-labelledby="role-design"><button data-task="design" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="design" data-owner="ai" aria-pressed="false">AI</button></div></div>
       <div class="team-row"><span id="role-explain">Explain the central claim</span><div role="group" aria-labelledby="role-explain"><button data-task="explain" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="explain" data-owner="ai" aria-pressed="false">AI</button></div></div>
       <div class="team-row"><span id="role-check">Check the evidence</span><div role="group" aria-labelledby="role-check"><button data-task="check" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="check" data-owner="ai" aria-pressed="false">AI</button></div></div>
       <div class="team-row"><span id="role-sign">Take responsibility for publication</span><div role="group" aria-labelledby="role-sign"><button data-task="sign" data-owner="human" aria-pressed="true" class="is-selected">Human</button><button data-task="sign" data-owner="ai" aria-pressed="false">AI</button></div></div>
-      <div class="team-feedback" id="team-feedback" aria-live="polite"><h4>Assistance with a human at the helm.</h4><p>Your team delegates routine work while keeping explanation, checking and responsibility with people. Even the delegated work still needs review.</p></div>
+      <div class="team-feedback" id="team-feedback" aria-live="polite"><h4>Assistance with a human at the helm.</h4><p>Your team delegates routine work while people direct the study, explain its claims, check the evidence and accept responsibility. Even the delegated work still needs review.</p></div>
       <p class="science-small">A thought experiment reflecting this essay's argument, not a score or a research policy. Your choices stay on this page and reset when you reload.</p>
     </div>
     <figure class="science-lab-photo">
@@ -168,13 +183,14 @@ image: /assets/images/feel-for-science/fluid-proof.png
       <figcaption><span class="science-caption-title">An assistant at the bench.</span>MIT researcher Zhichu Ren working with an AI-assisted laboratory system. Photo: Jason Sparapani / MIT. <a href="https://dmse.mit.edu/news/accelerating-research-with-ai-assisted-experiments/">Read about the research ↗</a></figcaption>
     </figure>
     <div class="science-prose science-after-lab">
-      <p>My line is this: a named human should be able to explain a paper's central claim, accept responsibility, and disclose how AI was used. ICMJE guidance already places authorship and accountability with people. <a class="science-cite" href="#source-authorship" aria-label="Source: ICMJE authorship guidance">[4]</a> Auditable records can help without making every confidential prompt public.</p>
-      <p>Researching this essay changed my view. I began with an instinct that using AI in science was like cheating on an exam. I came to see how much time useful tools can give back. What I still want to protect is our ability to understand what we are doing.</p>
+      <p>Academic journals should draw a clear line between computational assistance and autonomous research. My proposal is to require a named human who can explain each paper's central claim and accept responsibility for its impacts. As readers, we should also call out papers that slip through without proper human authorship. Making that expectation known helps protect science's explainability.</p>
+      <p>Researching this commentary changed my view. I began with an instinct that using AI in science was like cheating on an important exam. Learning how computational tools accelerate discovery made me more open to assistance, provided human understanding is not sacrificed.</p>
+      <p>As a student working towards becoming a computer scientist, and perhaps a researcher, I want to think beyond raw results. Technologies affect human lives. Making them inspectable and explainable is part of our responsibility to make them safe, reliable and useful to people.</p>
     </div>
   </section>
 
   <footer class="science-ending">
-    <p>Unlike humans, AI has no hands to feel water.</p>
+    <p>Unlike humans, AI has no hands to feel water.<br>If we let it do our thinking for us, we may lose our feel for science too.</p>
     <h2>Let's keep our<br><em>feel for science.</em></h2>
     <a href="#science-essay">Back to the beginning ↑</a>
   </footer>
@@ -182,16 +198,26 @@ image: /assets/images/feel-for-science/fluid-proof.png
   <details class="science-sources" id="sources" open>
     <summary>Sources, credits &amp; a note on this page</summary>
     <div>
-      <p>Adapted from my commentary, <cite>AI may have just cracked a math problem no human could. Does this spell the end of science?</cite> The experiments are illustrations of the argument, not scientific evidence. Reporting is framed as of November 2026.</p>
+      <p>Adapted from my updated commentary, <cite>AI may have just cracked a math problem no human could. Does this spell the end of science?</cite> The experiments illustrate its argument for AI assistance under human judgement. They are not scientific evidence. Reporting is framed as of November 2026; reference numbers match the commentary.</p>
       <ol>
         <li id="source-openai"><a href="https://openai.com/index/navier-stokes-solution/">OpenAI, On the Navier–Stokes Millennium Prize Problem</a> (September 2026). The claimed result, illustration and OpenAI's response on private prompts.</li>
+        <li id="source-quanta"><a href="https://www.quantamagazine.org/ai-has-solved-one-of-maths-1-million-millennium-prize-problems-20260908/">Kakaes, AI has solved one of math's $1 million Millennium Prize Problems</a>, <cite>Quanta Magazine</cite> (8 September 2026).</li>
+        <li id="source-maynard"><a href="https://www.wbur.org/npr/nx-s1-5968588/openai-navier-stokes-problem-mathematicians-learn-little">Brumfiel, AI solved one of math's hardest problems. Humanity learned nothing (so far)</a>, <cite>NPR</cite> (22 September 2026). Also: <a href="https://community.openai.com/t/first-look-at-mathematics-manuscripts-from-an-internal-frontier-model-at-openai/1403886">OpenAI's mathematics manuscript release</a>.</li>
         <li id="source-understanding"><a href="https://www.nature.com/articles/s41586-024-07146-0">Messeri &amp; Crockett, Artificial intelligence and illusions of understanding in scientific research</a>, <cite>Nature</cite> (2024).</li>
+        <li id="source-biomedical"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12219543/">Kobak et al., Delving into LLM-assisted writing in biomedical publications through excess vocabulary</a>, <cite>Science Advances</cite> (2025).</li>
+        <li id="source-ai-scientist"><a href="https://www.nature.com/articles/s41586-026-10265-5">Lu et al., Towards end-to-end automation of AI research</a>, <cite>Nature</cite> (2026).</li>
+        <li id="source-credit"><a href="https://theconversation.com/openai-claims-another-huge-mathematical-result-amid-fights-over-credit-ethics-and-privacy-291575">Cullen, OpenAI claims another huge mathematical result amid fights over credit, ethics and privacy</a>, <cite>The Conversation</cite> (10 September 2026).</li>
+        <li id="source-interview"><a href="https://www.youtube.com/watch?v=Mzbtj5nkMXI">The Buckmaster Interview (Navier-Stokes)</a>, Numberphile (29 September 2026).</li>
+        <li id="source-withdrawals"><a href="https://retractionwatch.com/2026/10/08/openai-withdraws-preprints-722-manuscripts-unsolved-math-problems/">Gallegos, OpenAI withdraws three preprints a day after releasing 722 manuscripts on unsolved math problems</a>, <cite>Retraction Watch</cite> (8 October 2026).</li>
+        <li id="source-survey"><a href="https://www.nature.com/articles/d41586-023-02980-0">Van Noorden &amp; Perkel, AI and science: What 1,600 researchers think</a>, <cite>Nature</cite> (2023).</li>
         <li id="source-alphafold"><a href="https://www.nature.com/articles/s41592-023-02087-4">Terwilliger et al., AlphaFold predictions are valuable hypotheses and accelerate but do not replace experimental structure determination</a>, <cite>Nature Methods</cite> (2024). <a href="https://alphafold.ebi.ac.uk/entry/P04637">p53 in AlphaFold DB</a>.</li>
-        <li id="source-authorship"><a href="https://www.icmje.org/recommendations/browse/roles-and-responsibilities/defining-the-role-of-authors-and-contributors.html">ICMJE, Defining the Role of Authors and Contributors</a>.</li>
+        <li id="source-pew"><a href="https://www.pewresearch.org/internet/2023/10/18/how-americans-view-data-privacy/">McClain et al., How Americans View Data Privacy</a>, Pew Research Center (2023).</li>
+        <li id="source-cisco"><a href="https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2024/m10/cisco-survey-shows-strong-relationship-between-privacy-awareness-and-trust-in-ai.html">New Cisco survey shows strong relationship between privacy awareness and trust in AI</a>, Cisco (2024).</li>
+        <li id="source-sharing"><a href="https://www.scientificamerican.com/article/scientists-worry-ai-is-stealing-their-ideas/">Hall, Scientists worry AI is stealing their ideas</a>, <cite>Scientific American</cite> (13 October 2026).</li>
       </ol>
-      <p>Also in the original essay: <a href="https://www.nature.com/articles/d41586-023-02980-0">Nature's survey of 1,600 researchers</a>; <a href="https://www.youtube.com/watch?v=Mzbtj5nkMXI">the Numberphile interview</a>; and <a href="https://dmse.mit.edu/news/accelerating-research-with-ai-assisted-experiments/">MIT's account of AI-assisted experiments</a>.</p>
+      <p>Additional image credits and context: <a href="https://x.com/sama/status/2097385167002415140?lang=en">Sam Altman's response on X</a>; <a href="https://dmse.mit.edu/news/accelerating-research-with-ai-assisted-experiments/">MIT's account of AI-assisted experiments</a>; and <a href="https://www.ibm.com/think/topics/explainable-ai">an introduction to explainable AI</a>.</p>
       <p>Images are reproduced from the supplied essay with their original source credits. The flow field is a custom visual illustration. The interactive adaptation and code were created with AI assistance; the argument and reflection are adapted from Marcus Wee's writing.</p>
     </div>
   </details>
 </article>
-<script src="{{ '/assets/js/feel-for-science.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/feel-for-science.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

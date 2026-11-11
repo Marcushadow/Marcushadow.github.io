@@ -44,7 +44,7 @@
 .flow-controls input { width: 100%; accent-color: var(--science-copper); cursor: pointer; }
 .flow-controls button { background: transparent; color: #ebeee7; border: 0; border-bottom: 1px solid #8ca79b; padding: .3rem 0; font: .75rem var(--font-sans); white-space: nowrap; min-height: 32px; }
 .flow-note { position: relative; font: .68rem/1.55 var(--font-sans); color: #b3c8bc; margin-top: .7rem; }
-.science-chapters { position: sticky; top: 64px; z-index: var(--science-z-chapters); display: flex; justify-content: center; gap: 2.5rem; padding: 1.2rem .25rem; background: var(--bg); border-bottom: 1px solid var(--border); font: .85rem var(--font-sans); }
+.science-chapters { position: sticky; top: 64px; z-index: var(--science-z-chapters); display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 2rem; padding: 1.2rem .25rem; background: var(--bg); border-bottom: 1px solid var(--border); font: .85rem var(--font-sans); }
 .science-chapters a { color: var(--text-secondary); padding: .25rem 0; border-bottom: 1px solid transparent; }
 .science-chapters a:hover, .science-chapters a[aria-current="location"] { color: var(--science-green); border-bottom-color: var(--science-green); }
 .science-prose { max-width: 630px; margin: 0 auto; }
@@ -189,7 +189,7 @@
   .flow-controls { flex-direction: row; align-items: end; padding: .75rem; }
   .flow-controls button { align-self: flex-end; }
   .flow-note { font-size: .63rem; }
-  .science-chapters { gap: 0; justify-content: space-between; padding: 1rem 0; font-size: .72rem; }
+  .science-chapters { gap: .35rem .75rem; justify-content: space-between; padding: 1rem 0; font-size: .72rem; }
   .science-opening { padding-top: 3rem; }
   .science-prose p { font-size: 1.05rem; line-height: 1.8; }
   .science-prose .science-lead { font-size: 1.4rem; }

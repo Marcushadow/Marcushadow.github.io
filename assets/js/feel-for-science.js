@@ -60,9 +60,9 @@
   });
 
   const creditDetails = {
-    question: ['A similar approach, a question of provenance.', 'Buckmaster raised concerns about the relationship between his private work and OpenAI’s result. His account is one side of a disputed attribution story, not proof that ideas were taken.'],
-    response: ['OpenAI says private prompts had no influence.', 'In its September 10 update, OpenAI said its investigation found Buckmaster’s prompts could not have influenced the system, including through training. It also distinguished the mathematical results and recognised the priority of Alpöge and Buckmaster’s forced-Euler work.'],
-    lesson: ['Keep a trail people can inspect.', 'A record of contributions, experiments and AI use makes credit easier to examine. Confidential records need not all be public. The broader concern about transparency remains separate from whether any particular allegation is true.']
+    question: ['A similar approach, a question of provenance.', 'Buckmaster questioned whether private prompts from his work with Alpöge influenced OpenAI’s result. Similarities prompted a concern about credit; they do not establish that ideas were taken.'],
+    response: ['OpenAI says private prompts had no influence.', 'OpenAI says its investigation found no influence from those private prompts. Sam Altman also disputed the plagiarism allegations on X. Those responses belong alongside Buckmaster’s concerns when considering this disputed attribution story.'],
+    lesson: ['Science needs people willing to share.', 'Even without a proven misuse of data, fear that ideas could reappear under someone else’s name can make researchers less willing to share. A data policy alone cannot sustain the trust that open scientific collaboration needs.']
   };
   essay.querySelectorAll('[data-credit]').forEach(button => {
     button.addEventListener('click', () => {
@@ -86,13 +86,14 @@
     player.focus();
   }, { once: true });
 
-  const defaultTeam = { data: 'ai', code: 'ai', question: 'human', explain: 'human', check: 'human', sign: 'human' };
+  const defaultTeam = { data: 'ai', code: 'ai', question: 'human', design: 'human', explain: 'human', check: 'human', sign: 'human' };
   let team = { ...defaultTeam };
   const concerns = {
     question: 'Research direction: if AI chooses the question, who decides whether it is worth asking and whose interests it serves?',
+    design: 'Study design: deciding how to test a claim shapes the research itself. A human needs to understand and lead those choices, even when AI helps run the experiment.',
     explain: 'Understanding: someone must be able to explain the central claim, including its limits, rather than repeat an output.',
     check: 'Verification: generated evidence needs independent checking. A system reviewing its own work can repeat its mistakes.',
-    sign: 'Accountability: AI cannot accept responsibility for a paper. ICMJE authorship guidance keeps this obligation with humans.'
+    sign: 'Accountability: my proposal is for a named human to explain the paper’s central claim and accept responsibility for its impacts. Assigning this to AI leaves that obligation unmet.'
   };
   function updateTeam() {
     essay.querySelectorAll('[data-task]').forEach(button => {
@@ -104,7 +105,7 @@
     const allHuman = Object.values(team).every(owner => owner === 'human');
     const target = byId('team-feedback');
     if (delegatedJudgement.length) {
-      showDetail(target, team.sign === 'ai' ? 'Who will put their name to this?' : 'Some judgement has left human hands.', 'This is where I would ask for more human involvement. Your choices raise these questions:');
+      showDetail(target, team.sign === 'ai' ? 'Who will put their name to this?' : 'Assistance is becoming autonomous research.', 'These choices cross the line I argue for: AI should assist human judgement, while people lead the research and take responsibility. Consider what has been delegated:');
       const list = document.createElement('ul');
       delegatedJudgement.forEach(task => {
         const item = document.createElement('li');
@@ -115,7 +116,7 @@
     } else if (allHuman) {
       showDetail(target, 'People lead every step.', 'You have kept every task with humans. That preserves direct involvement, but it can also leave researchers doing repetitive work that useful tools could assist with. Human work still needs checking.');
     } else {
-      showDetail(target, 'Assistance with a human at the helm.', 'Your team delegates routine work while keeping explanation, checking and responsibility with people. Even the delegated work still needs review.');
+      showDetail(target, 'Assistance with a human at the helm.', 'Your team delegates routine work while people direct the study, explain its claims, check the evidence and accept responsibility. Even the delegated work still needs review.');
     }
   }
   essay.querySelectorAll('[data-task]').forEach(button => {
